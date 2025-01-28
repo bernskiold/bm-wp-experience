@@ -12,5 +12,5 @@
 	</article>
 <?php endforeach; ?>
 <p class="bm-academy-feed-more">
-	<a href="<?php echo esc_url(__('https://bernskioldmedia.com/en/academy/', 'bm-wp-experience')); ?>" target="_blank"><?php esc_html_e( 'More at the Academy ›', 'bm-wp-experience' ); ?></a>
+	<a href="<?php echo esc_url(__('https://bernskiold.com/en/academy/', 'bm-wp-experience')); ?>" target="_blank"><?php esc_html_e( 'More at the Academy ›', 'bm-wp-experience' ); ?></a>
 </p>

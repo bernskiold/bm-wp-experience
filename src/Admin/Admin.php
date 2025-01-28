@@ -39,7 +39,7 @@ class Admin implements Hookable {
     public static function change_admin_footer_text(): string {
         /* translators: 1. Site Name */
         $new_text = sprintf( __(
-            'Thank you for creating with <a href="https://wordpress.org">WordPress</a> and <a href="https://www.bernskioldmedia.com/en/?utm_source=clientsite&utm_medium=dashboard_link&utm_campaign=%1$s">Bernskiold Media</a>.',
+            'Thank you for creating with <a href="https://wordpress.org">WordPress</a> and <a href="https://www.bernskiold.com/en/?utm_source=clientsite&utm_medium=dashboard_link&utm_campaign=%1$s">Bernskiold Media</a>.',
             'bm-wp-experience'
         ), get_bloginfo( 'name' ) );
 

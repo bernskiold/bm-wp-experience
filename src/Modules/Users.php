@@ -12,8 +12,8 @@ class Users extends Module {
      * Includes sub-domains.
      */
     protected const ALLOWLISTED_DOMAINS = [
-        'bernskioldmedia.com',
-        'bernskioldmedia.se',
+        'bernskiold.com',
+        'bernskiold.se',
     ];
 
     /**

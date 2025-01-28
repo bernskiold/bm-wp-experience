@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: BM WP Experience
- * Plugin URI:  https://www.bernskioldmedia.com
+ * Plugin URI:  https://www.bernskiold.com
  * Description: Provides an opinionated WordPress experience with clean-up and tweaks that we at Bernskiold Media have found runs WordPress best.
  * Version:     3.11.6
  * Author:      Bernskiold Media
- * Author URI:  https://www.bernskioldmedia.com
+ * Author URI:  https://www.bernskiold.com
  * Text Domain: bm-wp-experience
  * Domain Path: /languages/
  *

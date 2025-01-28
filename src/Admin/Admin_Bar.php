@@ -178,7 +178,7 @@ class Admin_Bar implements Hookable {
                 'id'     => 'bm-academy',
                 'parent' => 'bm-list',
                 'title'  => esc_html__('Academy', 'bm-wp-experience'),
-                'href'   => esc_url(_x('https://www.bernskioldmedia.com/en/academy/', 'BM Academy URL', 'bm-wp-experience')),
+                'href'   => esc_url(_x('https://www.bernskiold.com/en/academy/', 'BM Academy URL', 'bm-wp-experience')),
                 'meta'   => [
                     'title' => esc_html__('Academy', 'bm-wp-experience'),
                 ],
@@ -188,7 +188,7 @@ class Admin_Bar implements Hookable {
                 'id'     => 'bm-support',
                 'parent' => 'bm-list',
                 'title'  => esc_html__('Support', 'bm-wp-experience'),
-                'href'   => esc_url(_x('https://support.bernskioldmedia.com/', 'BM Support URL', 'bm-wp-experience')),
+                'href'   => esc_url(_x('https://support.bernskiold.com/', 'BM Support URL', 'bm-wp-experience')),
                 'meta'   => [
                     'title' => esc_html__('Support', 'bm-wp-experience'),
                 ],
@@ -198,7 +198,7 @@ class Admin_Bar implements Hookable {
                 'id'     => 'bm-services',
                 'parent' => 'bm-list',
                 'title'  => esc_html__('Services', 'bm-wp-experience'),
-                'href'   => esc_url(_x('https://www.bernskioldmedia.com/en/services/', 'BM Services URL', 'bm-wp-experience')),
+                'href'   => esc_url(_x('https://www.bernskiold.com/en/services/', 'BM Services URL', 'bm-wp-experience')),
                 'meta'   => [
                     'title' => esc_html__('Services', 'bm-wp-experience'),
                 ],

@@ -26,7 +26,7 @@ class Maintenance_Plan_Check extends Security_Check {
             $result['description'] = sprintf(
                 '<p>%s</p>',
                 __(
-                    'Not having the site on a maintenance plan means that you need to take extra care updating WordPress, plugins and themes to keep it up to date with the latest security fixes. Contact us at <a href="mailto:support@bernskioldmedia.com">support@bernskioldmedia.com</a> to find out more.',
+                    'Not having the site on a maintenance plan means that you need to take extra care updating WordPress, plugins and themes to keep it up to date with the latest security fixes. Contact us at <a href="mailto:support@bernskiold.com">support@bernskiold.com</a> to find out more.',
                     'bm-wp-experience'
                 )
             );
