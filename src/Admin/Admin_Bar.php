@@ -149,20 +149,20 @@ class Admin_Bar implements Hookable {
         if (is_user_logged_in() && current_user_can('edit_posts')) {
             $wp_admin_bar->add_node([
                 'id'    => 'bm',
-                'title' => '<div class="bm-icon ab-item"><span class="screen-reader-text">' . esc_html__('Bernskiold Media', 'bm-wp-experience') . '</span></div>',
+                'title' => '<div class="bm-icon ab-item"><span class="screen-reader-text">' . esc_html__('Bernskiold', 'bm-wp-experience') . '</span></div>',
                 'href'  => admin_url('admin.php?page=bm-about'),
                 'meta'  => [
-                    'title' => 'Bernskiold Media',
+                    'title' => 'Bernskiold',
                 ],
             ]);
 
             $wp_admin_bar->add_node([
                 'id'     => 'bm-about',
                 'parent' => 'bm',
-                'title'  => esc_html__('About Bernskiold Media', 'bm-wp-experience'),
+                'title'  => esc_html__('About Bernskiold', 'bm-wp-experience'),
                 'href'   => esc_url(admin_url('admin.php?page=bm-about')),
                 'meta'   => [
-                    'title' => esc_html__('About Bernskiold Media', 'bm-wp-experience'),
+                    'title' => esc_html__('About Bernskiold', 'bm-wp-experience'),
                 ],
             ]);
 

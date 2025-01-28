@@ -78,7 +78,7 @@ class Plugins extends Module {
 			<p>
 				<?php
                 // translators: 1. Link to Suggested Plugins
-                echo wp_kses_post(sprintf(__("Some plugins may affect the display, performance, and reliability of your website negatively. Please consider <a href='%s'>Bernskiold Media suggestions</a> and if in doubt consult with Bernskiold Media support.", 'bm-wp-experience'), esc_url(network_admin_url('plugin-install.php?tab=bmedia')))); ?>
+                echo wp_kses_post(sprintf(__("Some plugins may affect the display, performance, and reliability of your website negatively. Please consider <a href='%s'>Bernskiold suggestions</a> and if in doubt consult with Bernskiold support.", 'bm-wp-experience'), esc_url(network_admin_url('plugin-install.php?tab=bmedia')))); ?>
 			</p>
 		</div>
 		<?php

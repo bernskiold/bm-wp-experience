@@ -48,10 +48,10 @@ class Admin_Pages implements Hookable {
 		}
 
 		/*
-		 * Add About Bernskiold Media page.
+		 * Add About Bernskiold page.
 		 */
 		if ( true === apply_filters( 'bm_wpexp_show_admin_page_about', true ) ) {
-			add_submenu_page( '', esc_html__( 'About Bernskiold Media', 'bm-wp-experience' ), esc_html__( 'About Bernskiold Media', 'bm-wp-experience' ), 'edit_posts', 'bm-about', [
+			add_submenu_page( '', esc_html__( 'About Bernskiold', 'bm-wp-experience' ), esc_html__( 'About Bernskiold', 'bm-wp-experience' ), 'edit_posts', 'bm-about', [
 				self::class,
 				'view_about_bm',
 			] );

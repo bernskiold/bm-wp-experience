@@ -43,7 +43,7 @@ class Dashboard extends Module {
     }
 
     public static function add_bm_academy_dashboard_widget(): void {
-        wp_add_dashboard_widget('bm_academy', __('Bernskiold Media Academy', 'bm-wp-experience'), static function () {
+        wp_add_dashboard_widget('bm_academy', __('Bernskiold Academy', 'bm-wp-experience'), static function () {
             $feed = fetch_feed(_x('https://bernskiold.com/en/feed/', 'academy feed', 'bm-wp-experience'));
 
             if (is_wp_error($feed)) {

@@ -7,8 +7,8 @@
  *
  * @link https://laravel.com/docs/5.6/mix
  *
- * @author  Bernskiold Media <info@bernskiold.com>
- * @package BernskioldMedia\Equmeniakyrkan\Equmenisk
+ * @author  Bernskiold <info@bernskiold.com>
+ * @package BernskioldMedia\WP\Experience
  **/
 
 const mix = require( 'laravel-mix' );

@@ -1,11 +1,11 @@
-# Copyright (C) 2019 Bernskiold Media
+# Copyright (C) 2019 Bernskiold
 # This file is distributed under the same license as the BM WP Experience package.
 msgid ""
 msgstr ""
 "Project-Id-Version: BM WP Experience 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bm-wp-experience\n"
-"POT-Creation-Date: 2025-01-28 14:44:49+00:00\n"
-"PO-Revision-Date: 2025-01-28 15:46+0100\n"
+"POT-Creation-Date: 2025-01-28 20:05:19+00:00\n"
+"PO-Revision-Date: 2025-01-28 21:05+0100\n"
 "Last-Translator: Erik Bernskiold <erik@bernskiold.com>\n"
 "Language-Team: \n"
 "Language: sv_SE\n"
@@ -123,13 +123,13 @@ msgstr "Uppladdat till"
 msgid ""
 "Thank you for creating with <a href=\"https://wordpress.org\">WordPress</a> and "
 "<a href=\"https://www.bernskiold.com/en/?"
-"utm_source=clientsite&utm_medium=dashboard_link&utm_campaign=%1$s\">Bernskiold "
-"Media</a>."
+"utm_source=clientsite&utm_medium=dashboard_link&utm_campaign=%1$s\">Bernskiold</"
+"a>."
 msgstr ""
 "Tack för att du skapar med <a href=\"https://wordpress.org\">WordPress</a> och <a "
 "href=\"https://www.bernskiold.com/sv/?"
-"utm_source=clientsite&utm_medium=dashboard&utm_campaign=footerlink\">Bernskiold "
-"Media</a>."
+"utm_source=clientsite&utm_medium=dashboard&utm_campaign=footerlink\">Bernskiold</"
+"a>."
 
 #: src/Admin/Admin_Analytics_Tab.php:27
 msgid "BM Analytics"
@@ -237,13 +237,13 @@ msgid "Customize the site appearance."
 msgstr "Anpassa webbplatsens utseende."
 
 #. Author of the plugin/theme
-msgid "Bernskiold Media"
-msgstr "Bernskiold Media"
+msgid "Bernskiold"
+msgstr "Bernskiold"
 
 #: src/Admin/Admin_Bar.php:162 src/Admin/Admin_Bar.php:165
 #: src/Admin/Admin_Pages.php:54
-msgid "About Bernskiold Media"
-msgstr "Om Bernskiold Media"
+msgid "About Bernskiold"
+msgstr "Om Bernskiold"
 
 #: src/Admin/Admin_Bar.php:180 src/Admin/Admin_Bar.php:183
 msgid "Academy"
@@ -322,8 +322,8 @@ msgid "This site does not support comments."
 msgstr "Den här webbplatsen stöder inte kommentarer."
 
 #: src/Modules/Dashboard.php:46
-msgid "Bernskiold Media Academy"
-msgstr "Bernskiold Media Academy"
+msgid "Bernskiold Academy"
+msgstr "Bernskiold Academy"
 
 #: src/Modules/Dashboard.php:50
 msgid "Unfortunately the academy content is not currently available."
@@ -512,13 +512,12 @@ msgstr "BM-förslag"
 #: src/Modules/Plugins.php:81
 msgid ""
 "Some plugins may affect the display, performance, and reliability of your website "
-"negatively. Please consider <a href='%s'>Bernskiold Media suggestions</a> and if "
-"in doubt consult with Bernskiold Media support."
+"negatively. Please consider <a href='%s'>Bernskiold suggestions</a> and if in "
+"doubt consult with Bernskiold support."
 msgstr ""
 "Vissa tillägg kan påverka visningen, prestandan och pålitligheten på din "
 "webbplats på ett negativt sätt. Överväg gärna att använda <a href='%s'>Bernskiold "
-"Medias föreslagna tillägg</a> och om du är osäker, rådfråga Bernskiold Medias "
-"support."
+"Medias föreslagna tillägg</a> och om du är osäker, rådfråga Bernskiolds support."
 
 #: src/Modules/Plugins.php:104
 msgid "Learn More"
@@ -762,10 +761,10 @@ msgstr "https://www.bernskiold.com/sv"
 #. Description of the plugin/theme
 msgid ""
 "Provides an opinionated WordPress experience with clean-up and tweaks that we at "
-"Bernskiold Media have found runs WordPress best."
+"Bernskiold have found runs WordPress best."
 msgstr ""
 "Ger en WordPress-upplevelse med justeringar och förbättringar som vi på "
-"Bernskiold Media tycker optimerar WordPress på bästa sätt."
+"Bernskiold tycker optimerar WordPress på bästa sätt."
 
 #: src/Admin/Admin_Bar.php:181
 msgctxt "BM Academy URL"

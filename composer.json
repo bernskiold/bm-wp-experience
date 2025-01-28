@@ -1,6 +1,6 @@
 {
   "name": "bernskioldmedia/bm-wp-experience",
-  "description": "Provides an opinionated WordPress experience with clean-up and tweaks that we at Bernskiold Media have found runs WordPress best.",
+  "description": "Provides an opinionated WordPress experience with clean-up and tweaks that we at Bernskiold have found runs WordPress best.",
   "type": "wordpress-plugin",
   "config": {
 	"sort-packages": true,
@@ -29,7 +29,7 @@
   "license": "GPL-3.0+",
   "authors": [
 	{
-	  "name": "Bernskiold Media",
+	  "name": "Bernskiold",
 	  "email": "info@bernskiold.com"
 	}
   ],

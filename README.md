@@ -81,7 +81,7 @@ For almost every feature there is a filter, constant or action allowing you to c
 
 ### Plugins
 
-- Include a tab with suggested plugins from Bernskiold Media.
+- Include a tab with suggested plugins from Bernskiold.
 - Add a warning when disabling this plugin.
 
 ### REST API

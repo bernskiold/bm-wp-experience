@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin Page View: About Bernskiold Media
+ * Admin Page View: About Bernskiold
  *
  * @package BernskioldMedia\WP\Experience
  */
