@@ -63,7 +63,7 @@ bm_wp_experience();
  * Run update checker if not disabled.
  */
 if ( ! defined( 'BM_WP_EXPERIENCE_DISABLE_UPDATER' ) || ( defined( 'BM_WP_EXPERIENCE_DISABLE_UPDATER' ) && false === BM_WP_EXPERIENCE_DISABLE_UPDATER ) ) {
-	$bm_wp_experience_updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/bernskioldmedia/bm-wp-experience', __FILE__, 'bm-wp-experience' );
+	$bm_wp_experience_updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/bernskiold/bm-wp-experience', __FILE__, 'bm-wp-experience' );
 	$bm_wp_experience_updater->getVcsApi()->enableReleaseAssets();
 
 	// Add our own plugin icon.
