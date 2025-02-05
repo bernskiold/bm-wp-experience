@@ -1,19 +1,19 @@
-# Copyright (C) 2019 Bernskiold Media
+# Copyright (C) 2019 Bernskiold
 # This file is distributed under the same license as the BM WP Experience package.
 msgid ""
 msgstr ""
 "Project-Id-Version: BM WP Experience 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bm-wp-experience\n"
-"POT-Creation-Date: 2023-12-08 13:25:04+00:00\n"
-"PO-Revision-Date: 2023-12-08 14:30+0100\n"
-"Last-Translator: Erik Bernskiold <erik@bernskioldmedia.com>\n"
+"POT-Creation-Date: 2025-01-28 20:05:19+00:00\n"
+"PO-Revision-Date: 2025-01-28 21:05+0100\n"
+"Last-Translator: Erik Bernskiold <erik@bernskiold.com>\n"
 "Language-Team: \n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: acp-columns/60f1655d5fd1f.php:26 acp-columns/60f16cb5069c4.php:45
 #: acp-columns/60f16cb5069c4.php:54
@@ -122,14 +122,14 @@ msgstr "Uppladdat till"
 #: src/Admin/Admin.php:41
 msgid ""
 "Thank you for creating with <a href=\"https://wordpress.org\">WordPress</a> and "
-"<a href=\"https://www.bernskioldmedia.com/en/?"
-"utm_source=clientsite&utm_medium=dashboard_link&utm_campaign=%1$s\">Bernskiold "
-"Media</a>."
+"<a href=\"https://www.bernskiold.com/en/?"
+"utm_source=clientsite&utm_medium=dashboard_link&utm_campaign=%1$s\">Bernskiold</"
+"a>."
 msgstr ""
-"Tack för att du skapar med <a href=\"https://wordpress.org\">WordPress</a> och "
-"<a href=\"https://www.bernskioldmedia.com/sv/?"
-"utm_source=clientsite&utm_medium=dashboard&utm_campaign=footerlink\">Bernskiold "
-"Media</a>."
+"Tack för att du skapar med <a href=\"https://wordpress.org\">WordPress</a> och <a "
+"href=\"https://www.bernskiold.com/sv/?"
+"utm_source=clientsite&utm_medium=dashboard&utm_campaign=footerlink\">Bernskiold</"
+"a>."
 
 #: src/Admin/Admin_Analytics_Tab.php:27
 msgid "BM Analytics"
@@ -193,8 +193,8 @@ msgstr "Ja, skicka användar-id till analytics"
 
 #: src/Admin/Admin_Analytics_Tab.php:202
 msgid ""
-"Please note that passing user id to analytics requires informed and specific "
-"user consent under GDPR."
+"Please note that passing user id to analytics requires informed and specific user "
+"consent under GDPR."
 msgstr ""
 "Observera att överföring av användar-ID till analys kräver informerat och "
 "specifikt användarmedgivande enligt GDPR."
@@ -213,11 +213,11 @@ msgstr "Domän"
 
 #: src/Admin/Admin_Analytics_Tab.php:228
 msgid ""
-"If you have enables subdomains above you need to enter your website domain "
-"here, for example: example.com"
+"If you have enables subdomains above you need to enter your website domain here, "
+"for example: example.com"
 msgstr ""
-"Om du har aktiverat underdomäner ovan måste du ange din webbplatsdomän här, "
-"till exempel: example.com"
+"Om du har aktiverat underdomäner ovan måste du ange din webbplatsdomän här, till "
+"exempel: example.com"
 
 #: src/Admin/Admin_Analytics_Tab.php:234 src/Admin/Admin_Mail_Tab.php:124
 msgid "Save"
@@ -237,13 +237,13 @@ msgid "Customize the site appearance."
 msgstr "Anpassa webbplatsens utseende."
 
 #. Author of the plugin/theme
-msgid "Bernskiold Media"
-msgstr "Bernskiold Media"
+msgid "Bernskiold"
+msgstr "Bernskiold"
 
 #: src/Admin/Admin_Bar.php:162 src/Admin/Admin_Bar.php:165
 #: src/Admin/Admin_Pages.php:54
-msgid "About Bernskiold Media"
-msgstr "Om Bernskiold Media"
+msgid "About Bernskiold"
+msgstr "Om Bernskiold"
 
 #: src/Admin/Admin_Bar.php:180 src/Admin/Admin_Bar.php:183
 msgid "Academy"
@@ -275,17 +275,17 @@ msgstr "Namn som e-posten skickas från"
 
 #: src/Admin/Admin_Mail_Tab.php:107
 msgid ""
-"This name will override the sender name, usually the site name, for "
-"notifications e.g. password reset, but also for emails sent with Gravity Forms "
-"and WooCommerce. If no name is added, a default will be used from the config "
-"shown as a placeholder here. If there's no settings in the config, the system "
-"settings will be used."
+"This name will override the sender name, usually the site name, for notifications "
+"e.g. password reset, but also for emails sent with Gravity Forms and WooCommerce. "
+"If no name is added, a default will be used from the config shown as a "
+"placeholder here. If there's no settings in the config, the system settings will "
+"be used."
 msgstr ""
 "Det här namnet kommer att skriva över avsändaren, vanligtvis webbplatsens namn, "
 "för notifikationer tex löslenordsåterställning, men också e-post skickade med "
-"Gravity Forms och WooCommerce. Om inget namn anges kommer en default att "
-"användas från configen vilket visas som platshållare här. Finns det ingen "
-"inställning i configen kommer systeminställningarna att användas."
+"Gravity Forms och WooCommerce. Om inget namn anges kommer en default att användas "
+"från configen vilket visas som platshållare här. Finns det ingen inställning i "
+"configen kommer systeminställningarna att användas."
 
 #: src/Admin/Admin_Mail_Tab.php:113
 msgid "E-mail address"
@@ -293,17 +293,17 @@ msgstr "E-postadress"
 
 #: src/Admin/Admin_Mail_Tab.php:119
 msgid ""
-"This email address will override the system email address for notifications e."
-"g. password reset, but also addresses added to the settings for example Gravity "
+"This email address will override the system email address for notifications e.g. "
+"password reset, but also addresses added to the settings for example Gravity "
 "Forms and WooCommerce. If no address is added, a default will be used from the "
 "config shown as a placeholder here. If there's no settings in the config, the "
 "system settings will be used."
 msgstr ""
 "Den här e-postadressen kommer att skriva över systemets e-postaddress för "
-"notifikationer tex löslenordsåterställning, men också e-post skickade med "
-"Gravity Forms och WooCommerce. Om ingen adress anges kommer en default att "
-"användas från configen vilket visas som platshållare här. Finns det ingen "
-"inställning i configen kommer systeminställningarna att användas."
+"notifikationer tex löslenordsåterställning, men också e-post skickade med Gravity "
+"Forms och WooCommerce. Om ingen adress anges kommer en default att användas från "
+"configen vilket visas som platshållare här. Finns det ingen inställning i "
+"configen kommer systeminställningarna att användas."
 
 #: src/Admin/Admin_Pages.php:33
 msgid "Reusable Blocks"
@@ -322,8 +322,8 @@ msgid "This site does not support comments."
 msgstr "Den här webbplatsen stöder inte kommentarer."
 
 #: src/Modules/Dashboard.php:46
-msgid "Bernskiold Media Academy"
-msgstr "Bernskiold Media Academy"
+msgid "Bernskiold Academy"
+msgstr "Bernskiold Academy"
 
 #: src/Modules/Dashboard.php:50
 msgid "Unfortunately the academy content is not currently available."
@@ -355,12 +355,12 @@ msgstr "Konfigurationsfilerna behöver säkras."
 
 #: src/Modules/Health_Checks/Security/Bm_Config_Check.php:22
 msgid ""
-"It could be possible to access the files in the config directory. To fix, "
-"please CHMOD the file to a permission set less than, or equal to 440."
+"It could be possible to access the files in the config directory. To fix, please "
+"CHMOD the file to a permission set less than, or equal to 440."
 msgstr ""
-"Det kan vara möjligt att få tillgång till filerna i konfigureringskatalogen. "
-"För att åtgärda detta, vänligen CHMOD filen till en behörighetsuppsättning som "
-"är mindre än eller lika med 440."
+"Det kan vara möjligt att få tillgång till filerna i konfigureringskatalogen. För "
+"att åtgärda detta, vänligen CHMOD filen till en behörighetsuppsättning som är "
+"mindre än eller lika med 440."
 
 #: src/Modules/Health_Checks/Security/Bm_Config_Check.php:42
 msgid "Configuration File Permissions"
@@ -380,8 +380,7 @@ msgstr "Det finns ingen .env-fil."
 
 #: src/Modules/Health_Checks/Security/Env_File_Check.php:21
 msgid "You are not using a .env file on this environment. No need to do anything."
-msgstr ""
-"Du använder inte en .env-fil i den här miljön. Du behöver inte göra något."
+msgstr "Du använder inte en .env-fil i den här miljön. Du behöver inte göra något."
 
 #: src/Modules/Health_Checks/Security/Env_File_Check.php:26
 msgid "The .env file is readable!"
@@ -418,16 +417,15 @@ msgstr "Denna webbplats omfattas inte av något underhållsavtal."
 
 #: src/Modules/Health_Checks/Security/Maintenance_Plan_Check.php:28
 msgid ""
-"Not having the site on a maintenance plan means that you need to take extra "
-"care updating WordPress, plugins and themes to keep it up to date with the "
-"latest security fixes. Contact us at <a href=\"mailto:support@bernskioldmedia."
-"com\">support@bernskioldmedia.com</a> to find out more."
+"Not having the site on a maintenance plan means that you need to take extra care "
+"updating WordPress, plugins and themes to keep it up to date with the latest "
+"security fixes. Contact us at <a href=\"mailto:support@bernskiold."
+"com\">support@bernskiold.com</a> to find out more."
 msgstr ""
 "Om webbplatsen inte har ett underhållsavtal innebär det att du måste vara extra "
-"noga med att uppdatera WordPress, plugins och teman för att hålla den "
-"uppdaterad med de senaste säkerhetsfixarna. Kontakta oss på <a href=\"mailto:"
-"support@bernskioldmedia.com\">support@bernskioldmedia.com</a> för att få veta "
-"mer."
+"noga med att uppdatera WordPress, plugins och teman för att hålla den uppdaterad "
+"med de senaste säkerhetsfixarna. Kontakta oss på <a href=\"mailto:"
+"support@bernskiold.com\">support@bernskiold.com</a> för att få veta mer."
 
 #: src/Modules/Health_Checks/Security/Maintenance_Plan_Check.php:39
 msgid "Maintenance Plan Coverage"
@@ -458,9 +456,9 @@ msgid ""
 "It could be possible to access the wp-config.php file publicly. To fix, please "
 "CHMOD the file to a permission set less than, or equal to 440."
 msgstr ""
-"Det kan vara möjligt att komma åt filen wp-config.php offentligt. För att "
-"åtgärda detta, vänligen ändra filens rättigheter till en behörighetsuppsättning "
-"som är mindre än eller lika med 440."
+"Det kan vara möjligt att komma åt filen wp-config.php offentligt. För att åtgärda "
+"detta, vänligen ändra filens rättigheter till en behörighetsuppsättning som är "
+"mindre än eller lika med 440."
 
 #: src/Modules/Health_Checks/Security/Wp_Config_Permissions_Check.php:31
 msgid "WP-Config File Permissions"
@@ -472,9 +470,9 @@ msgstr "E-postmeddelanden skickas inte:"
 
 #: src/Modules/Mail.php:47
 msgid ""
-"Sending via SMTP is currently enabled but the configuration has not been "
-"properly set in the configuration files. Sending via SMTP is therefore disabled "
-"and e-mail will be send via the default PHP sendmail functions."
+"Sending via SMTP is currently enabled but the configuration has not been properly "
+"set in the configuration files. Sending via SMTP is therefore disabled and e-mail "
+"will be send via the default PHP sendmail functions."
 msgstr ""
 "Sändning via SMTP är för närvarande aktiverat, men konfigurationen har inte "
 "ställts in korrekt i konfigurationsfilerna. Sändning via SMTP är därför "
@@ -489,7 +487,7 @@ msgstr ""
 "Du kan åtgärda felet genom att antingen inaktivera SMTP i konfigurationen eller "
 "ange korrekta konfigurationsvärden."
 
-#: src/Modules/Mail.php:249
+#: src/Modules/Mail.php:250
 msgid "notification"
 msgstr "notifikation"
 
@@ -513,14 +511,13 @@ msgstr "BM-förslag"
 #. translators: 1. Link to Suggested Plugins
 #: src/Modules/Plugins.php:81
 msgid ""
-"Some plugins may affect the display, performance, and reliability of your "
-"website negatively. Please consider <a href='%s'>Bernskiold Media suggestions</"
-"a> and if in doubt consult with Bernskiold Media support."
+"Some plugins may affect the display, performance, and reliability of your website "
+"negatively. Please consider <a href='%s'>Bernskiold suggestions</a> and if in "
+"doubt consult with Bernskiold support."
 msgstr ""
 "Vissa tillägg kan påverka visningen, prestandan och pålitligheten på din "
-"webbplats på ett negativt sätt. Överväg gärna att använda <a "
-"href='%s'>Bernskiold Medias föreslagna tillägg</a> och om du är osäker, "
-"rådfråga Bernskiold Medias support."
+"webbplats på ett negativt sätt. Överväg gärna att använda <a href='%s'>Bernskiold "
+"Medias föreslagna tillägg</a> och om du är osäker, rådfråga Bernskiolds support."
 
 #: src/Modules/Plugins.php:104
 msgid "Learn More"
@@ -602,8 +599,7 @@ msgstr "Tvåfaktorsautentisering"
 
 #: views/admin/two-factor.php:8
 msgid ""
-"Protect your account and increase security by enabling two-factor "
-"authentication."
+"Protect your account and increase security by enabling two-factor authentication."
 msgstr ""
 "Skydda ditt konto och öka säkerheten genom att aktivera tvåfaktorsautentisering."
 
@@ -646,9 +642,9 @@ msgid ""
 "\t\t\t\t<a href=\"https://1password.com\" target=\"_blank\">1Password</a> that "
 "lets you both store passwords securely, as well two factor codes."
 msgstr ""
-"Vi rekommenderar att du använder ett program som t.ex <a "
-"href=\"https://1password.com\" target=\"_blank\">1Password</a> som låter dig "
-"både lagra lösenord och tvåfaktorskoder säkert."
+"Vi rekommenderar att du använder ett program som t.ex <a href=\"https://1password."
+"com\" target=\"_blank\">1Password</a> som låter dig både lagra lösenord och "
+"tvåfaktorskoder säkert."
 
 #: views/admin/two-factor.php:33 views/public/2fa-activation.php:13
 msgid ""
@@ -656,8 +652,7 @@ msgid ""
 "target=\"_blank\">Authy</a> if you don't want a full password manager."
 msgstr ""
 "Du kan också använda en särskild app som <a href=\"https://authy.com\" "
-"target=\"_blank\">Authy</a> om du inte vill ha en fullständig "
-"lösenordshanterare."
+"target=\"_blank\">Authy</a> om du inte vill ha en fullständig lösenordshanterare."
 
 #: views/admin/two-factor.php:35 views/public/2fa-activation.php:15
 msgid "Get Started"
@@ -705,8 +700,8 @@ msgid "Finish Setup"
 msgstr "Avsluta konfigurationen"
 
 #: views/dashboard-widgets/academy-feed.php:15
-msgid "https://bernskioldmedia.com/en/academy/"
-msgstr "https://bernskioldmedia.com/sv/academy/"
+msgid "https://bernskiold.com/en/academy/"
+msgstr "https://bernskiold.com/sv/academy/"
 
 #: views/dashboard-widgets/academy-feed.php:15
 msgid "More at the Academy ›"
@@ -760,36 +755,36 @@ msgid "BM WP Experience"
 msgstr "BM WP-upplevelse"
 
 #. Author URI of the plugin/theme
-msgid "https://www.bernskioldmedia.com"
-msgstr "https://www.bernskioldmedia.com/sv"
+msgid "https://www.bernskiold.com"
+msgstr "https://www.bernskiold.com/sv"
 
 #. Description of the plugin/theme
 msgid ""
-"Provides an opinionated WordPress experience with clean-up and tweaks that we "
-"at Bernskiold Media have found runs WordPress best."
+"Provides an opinionated WordPress experience with clean-up and tweaks that we at "
+"Bernskiold have found runs WordPress best."
 msgstr ""
 "Ger en WordPress-upplevelse med justeringar och förbättringar som vi på "
-"Bernskiold Media tycker optimerar WordPress på bästa sätt."
+"Bernskiold tycker optimerar WordPress på bästa sätt."
 
 #: src/Admin/Admin_Bar.php:181
 msgctxt "BM Academy URL"
-msgid "https://www.bernskioldmedia.com/en/academy/"
-msgstr "https://www.bernskioldmedia.com/sv/academy/"
+msgid "https://www.bernskiold.com/en/academy/"
+msgstr "https://www.bernskiold.com/sv/academy/"
 
 #: src/Admin/Admin_Bar.php:191
 msgctxt "BM Support URL"
-msgid "https://support.bernskioldmedia.com/"
-msgstr "https://support.bernskioldmedia.com/"
+msgid "https://support.bernskiold.com/"
+msgstr "https://support.bernskiold.com/"
 
 #: src/Admin/Admin_Bar.php:201
 msgctxt "BM Services URL"
-msgid "https://www.bernskioldmedia.com/en/services/"
-msgstr "https://www.bernskioldmedia.com/en/tjanster/"
+msgid "https://www.bernskiold.com/en/services/"
+msgstr "https://www.bernskiold.com/sv/tjanster/"
 
 #: src/Modules/Dashboard.php:47
 msgctxt "academy feed"
-msgid "https://bernskioldmedia.com/en/feed/"
-msgstr "https://bernskioldmedia.com/sv/feed/"
+msgid "https://bernskiold.com/en/feed/"
+msgstr "https://bernskiold.com/sv/feed/"
 
 #: vendor/yahnis-elsts/plugin-update-checker/Puc/v4p11/Plugin/Ui.php:214
 msgctxt "the plugin title"
@@ -808,5 +803,5 @@ msgstr "Det gick inte att avgöra om det finns tillgängliga uppdateringar för 
 
 #: views/admin/about-bm.php:12
 msgctxt "bm website about url"
-msgid "https://bernskioldmedia.com/en/cc-embed/about/"
-msgstr "https://bernskioldmedia.com/sv/cc-embed/om-oss/"
+msgid "https://bernskiold.com/en/cc-embed/about/"
+msgstr "https://bernskiold.com/sv/cc-embed/om-oss/"

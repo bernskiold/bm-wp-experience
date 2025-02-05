@@ -15,8 +15,8 @@ For almost every feature there is a filter, constant or action allowing you to c
 
 ### Admin & Admin Bar
 
-- Add slight Bernskiold Media branding
-- Add links to Bernskiold Media help and support
+- Add slight Bernskiold branding
+- Add links to Bernskiold help and support
 - Clean up the admin bar with less important nodes (Comments, Yoast SEO, New Draft, Customizer)
 - Remove lesser used dashboard widgets.
 - Remove import/export pages by default and only show them if `BM_WP_ENABLE_IMPORT_EXPORT` is set to true. Most of the time we don't need this.
@@ -81,7 +81,7 @@ For almost every feature there is a filter, constant or action allowing you to c
 
 ### Plugins
 
-- Include a tab with suggested plugins from Bernskiold Media.
+- Include a tab with suggested plugins from Bernskiold.
 - Add a warning when disabling this plugin.
 
 ### REST API
