@@ -33,7 +33,7 @@ class Matomo_Sync extends Module
 
     }
 
-    public function add_field_to_register_site_form(): void
+    public static function add_field_to_register_site_form(): void
     {
         ?>
         <h3><?php esc_html_e('Matomo', 'bm-wp-experience'); ?></h3>
@@ -56,7 +56,7 @@ class Matomo_Sync extends Module
         <?php
     }
 
-    public function save_site_register_fields(WP_Site $site): void
+    public static function save_site_register_fields(WP_Site $site): void
     {
 
         if (self::is_enabled_for_site($site->id)) {
