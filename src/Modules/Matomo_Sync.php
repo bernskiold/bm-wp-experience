@@ -67,6 +67,9 @@ class Matomo_Sync extends Module
             update_blog_option($site->id, self::$automatic_connection_option, 1);
 
             $matomo_id = self::maybe_create_site_and_get_matomo_id($site);
+            if( !$matomo_id ){
+                return;
+            }
             self::add_users_to_matomo($site, $matomo_id);
 
         } else {
