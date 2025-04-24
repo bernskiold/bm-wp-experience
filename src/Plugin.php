@@ -41,6 +41,7 @@ class Plugin extends BasePlugin {
 		Modules\Rest_Api::class,
 		Modules\Security::class,
 		Modules\Site_Health::class,
+        Modules\Sso\Okta::class,
 		Modules\Updates::class,
 		Modules\Users::class,
 	];
