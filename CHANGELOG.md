@@ -2,6 +2,81 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 3.11.6 - 2023-12-08
+
+### What's Changed
+
+* Bump actions/checkout from 3 to 4 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/110
+* Bump dependabot/fetch-metadata from 1.5.1 to 1.6.0 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/105
+* Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskioldmedia/bm-wp-experience/pull/104
+* Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskioldmedia/bm-wp-experience/pull/112
+* Bump postcss and postcss-preset-env by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/113
+* Mail Settings by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/119
+* Bump browserify-sign from 4.2.1 to 4.2.2 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/118
+* Bump actions/setup-node from 3 to 4 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/117
+* Bump @babel/traverse from 7.23.0 to 7.23.2 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/116
+* Bump stefanzweifel/git-auto-commit-action from 4 to 5 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/115
+* Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskioldmedia/bm-wp-experience/pull/114
+
+**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.11.5...3.11.6
+
+## 3.11.5 - 2023-09-18
+
+Fixes a bug where faulty code was introduced in the Mail module.
+
+**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.11.4...3.11.5
+
+## 3.11.4 - 2023-09-18
+
+### What's Changed
+
+- Make it possible to only use SMTP for some sites in a multisite by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/111
+
+**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.11.3...3.11.4
+
+## 3.11.3 - 2023-08-31
+
+### What's Changed
+
+- User access to admin pages by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/108
+- Default URL to analytics by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/109
+
+**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.11.2...3.11.3
+
+## 3.11.2 - 2023-08-09
+
+### What's Changed
+
+- Fix issue where we get a warning about wp being undefined by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/106
+- fix issue where we get a warning about foreach when removing the lite… by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/107
+- Fix issue where we get a warning for using an Imagick function when Imagick is not enabled
+
+**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.11.1...3.11.2
+
+## 3.11.1 - 2023-06-26
+
+### What's changed?
+
+- Fixed an issue where the tracking URL was not properly set when using the Matomo Sync.
+- Save matomo site ID before automated sync is enabled to prevent cases where a duplicate website was mistakenly created
+
+**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.11.0...3.11.1
+
+## 3.11.0 - 2023-06-26
+
+### What's Changed
+
+- Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskioldmedia/bm-wp-experience/pull/93
+- Improve Comments Disabling by @ErikBernskiold in https://github.com/bernskioldmedia/bm-wp-experience/pull/100
+- Bump dependabot/fetch-metadata from 1.3.5 to 1.4.0 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/99
+- Bump peter-evans/create-pull-request from 4 to 5 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/98
+- Bump webpack from 5.75.0 to 5.76.1 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/97
+- Automated Matomo Sync by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/101
+- Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskioldmedia/bm-wp-experience/pull/103
+- Bump dependabot/fetch-metadata from 1.4.0 to 1.5.1 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/102
+
+**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.10.3...3.11.0
+
 ## 3.10.3 - 2023-01-17
 
 ### What's Changed

@@ -23,6 +23,11 @@ class TwoFactorAuthentication implements Hookable {
 	}
 
 	public static function hooks(): void {
+
+        if (!extension_loaded('imagick')){
+            add_action('admin_notices', [self::class, 'admin_notice_no_imagick']);
+            return;
+        }
 		// User profile section.
 		add_action( 'show_user_profile', [ self::class, 'user_profile_section_content' ] );
 		add_action( 'edit_user_profile', [ self::class, 'user_profile_section_content' ] );
@@ -41,6 +46,14 @@ class TwoFactorAuthentication implements Hookable {
 		add_action( 'login_form_2fa_backup', [ self::class, 'validate_backup_login' ] );
 		add_action( 'login_form_load_backup_codes', [ self::class, 'load_backup_codes_form' ] );
 	}
+
+    public static function admin_notice_no_imagick(): void {
+        ?>
+        <div class="notice notice-error">
+            <p><?php _e( 'The Two Factor Authentication module requires the Imagick PHP extension to be installed.', 'bm-wp-experience' ); ?></p>
+        </div>
+        <?php
+    }
 
 	public static function user_profile_section_content( \WP_User $user ): void {
 		$user_id = $user->ID;

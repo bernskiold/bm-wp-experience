@@ -1,7 +1,7 @@
 {
 	"name": "bm-wp-experience",
-	"version": "3.10.3",
-	"description": "Provides an opinionated WordPress experience with clean-up and tweaks that we at Bernskiold Media have found runs WordPress best.",
+	"version": "3.11.6",
+	"description": "Provides an opinionated WordPress experience with clean-up and tweaks that we at Bernskiold have found runs WordPress best.",
 	"main": "assets/scripts/src/index.js",
 	"scripts": {
 		"release": "npm run production",
@@ -14,13 +14,13 @@
 		"i18n:textdomain": "npx wpi18n addtextdomain --exclude=vendor,node_modules --type theme",
 		"i18n:pot": "npx wpi18n makepot  --domain-path ./languages/"
 	},
-	"author": "Bernskiold Media",
+	"author": "Bernskiold",
 	"license": "GPL-2.0+",
 	"devDependencies": {
 		"cross-env": "^7.0.*",
 		"laravel-mix": "^6.0.31",
 		"node-wp-i18n": "^1.2.6",
-		"postcss-preset-env": "^6.7.*",
+		"postcss-preset-env": "^9.1.*",
 		"rimraf": "^3.0.2",
 		"sass": "^1.48.0",
 		"sass-loader": "^12.4.0"

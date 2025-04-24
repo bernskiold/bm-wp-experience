@@ -13,17 +13,17 @@ jobs:
         steps:
         
             - name: Checkout Code
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   ref: ${{ github.head_ref }}
               
             - name: Setup Node
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
                   node-version: 14
                   
             - name: Cache dependencies
-              uses: actions/cache@v3
+              uses: actions/cache@v4
               with:
                   path: ~/.npm
                   key: npm-${{ hashFiles('package-lock.json') }}
@@ -57,13 +57,13 @@ jobs:
               run: npm run production && composer install --no-dev -o
               
             - name: Commit
-              uses: stefanzweifel/git-auto-commit-action@v4
+              uses: stefanzweifel/git-auto-commit-action@v5
               with:
                   branch: main
                   commit_message: "Prepare release ${{ github.event.inputs.versionName }}"
                   
             - name: Release
-              uses: softprops/action-gh-release@v1
+              uses: softprops/action-gh-release@v2
               with:
                   draft: true
                   prerelease: false

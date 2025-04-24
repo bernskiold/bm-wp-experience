@@ -710,7 +710,7 @@
             "authors": [
                 {
                     "name": "Erik Bernskiold",
-                    "email": "erik@bernskioldmedia.com"
+                    "email": "erik@bernskiold.com"
                 }
             ],
             "description": "Development tools that we use for our WordPress projects.",
@@ -762,9 +762,9 @@
             ],
             "authors": [
                 {
-                    "name": "Bernskiold Media",
-                    "email": "hello@bernskioldmedia.com",
-                    "homepage": "https://bernskioldmedia.com",
+                    "name": "Bernskiold",
+                    "email": "hello@bernskiold.com",
+                    "homepage": "https://bernskiold.com",
                     "role": "agency"
                 }
             ],

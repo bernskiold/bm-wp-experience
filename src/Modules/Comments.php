@@ -24,6 +24,7 @@ class Comments extends Module {
         add_action('template_redirect', [ self::class, 'protect_comment_feeds' ], 9);
         add_action('template_redirect', [ self::class, 'remove_comments_from_admin_bar' ]);
         add_action('admin_init', [ self::class, 'remove_comments_from_admin_bar' ]);
+        add_action('admin_init', [ self::class, 'remove_post_type_support' ]);
         add_filter('rest_endpoints', [ self::class, 'remove_comments_from_rest_api' ]);
         add_filter('rest_pre_insert_comment', [ self::class, 'disable_adding_comments_from_rest_api' ]);
         add_filter('xmlrpc_methods', [ self::class, 'disable_comments_via_xmlrpc' ]);
@@ -34,11 +35,24 @@ class Comments extends Module {
         add_filter('pre_option_default_pingback_flag', '__return_zero');
         add_filter('feed_links_show_comments_feed', '__return_false');
 
+        add_filter('comments_open', '__return_false', 20, 2);
+        add_filter('pings_open', '__return_false', 20, 2);
+        add_filter('comments_array', '__return_empty_array', 10, 2);
+
         remove_action('wp_head', 'feed_links_extra', 3);
 
         add_action('wp_enqueue_scripts', static function () {
             wp_deregister_script('comment-reply');
         });
+    }
+
+    public static function remove_post_type_support(): void {
+        foreach (get_post_types() as $post_type) {
+            if (post_type_supports($post_type, 'comments')) {
+                remove_post_type_support($post_type, 'comments');
+                remove_post_type_support($post_type, 'trackbacks');
+            }
+        }
     }
 
     /**

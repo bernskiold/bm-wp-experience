@@ -6,6 +6,7 @@
 
 namespace BernskioldMedia\WP\Experience\Admin;
 
+use BernskioldMedia\WP\Experience\Modules\Users;
 use BernskioldMedia\WP\Experience\Plugin;
 use BMWPEXP_Vendor\BernskioldMedia\WP\PluginBase\Interfaces\Hookable;
 
@@ -47,10 +48,10 @@ class Admin_Pages implements Hookable {
 		}
 
 		/*
-		 * Add About Bernskiold Media page.
+		 * Add About Bernskiold page.
 		 */
 		if ( true === apply_filters( 'bm_wpexp_show_admin_page_about', true ) ) {
-			add_submenu_page( '', esc_html__( 'About Bernskiold Media', 'bm-wp-experience' ), esc_html__( 'About Bernskiold Media', 'bm-wp-experience' ), 'edit_posts', 'bm-about', [
+			add_submenu_page( '', esc_html__( 'About Bernskiold', 'bm-wp-experience' ), esc_html__( 'About Bernskiold', 'bm-wp-experience' ), 'edit_posts', 'bm-about', [
 				self::class,
 				'view_about_bm',
 			] );
@@ -98,6 +99,10 @@ class Admin_Pages implements Hookable {
 		if ( defined( 'BM_WP_ENABLE_IMPORT_EXPORT' ) && BM_WP_ENABLE_IMPORT_EXPORT ) {
 			return;
 		}
+
+        if( Users::is_agency(wp_get_current_user()) ) {
+            return;
+        }
 
 		remove_submenu_page( 'tools.php', 'export.php' );
 		remove_submenu_page( 'tools.php', 'import.php' );

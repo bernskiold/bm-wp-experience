@@ -2,6 +2,8 @@
 
 namespace BernskioldMedia\WP\Experience\Modules;
 
+use BernskioldMedia\WP\Experience\Integrations\Matomo_Api;
+
 class Matomo extends Module
 {
 
@@ -13,6 +15,9 @@ class Matomo extends Module
             return;
         }
 
+        add_filter('wpmu_blogs_columns', [self::class, 'add_matomo_column']);
+        add_action('manage_sites_custom_column', [self::class, 'add_matomo_link_to_site_in_sites_list'], 10, 2);
+
         if (wp_get_environment_type() !== 'production' && false === apply_filters('bm_wpexp_matomo_load_outside_production',
                 false)) {
             return;
@@ -22,6 +27,8 @@ class Matomo extends Module
         if (empty(self::get_site_id())) {
             return;
         }
+
+
 
         add_action('wp_head', [self::class, 'analytics_code'], 9999); // Hook far down.
 
@@ -40,9 +47,20 @@ class Matomo extends Module
 
     protected static function get_instance_url(): string
     {
-        $value = 'https://analytics.bmedia.io/';
+        $default_url = 'https://analytics.bmedia.io/';
+        $value = $default_url;
         if (is_multisite()) {
-            $value =  get_option('bm_wp_matomo_url', 'https://analytics.bmedia.io/');
+            $is_connection_enabled_for_site = Matomo_Sync::is_enabled_for_site( get_current_blog_id() );
+            if( $is_connection_enabled_for_site ){
+                $value = defined('BM_WP_MATOMO_INSTANCE_URL') ? BM_WP_MATOMO_INSTANCE_URL : $default_url;
+            }
+            else{
+                $value =  get_option('bm_wp_matomo_url', $default_url);
+                if( $value === ''){
+                    $value = $default_url;
+                }
+            }
+
         }
 
         return trailingslashit(apply_filters('bm_wpexp_matomo_url', $value ));
@@ -150,6 +168,27 @@ class Matomo extends Module
             </p>
         </noscript>
         <?php
+    }
+
+    public static function add_matomo_column($sites_columns){
+        $sites_columns['bm_wp_matomo'] = __('Matomo Site ID','bm-wp-experience');
+
+        return $sites_columns;
+    }
+
+    public static function add_matomo_link_to_site_in_sites_list($column_name, $blog_id)
+    {
+        if( 'bm_wp_matomo' !== $column_name ) {
+            return;
+        }
+
+        $matomo_id = Matomo_Sync::get_matomo_id_for_current_or_given_blog($blog_id);
+
+        if(empty($matomo_id)){
+            return;
+        }
+
+        echo '<a href="'.Matomo_Api::get_api_url().'/index.php?module=CoreHome&action=index&idSite='.$matomo_id.'" target="_blank">'. $matomo_id .'</a>';
     }
 
 }

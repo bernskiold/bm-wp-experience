@@ -1,17 +1,17 @@
-# Copyright (C) 2022 Bernskiold Media
+# Copyright (C) 2025 Bernskiold
 # This file is distributed under the same license as the BM WP Experience package.
 msgid ""
 msgstr ""
-"Project-Id-Version: BM WP Experience 3.7.0\n"
+"Project-Id-Version: BM WP Experience 3.11.6\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bm-wp-experience\n"
-"POT-Creation-Date: 2022-09-02 12:56:08+00:00\n"
+"POT-Creation-Date: 2025-01-28 20:05:19+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2022-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"X-Generator: node-wp-i18n 1.2.6\n"
+"X-Generator: node-wp-i18n 1.2.7\n"
 
 #: acp-columns/60f1655d5fd1f.php:26 acp-columns/60f16cb5069c4.php:45
 #: acp-columns/60f16cb5069c4.php:54
@@ -116,89 +116,103 @@ msgstr ""
 msgid "Uploaded To"
 msgstr ""
 
-#: src/Admin/Admin.php:37
+#: src/Admin/Admin.php:41
 #. translators: 1. Site Name
 msgid ""
 "Thank you for creating with <a href=\"https://wordpress.org\">WordPress</a> "
 "and <a "
-"href=\"https://www.bernskioldmedia.com/en/?utm_source=clientsite&utm_"
-"medium=dashboard_link&utm_campaign=%1$s\">Bernskiold Media</a>."
+"href=\"https://www.bernskiold.com/en/?utm_source=clientsite&utm_"
+"medium=dashboard_link&utm_campaign=%1$s\">Bernskiold</a>."
 msgstr ""
 
-#: src/Admin/Admin_Analytics_Tab.php:25
+#: src/Admin/Admin_Analytics_Tab.php:27
 msgid "BM Analytics"
 msgstr ""
 
-#: src/Admin/Admin_Analytics_Tab.php:35
+#: src/Admin/Admin_Analytics_Tab.php:38
 msgid "The analytics settings has been updated"
 msgstr ""
 
-#: src/Admin/Admin_Analytics_Tab.php:93
+#: src/Admin/Admin_Analytics_Tab.php:109
 msgid "Analytics Settings for: %s"
 msgstr ""
 
-#: src/Admin/Admin_Analytics_Tab.php:95
+#: src/Admin/Admin_Analytics_Tab.php:112 src/Admin/Admin_Mail_Tab.php:84
 msgid "Visit"
 msgstr ""
 
-#: src/Admin/Admin_Analytics_Tab.php:96
+#: src/Admin/Admin_Analytics_Tab.php:114 src/Admin/Admin_Mail_Tab.php:86
 msgid "Dashboard"
 msgstr ""
 
-#: src/Admin/Admin_Analytics_Tab.php:111
+#: src/Admin/Admin_Analytics_Tab.php:131 src/Modules/Matomo_Sync.php:44
+msgid "Automatic connection with Matomo"
+msgstr ""
+
+#: src/Admin/Admin_Analytics_Tab.php:138 src/Modules/Matomo_Sync.php:49
+msgid "Yes, enable automatic connection with Matomo"
+msgstr ""
+
+#: src/Admin/Admin_Analytics_Tab.php:140 src/Modules/Matomo_Sync.php:51
+msgid ""
+"A Matomo ID will be created. Administrators of the site will automatically "
+"get access to Matomo."
+msgstr ""
+
+#: src/Admin/Admin_Analytics_Tab.php:149
 msgid "Matomo ID"
 msgstr ""
 
-#: src/Admin/Admin_Analytics_Tab.php:121
+#: src/Admin/Admin_Analytics_Tab.php:162
 msgid "Instance URL"
 msgstr ""
 
-#: src/Admin/Admin_Analytics_Tab.php:131
+#: src/Admin/Admin_Analytics_Tab.php:180
 msgid "Cookie Consent"
 msgstr ""
 
-#: src/Admin/Admin_Analytics_Tab.php:135
+#: src/Admin/Admin_Analytics_Tab.php:187
 msgid "Yes, enable automatic cookie consent integration"
 msgstr ""
 
-#: src/Admin/Admin_Analytics_Tab.php:141
+#: src/Admin/Admin_Analytics_Tab.php:194
 msgid "User ID"
 msgstr ""
 
-#: src/Admin/Admin_Analytics_Tab.php:145
+#: src/Admin/Admin_Analytics_Tab.php:201
 msgid "Yes, send user id to analytics"
 msgstr ""
 
-#: src/Admin/Admin_Analytics_Tab.php:146
+#: src/Admin/Admin_Analytics_Tab.php:202
 msgid ""
 "Please note that passing user id to analytics requires informed and "
 "specific user consent under GDPR."
 msgstr ""
 
-#: src/Admin/Admin_Analytics_Tab.php:152
+#: src/Admin/Admin_Analytics_Tab.php:209
 msgid "Track Subdomains"
 msgstr ""
 
-#: src/Admin/Admin_Analytics_Tab.php:156
+#: src/Admin/Admin_Analytics_Tab.php:216
 msgid "Yes, enable tracking of subdomains"
 msgstr ""
 
-#: src/Admin/Admin_Analytics_Tab.php:162
+#: src/Admin/Admin_Analytics_Tab.php:222
 msgid "Domain"
 msgstr ""
 
-#: src/Admin/Admin_Analytics_Tab.php:167
+#: src/Admin/Admin_Analytics_Tab.php:228
 msgid ""
 "If you have enables subdomains above you need to enter your website domain "
 "here, for example: example.com"
 msgstr ""
 
-#: src/Admin/Admin_Analytics_Tab.php:172
+#: src/Admin/Admin_Analytics_Tab.php:234 src/Admin/Admin_Mail_Tab.php:124
 msgid "Save"
 msgstr ""
 
 #: src/Admin/Admin_Bar.php:100 src/Admin/Admin_Bar.php:103
-#: src/Admin/Admin_Pages.php:43
+#: src/Admin/Admin_Pages.php:44
 msgid "Help & Support"
 msgstr ""
 
@@ -211,12 +225,12 @@ msgid "Customize the site appearance."
 msgstr ""
 
 #. Author of the plugin/theme
-msgid "Bernskiold Media"
+msgid "Bernskiold"
 msgstr ""
 
 #: src/Admin/Admin_Bar.php:162 src/Admin/Admin_Bar.php:165
-#: src/Admin/Admin_Pages.php:53
-msgid "About Bernskiold Media"
+#: src/Admin/Admin_Pages.php:54
+msgid "About Bernskiold"
 msgstr ""
 
 #: src/Admin/Admin_Bar.php:180 src/Admin/Admin_Bar.php:183
@@ -231,24 +245,62 @@ msgstr ""
 msgid "Services"
 msgstr ""
 
-#: src/Admin/Admin_Pages.php:32
+#: src/Admin/Admin_Mail_Tab.php:27
+msgid "Mail"
+msgstr ""
+
+#: src/Admin/Admin_Mail_Tab.php:38
+msgid "The mail settings has been updated"
+msgstr ""
+
+#: src/Admin/Admin_Mail_Tab.php:81
+msgid "E-mail settings for: %s"
+msgstr ""
+
+#: src/Admin/Admin_Mail_Tab.php:101
+msgid "Name email is sent from"
+msgstr ""
+
+#: src/Admin/Admin_Mail_Tab.php:107
+msgid ""
+"This name will override the sender name, usually the site name, for "
+"notifications e.g. password reset, but also for emails sent with Gravity "
+"Forms and WooCommerce. If no name is added, a default will be used from the "
+"config shown as a placeholder here. If there's no settings in the config, "
+"the system settings will be used."
+msgstr ""
+
+#: src/Admin/Admin_Mail_Tab.php:113
+msgid "E-mail address"
+msgstr ""
+
+#: src/Admin/Admin_Mail_Tab.php:119
+msgid ""
+"This email address will override the system email address for notifications "
+"e.g. password reset, but also addresses added to the settings for example "
+"Gravity Forms and WooCommerce. If no address is added, a default will be "
+"used from the config shown as a placeholder here. If there's no settings in "
+"the config, the system settings will be used."
+msgstr ""
+
+#: src/Admin/Admin_Pages.php:33
 msgid "Reusable Blocks"
 msgstr ""
 
-#: src/Admin/Admin_Pages.php:63
+#: src/Admin/Admin_Pages.php:64
 msgid "Company Cloud Dashboard"
 msgstr ""
 
-#: src/Admin/Admin_Pages.php:63
+#: src/Admin/Admin_Pages.php:64
 msgid "My Website"
 msgstr ""
 
-#: src/Modules/Comments.php:69 src/Modules/Comments.php:139
+#: src/Modules/Comments.php:83 src/Modules/Comments.php:153
 msgid "This site does not support comments."
 msgstr ""
 
 #: src/Modules/Dashboard.php:46
-msgid "Bernskiold Media Academy"
+msgid "Bernskiold Academy"
 msgstr ""
 
 #: src/Modules/Dashboard.php:50
@@ -338,8 +390,8 @@ msgid ""
 "Not having the site on a maintenance plan means that you need to take extra "
 "care updating WordPress, plugins and themes to keep it up to date with the "
 "latest security fixes. Contact us at <a "
-"href=\"mailto:support@bernskioldmedia.com\">support@bernskioldmedia.com</a> "
-"to find out more."
+"href=\"mailto:support@bernskiold.com\">support@bernskiold.com</a> to find "
+"out more."
 msgstr ""
 
 #: src/Modules/Health_Checks/Security/Maintenance_Plan_Check.php:39
@@ -374,21 +426,33 @@ msgstr ""
 msgid "WP-Config File Permissions"
 msgstr ""
 
-#: src/Modules/Mail.php:27
+#: src/Modules/Mail.php:45
 msgid "E-Mails Not Sending:"
 msgstr ""
 
-#: src/Modules/Mail.php:29
+#: src/Modules/Mail.php:47
 msgid ""
 "Sending via SMTP is currently enabled but the configuration has not been "
 "properly set in the configuration files. Sending via SMTP is therefore "
 "disabled and e-mail will be send via the default PHP sendmail functions."
 msgstr ""
 
-#: src/Modules/Mail.php:30
+#: src/Modules/Mail.php:48
 msgid ""
 "You can fix this error by either disabling SMTP in the configuration, or "
 "providing proper configuration values."
+msgstr ""
+
+#: src/Modules/Mail.php:250
+msgid "notification"
+msgstr ""
+
+#: src/Modules/Matomo.php:174
+msgid "Matomo Site ID"
+msgstr ""
+
+#: src/Modules/Matomo_Sync.php:39
+msgid "Matomo"
 msgstr ""
 
 #: src/Modules/Multisite.php:80
@@ -404,8 +468,8 @@ msgstr ""
 #. translators: 1. Link to Suggested Plugins
 msgid ""
 "Some plugins may affect the display, performance, and reliability of your "
-"website negatively. Please consider <a href='%s'>Bernskiold Media "
-"suggestions</a> and if in doubt consult with Bernskiold Media support."
+"website negatively. Please consider <a href='%s'>Bernskiold suggestions</a> "
+"and if in doubt consult with Bernskiold support."
 msgstr ""
 
 #: src/Modules/Plugins.php:104
@@ -425,11 +489,17 @@ msgstr ""
 msgid "Authentication is required."
 msgstr ""
 
-#: src/Modules/Security/TwoFactorAuthentication.php:280
+#: src/Modules/Security/TwoFactorAuthentication.php:53
+msgid ""
+"The Two Factor Authentication module requires the Imagick PHP extension to "
+"be installed."
+msgstr ""
+
+#: src/Modules/Security/TwoFactorAuthentication.php:293
 msgid "The code you entered is not valid. Please try again."
 msgstr ""
 
-#: src/Modules/Security/TwoFactorAuthentication.php:306
+#: src/Modules/Security/TwoFactorAuthentication.php:319
 msgid "The backup code you entered is not valid. Please try again."
 msgstr ""
 
@@ -561,7 +631,7 @@ msgid "Finish Setup"
 msgstr ""
 
 #: views/dashboard-widgets/academy-feed.php:15
-msgid "https://bernskioldmedia.com/en/academy/"
+msgid "https://bernskiold.com/en/academy/"
 msgstr ""
 
 #: views/dashboard-widgets/academy-feed.php:15
@@ -615,33 +685,33 @@ msgid "BM WP Experience"
 msgstr ""
 
 #. Author URI of the plugin/theme
-msgid "https://www.bernskioldmedia.com"
+msgid "https://www.bernskiold.com"
 msgstr ""
 
 #. Description of the plugin/theme
 msgid ""
 "Provides an opinionated WordPress experience with clean-up and tweaks that "
-"we at Bernskiold Media have found runs WordPress best."
+"we at Bernskiold have found runs WordPress best."
 msgstr ""
 
 #: src/Admin/Admin_Bar.php:181
 msgctxt "BM Academy URL"
-msgid "https://www.bernskioldmedia.com/en/academy/"
+msgid "https://www.bernskiold.com/en/academy/"
 msgstr ""
 
 #: src/Admin/Admin_Bar.php:191
 msgctxt "BM Support URL"
-msgid "https://support.bernskioldmedia.com/"
+msgid "https://support.bernskiold.com/"
 msgstr ""
 
 #: src/Admin/Admin_Bar.php:201
 msgctxt "BM Services URL"
-msgid "https://www.bernskioldmedia.com/en/services/"
+msgid "https://www.bernskiold.com/en/services/"
 msgstr ""
 
 #: src/Modules/Dashboard.php:47
 msgctxt "academy feed"
-msgid "https://bernskioldmedia.com/en/feed/"
+msgid "https://bernskiold.com/en/feed/"
 msgstr ""
 
 #: vendor/yahnis-elsts/plugin-update-checker/Puc/v4p11/Plugin/Ui.php:214
@@ -661,5 +731,5 @@ msgstr ""
 
 #: views/admin/about-bm.php:12
 msgctxt "bm website about url"
-msgid "https://bernskioldmedia.com/en/cc-embed/about/"
+msgid "https://bernskiold.com/en/cc-embed/about/"
 msgstr ""

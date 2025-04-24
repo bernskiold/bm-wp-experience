@@ -12,8 +12,8 @@ class Users extends Module {
      * Includes sub-domains.
      */
     protected const ALLOWLISTED_DOMAINS = [
-        'bernskioldmedia.com',
-        'bernskioldmedia.se',
+        'bernskiold.com',
+        'bernskiold.se',
     ];
 
     /**
@@ -84,5 +84,22 @@ class Users extends Module {
      */
     public static function get_email_domains(): array {
         return apply_filters( 'bm_wpexp_authors_email_domains', self::EMAIL_DOMAINS );
+    }
+
+    public static function is_agency( $user ){
+
+        $is_agency = false;
+        foreach ( self::get_email_domains() as $domain ) {
+            if ( $is_agency !== true && false !== stripos( $user->user_email, $domain ) ) {
+                $is_agency = true;
+            }
+        }
+
+        if( $is_agency ){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }
