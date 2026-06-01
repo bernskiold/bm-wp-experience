@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
-            "version": "2.0.7",
+            "version": "2.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Bacon/BaconQrCode.git",
-                "reference": "d70c840f68657ce49094b8d91f9ee0cc07fbf66c"
+                "reference": "8674e51bb65af933a5ffaf1c308a660387c35c22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/d70c840f68657ce49094b8d91f9ee0cc07fbf66c",
-                "reference": "d70c840f68657ce49094b8d91f9ee0cc07fbf66c",
+                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/8674e51bb65af933a5ffaf1c308a660387c35c22",
+                "reference": "8674e51bb65af933a5ffaf1c308a660387c35c22",
                 "shasum": ""
             },
             "require": {
@@ -56,9 +56,9 @@
             "homepage": "https://github.com/Bacon/BaconQrCode",
             "support": {
                 "issues": "https://github.com/Bacon/BaconQrCode/issues",
-                "source": "https://github.com/Bacon/BaconQrCode/tree/2.0.7"
+                "source": "https://github.com/Bacon/BaconQrCode/tree/2.0.8"
             },
-            "time": "2022-03-14T02:02:36+00:00"
+            "time": "2022-12-07T17:46:57+00:00"
         },
         {
             "name": "composer/installers",
@@ -213,21 +213,24 @@
         },
         {
             "name": "dasprid/enum",
-            "version": "1.0.3",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DASPRiD/Enum.git",
-                "reference": "5abf82f213618696dda8e3bf6f64dd042d8542b2"
+                "reference": "b5874fa9ed0043116c72162ec7f4fb50e02e7cce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DASPRiD/Enum/zipball/5abf82f213618696dda8e3bf6f64dd042d8542b2",
-                "reference": "5abf82f213618696dda8e3bf6f64dd042d8542b2",
+                "url": "https://api.github.com/repos/DASPRiD/Enum/zipball/b5874fa9ed0043116c72162ec7f4fb50e02e7cce",
+                "reference": "b5874fa9ed0043116c72162ec7f4fb50e02e7cce",
                 "shasum": ""
             },
+            "require": {
+                "php": ">=7.1 <9.0"
+            },
             "require-dev": {
-                "phpunit/phpunit": "^7 | ^8 | ^9",
-                "squizlabs/php_codesniffer": "^3.4"
+                "phpunit/phpunit": "^7 || ^8 || ^9 || ^10 || ^11",
+                "squizlabs/php_codesniffer": "*"
             },
             "type": "library",
             "autoload": {
@@ -254,22 +257,22 @@
             ],
             "support": {
                 "issues": "https://github.com/DASPRiD/Enum/issues",
-                "source": "https://github.com/DASPRiD/Enum/tree/1.0.3"
+                "source": "https://github.com/DASPRiD/Enum/tree/1.0.7"
             },
-            "time": "2020-10-02T16:03:48+00:00"
+            "time": "2025-09-16T12:23:56+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
-            "version": "v2.5.0",
+            "version": "v2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/constant_time_encoding.git",
-                "reference": "9229e15f2e6ba772f0c55dd6986c563b937170a8"
+                "reference": "e30811f7bc69e4b5b6d5783e712c06c8eabf0226"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/constant_time_encoding/zipball/9229e15f2e6ba772f0c55dd6986c563b937170a8",
-                "reference": "9229e15f2e6ba772f0c55dd6986c563b937170a8",
+                "url": "https://api.github.com/repos/paragonie/constant_time_encoding/zipball/e30811f7bc69e4b5b6d5783e712c06c8eabf0226",
+                "reference": "e30811f7bc69e4b5b6d5783e712c06c8eabf0226",
                 "shasum": ""
             },
             "require": {
@@ -323,7 +326,7 @@
                 "issues": "https://github.com/paragonie/constant_time_encoding/issues",
                 "source": "https://github.com/paragonie/constant_time_encoding"
             },
-            "time": "2022-01-17T05:32:27+00:00"
+            "time": "2025-09-24T15:12:37+00:00"
         },
         {
             "name": "postal/postal",
@@ -373,24 +376,24 @@
         },
         {
             "name": "pragmarx/google2fa",
-            "version": "8.0.0",
+            "version": "v8.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/antonioribeiro/google2fa.git",
-                "reference": "26c4c5cf30a2844ba121760fd7301f8ad240100b"
+                "reference": "6f8d87ebd5afbf7790bde1ffc7579c7c705e0fad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/antonioribeiro/google2fa/zipball/26c4c5cf30a2844ba121760fd7301f8ad240100b",
-                "reference": "26c4c5cf30a2844ba121760fd7301f8ad240100b",
+                "url": "https://api.github.com/repos/antonioribeiro/google2fa/zipball/6f8d87ebd5afbf7790bde1ffc7579c7c705e0fad",
+                "reference": "6f8d87ebd5afbf7790bde1ffc7579c7c705e0fad",
                 "shasum": ""
             },
             "require": {
-                "paragonie/constant_time_encoding": "^1.0|^2.0",
+                "paragonie/constant_time_encoding": "^1.0|^2.0|^3.0",
                 "php": "^7.1|^8.0"
             },
             "require-dev": {
-                "phpstan/phpstan": "^0.12.18",
+                "phpstan/phpstan": "^1.9",
                 "phpunit/phpunit": "^7.5.15|^8.5|^9.0"
             },
             "type": "library",
@@ -419,9 +422,9 @@
             ],
             "support": {
                 "issues": "https://github.com/antonioribeiro/google2fa/issues",
-                "source": "https://github.com/antonioribeiro/google2fa/tree/8.0.0"
+                "source": "https://github.com/antonioribeiro/google2fa/tree/v8.0.3"
             },
-            "time": "2020-04-05T10:47:18+00:00"
+            "time": "2024-09-05T11:56:40+00:00"
         },
         {
             "name": "pragmarx/random",
@@ -620,16 +623,16 @@
         },
         {
             "name": "yahnis-elsts/plugin-update-checker",
-            "version": "v4.11",
+            "version": "v4.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/YahnisElsts/plugin-update-checker.git",
-                "reference": "3155f2d3f1ca5e7ed3f25b256f020e370515af43"
+                "reference": "6eb27a6911e0e0880d09e5b11f577d3f688f7da7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/YahnisElsts/plugin-update-checker/zipball/3155f2d3f1ca5e7ed3f25b256f020e370515af43",
-                "reference": "3155f2d3f1ca5e7ed3f25b256f020e370515af43",
+                "url": "https://api.github.com/repos/YahnisElsts/plugin-update-checker/zipball/6eb27a6911e0e0880d09e5b11f577d3f688f7da7",
+                "reference": "6eb27a6911e0e0880d09e5b11f577d3f688f7da7",
                 "shasum": ""
             },
             "require": {
@@ -639,7 +642,7 @@
             "type": "library",
             "autoload": {
                 "files": [
-                    "load-v4p11.php"
+                    "load-v4p13.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -664,9 +667,9 @@
             ],
             "support": {
                 "issues": "https://github.com/YahnisElsts/plugin-update-checker/issues",
-                "source": "https://github.com/YahnisElsts/plugin-update-checker/tree/v4.11"
+                "source": "https://github.com/YahnisElsts/plugin-update-checker/tree/v4.13"
             },
-            "time": "2021-03-15T16:07:52+00:00"
+            "time": "2022-07-29T12:36:25+00:00"
         }
     ],
     "packages-dev": [
@@ -3127,15 +3130,15 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "roave/security-advisories": 20,
         "bernskioldmedia/bm-wp-devtools": 20,
-        "humbug/php-scoper": 20
+        "humbug/php-scoper": 20,
+        "roave/security-advisories": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^7.4|^8.0"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
 }
