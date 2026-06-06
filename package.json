@@ -22,7 +22,7 @@
 		"node-wp-i18n": "^1.2.6",
 		"postcss-preset-env": "^9.1.*",
 		"rimraf": "^3.0.2",
-		"sass": "^1.48.0",
+		"sass": "^1.100.0",
 		"sass-loader": "^12.4.0"
 	}
 }
