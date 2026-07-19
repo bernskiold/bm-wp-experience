@@ -89,19 +89,12 @@ class OhDear_Application_Health implements Hookable {
 	}
 
 	protected static function map_status( array $test_results ): string {
-		switch ( $test_results['status'] ) {
-			case 'good':
-				return CheckResult::STATUS_OK;
-
-			case 'recommended':
-				return CheckResult::STATUS_WARNING;
-
-			case 'critical':
-				return CheckResult::STATUS_FAILED;
-
-			default:
-				return CheckResult::STATUS_SKIPPED;
-		}
+		return match ( $test_results['status'] ) {
+			'good'        => CheckResult::STATUS_OK,
+			'recommended' => CheckResult::STATUS_WARNING,
+			'critical'    => CheckResult::STATUS_FAILED,
+			default       => CheckResult::STATUS_SKIPPED,
+		};
 	}
 
 }

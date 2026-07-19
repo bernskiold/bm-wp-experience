@@ -13,7 +13,7 @@ use PragmaRX\Recovery\Recovery;
 
 class TwoFactorAuthentication implements Hookable {
 
-	protected Google2FA $two_factor;
+	protected readonly Google2FA $two_factor;
 	private const USER_SECRET_META_KEY       = 'bmwp_two_factor_secret';
 	private const TWO_FACTOR_STATUS_META_KEY = 'bmwp_two_factor_enabled';
 	private const RECOVERY_CODES_META_KEY    = 'bmwp_two_factor_recovery_codes';

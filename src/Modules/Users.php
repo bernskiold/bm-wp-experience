@@ -48,9 +48,7 @@ class Users extends Module {
         $current_domain     = parse_url( get_site_url(), PHP_URL_HOST );
 
         // Perform partial match on domains to catch subdomains or variation of domain name
-        $filtered_domains = array_filter( self::get_allowlisted_domains(), function ($domain) use ($current_domain) {
-            return false !== stripos( $current_domain, $domain );
-        } );
+        $filtered_domains = array_filter( self::get_allowlisted_domains(), fn ( $domain ) => false !== stripos( $current_domain, $domain ) );
 
         /*
          * The user in the query must have an email,
@@ -86,20 +84,14 @@ class Users extends Module {
         return apply_filters( 'bm_wpexp_authors_email_domains', self::EMAIL_DOMAINS );
     }
 
-    public static function is_agency( $user ){
+    public static function is_agency( $user ): bool {
 
-        $is_agency = false;
         foreach ( self::get_email_domains() as $domain ) {
-            if ( $is_agency !== true && false !== stripos( $user->user_email, $domain ) ) {
-                $is_agency = true;
+            if ( false !== stripos( $user->user_email, $domain ) ) {
+                return true;
             }
         }
 
-        if( $is_agency ){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return false;
     }
 }

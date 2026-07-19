@@ -22,7 +22,7 @@ class Customizer extends Module {
      *
      * @var string
      */
-    protected static $custom_css_file_name = 'app';
+    protected static string $custom_css_file_name = 'app';
 
     /**
      * Custom CSS ID.

@@ -124,21 +124,11 @@ class Environments extends Module {
     protected static function get_environment_label(): string {
         $environment = wp_get_environment_type();
 
-        switch ( $environment ) {
-            case 'local':
-            case 'development':
-                $label = __( 'Local', 'bm-wp-experience' );
-                break;
-
-            case 'staging':
-                $label = __( 'Staging', 'bm-wp-experience' );
-                break;
-
-            case 'production':
-            default:
-                $label = __( 'Production', 'bm-wp-experience' );
-                break;
-        }
+        $label = match ( $environment ) {
+            'local', 'development' => __( 'Local', 'bm-wp-experience' ),
+            'staging'              => __( 'Staging', 'bm-wp-experience' ),
+            default                => __( 'Production', 'bm-wp-experience' ),
+        };
 
         return apply_filters( 'bm_wpexp_staging_environment_label', $label, $environment );
     }

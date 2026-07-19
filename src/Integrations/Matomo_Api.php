@@ -2,12 +2,14 @@
 
 namespace BernskioldMedia\WP\Experience\Integrations;
 
+use BernskioldMedia\WP\Experience\Enums\MatomoRole;
+
 class Matomo_Api
 {
 
-    public const ROLE_ADMIN = 'admin';
-    public const ROLE_VIEW = 'view';
-    const ROLE_NO_ACCESS = 'noaccess';
+    public const ROLE_ADMIN = MatomoRole::Admin->value;
+    public const ROLE_VIEW = MatomoRole::View->value;
+    public const ROLE_NO_ACCESS = MatomoRole::NoAccess->value;
 
     public static function create_site(string $site_name, string $site_url): ?int
     {
@@ -205,20 +207,20 @@ class Matomo_Api
      * Note: the $add_dashes option will increase the length of the password by
      * floor(sqrt(N)) characters.
      * **/
-    public static function password_generator($length = 15, $available_sets = 'luds')
+    public static function password_generator(int $length = 15, string $available_sets = 'luds'): string
     {
 
         $sets = [];
-        if (strpos($available_sets, 'l') !== false) {
+        if (str_contains($available_sets, 'l')) {
             $sets[] = 'abcdefghjkmnpqrstuvwxyz';
         }
-        if (strpos($available_sets, 'u') !== false) {
+        if (str_contains($available_sets, 'u')) {
             $sets[] = 'ABCDEFGHJKMNPQRSTUVWXYZ';
         }
-        if (strpos($available_sets, 'd') !== false) {
+        if (str_contains($available_sets, 'd')) {
             $sets[] = '23456789';
         }
-        if (strpos($available_sets, 's') !== false) {
+        if (str_contains($available_sets, 's')) {
             $sets[] = '!@#$%&*?';
         }
 
@@ -248,7 +250,7 @@ class Matomo_Api
 
     //take a array and get random index, same function of array_rand, only diference is
     // intent use secure random algoritn on fail use mersene twistter, and on fail use defaul array_rand
-    public static function tweak_array_rand($array)
+    public static function tweak_array_rand(array $array): int
     {
         if (function_exists('random_int')) {
             return random_int(0, count($array) - 1);
