@@ -7,9 +7,9 @@
  * exist here.
  */
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
-use BernskioldMedia\WP\Experience\Plugin;
+use Bernskiold\WP\Experience\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -20,7 +20,12 @@ class Block_Editor extends Module {
 	public static function hooks(): void {
 		// Disable the block directory in the editor.
 		add_action( 'plugins_loaded', [ self::class, 'disable_block_directory' ] );
-		add_action( 'admin_enqueue_scripts', [ self::class, 'block_editor_styles' ] );
+
+		// As of WordPress 7.0 the post editor is always iframed. Styles that
+		// should affect the editor content must be enqueued through
+		// enqueue_block_assets (which loads inside the iframe) rather than
+		// admin_enqueue_scripts (which only loads in the parent frame).
+		add_action( 'enqueue_block_assets', [ self::class, 'block_editor_styles' ] );
 	}
 
 	/**
@@ -57,7 +62,9 @@ class Block_Editor extends Module {
 	}
 
 	public static function block_editor_styles(): void {
-		if ( ! self::is_block_editor() ) {
+		// enqueue_block_assets also fires on the front end; we only want to
+		// style the editor itself, so bail out everywhere but the admin editor.
+		if ( ! is_admin() || ! self::is_block_editor() ) {
 			return;
 		}
 

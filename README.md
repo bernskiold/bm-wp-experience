@@ -9,6 +9,7 @@ For almost every feature there is a filter, constant or action allowing you to c
 
 ## Requirements
 
+- WordPress 7.0 or higher
 - PHP 8.2 or higher
 
 ## What do we do?

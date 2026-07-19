@@ -5,10 +5,10 @@
  *
  **/
 
-namespace BernskioldMedia\WP\Experience\Admin;
+namespace Bernskiold\WP\Experience\Admin;
 
-use BernskioldMedia\WP\Experience\Plugin;
-use BernskioldMedia\WP\Experience\Core\Hookable;
+use Bernskiold\WP\Experience\Plugin;
+use Bernskiold\WP\Experience\Core\Hookable;
 
 if (! defined('ABSPATH')) {
     exit;
@@ -37,8 +37,8 @@ class Admin_Assets implements Hookable {
             wp_enqueue_style('bm-wp-experience-admin-theme');
         }
 
-        if( $screen->base === 'post' && $screen->post_type  === 'wpdmpro'
-            || $screen->base === 'edit-tags' && $screen->post_type  === 'wpdmpro' ){
+        if ( $screen && ( $screen->base === 'post' && $screen->post_type === 'wpdmpro'
+            || $screen->base === 'edit-tags' && $screen->post_type === 'wpdmpro' ) ) {
             wp_register_style('bm-wp-experience-admin-download-manager', Plugin::get_assets_url() . '/styles/dist/admin-download-manager.css', [], Plugin::get_version());
             wp_enqueue_style('bm-wp-experience-admin-download-manager');
         }

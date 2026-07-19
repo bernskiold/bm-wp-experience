@@ -8,6 +8,7 @@
  * Author URI:  https://www.bernskiold.com
  * Text Domain: bm-wp-experience
  * Domain Path: /languages/
+ * Requires at least: 7.0
  * Requires PHP: 8.2
  *
  * **************************************************************************
@@ -27,7 +28,7 @@
  *
  * **************************************************************************
  *
- * @package BernskioldMedia\WP\Experience
+ * @package Bernskiold\WP\Experience
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -54,7 +55,7 @@ define( 'BM_WP_EXPERIENCE_FILE_PATH', __FILE__ );
  * @return object
  */
 function bm_wp_experience() {
-	return \BernskioldMedia\WP\Experience\Plugin::instance();
+	return \Bernskiold\WP\Experience\Plugin::instance();
 }
 
 // Initialize the class instance only once.
@@ -70,7 +71,7 @@ if ( ! defined( 'BM_WP_EXPERIENCE_DISABLE_UPDATER' ) || ( defined( 'BM_WP_EXPERI
 	// Add our own plugin icon.
 	$bm_wp_experience_updater->addResultFilter( function( $plugin_info ) {
 		$plugin_info->icons = [
-			'svg' => \BernskioldMedia\WP\Experience\Plugin::get_assets_url( 'icons/bm.svg' ),
+			'svg' => \Bernskiold\WP\Experience\Plugin::get_assets_url( 'icons/bm.svg' ),
 		];
 
 		return $plugin_info;
