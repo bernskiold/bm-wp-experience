@@ -21,7 +21,7 @@
     "yahnis-elsts/plugin-update-checker": "^5.0"
   },
   "require-dev": {
-    "bernskioldmedia/bm-wp-devtools": "dev-main",
+    "friendsofphp/php-cs-fixer": "^3.0",
     "phpstan/phpstan": "^2.0",
     "roave/security-advisories": "dev-latest",
     "szepeviktor/phpstan-wordpress": "^2.0"
@@ -40,7 +40,6 @@
   },
   "scripts": {
 	"lint": "php-cs-fixer fix -v src",
-	"test:cs": "phpcs-wp",
 	"test:types": "phpstan analyse --ansi --memory-limit=-1",
 	"test:lint": "php-cs-fixer fix -v --dry-run src",
 	"test": [
