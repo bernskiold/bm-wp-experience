@@ -133,7 +133,7 @@ The SearchWP integration automatically runs if SearchWP is active.
 
 - Prevent agency users from being indexed.
 - Block user enumeration via `?author=N` scans, which otherwise leak login names.
-- Disable Gravatar (remote avatars) by default to avoid phoning home to gravatar.com. A neutral local placeholder is used instead. Re-enable with `BM_WP_ENABLE_GRAVATAR`.
+- Optionally disable Gravatar (remote avatars) to avoid phoning home to gravatar.com, showing a neutral local placeholder instead. Enabled by default; disable with `BM_WP_DISABLE_GRAVATAR`.
 - Remove color scheme picker.
 
 ### WooCommerce
@@ -283,7 +283,7 @@ managed anyway (just not daily). Define `BM_WP_HAS_MAINTENANCE_PLAN` to `true` i
 
 `bm_wpexp_block_user_enumeration` - Return `false` to allow `?author=N` scans instead of blocking them.
 
-**Enable Gravatar:** By default remote avatars (Gravatar) are disabled to avoid phoning home to gravatar.com, and a local placeholder is shown. Define `BM_WP_ENABLE_GRAVATAR` to `true`, or return the `bm_wpexp_enable_gravatar` filter as `true`, to restore native avatar behavior.
+**Disable Gravatar:** By default remote avatars (Gravatar) work natively. To avoid phoning home to gravatar.com, define `BM_WP_DISABLE_GRAVATAR` to `true`, or return the `bm_wpexp_enable_gravatar` filter as `false`, and a local placeholder is shown instead.
 
 ### WooCommerce
 

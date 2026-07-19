@@ -87,16 +87,16 @@ class Users extends Module {
     /**
      * Whether Gravatar (remote avatars) should be enabled.
      *
-     * Disabled by default to avoid phoning home to gravatar.com. Define
-     * BM_WP_ENABLE_GRAVATAR as true, or return the bm_wpexp_enable_gravatar
-     * filter as true, to restore native behavior.
+     * Enabled by default. To avoid phoning home to gravatar.com, define
+     * BM_WP_DISABLE_GRAVATAR as true, or return the bm_wpexp_enable_gravatar
+     * filter as false, and a local placeholder is shown instead.
      */
     protected static function is_gravatar_enabled(): bool {
-        if ( defined( 'BM_WP_ENABLE_GRAVATAR' ) && BM_WP_ENABLE_GRAVATAR ) {
-            return true;
+        if ( defined( 'BM_WP_DISABLE_GRAVATAR' ) && BM_WP_DISABLE_GRAVATAR ) {
+            return false;
         }
 
-        return true === apply_filters( 'bm_wpexp_enable_gravatar', false );
+        return false !== apply_filters( 'bm_wpexp_enable_gravatar', true );
     }
 
     /**

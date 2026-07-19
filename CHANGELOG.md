@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file. This projec
 * Disable the Openverse external media inserter in the editor by default. Re-enable with the `bm_wpexp_enable_openverse` filter.
 * Block user enumeration via `?author=N` scans, which otherwise leak login names. Return the `bm_wpexp_block_user_enumeration` filter as `false` to allow it.
 * Disable the periodic admin email verification screen shown on login. Re-enable with the `bm_wpexp_enable_admin_email_verification` filter.
-* Disable Gravatar (remote avatars) by default to avoid phoning home to gravatar.com, showing a neutral local placeholder instead. Restore native behavior with the `BM_WP_ENABLE_GRAVATAR` constant or the `bm_wpexp_enable_gravatar` filter.
+* Optionally disable Gravatar (remote avatars) to avoid phoning home to gravatar.com, showing a neutral local placeholder instead. Enabled by default; disable with the `BM_WP_DISABLE_GRAVATAR` constant or by returning the `bm_wpexp_enable_gravatar` filter as `false`.
 
 ## 4.0.0 - 2026-07-19
 
