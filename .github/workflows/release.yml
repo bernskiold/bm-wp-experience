@@ -61,11 +61,18 @@ jobs:
               run: composer run release
 
             - name: Commit version bump
+              id: commit
               uses: stefanzweifel/git-auto-commit-action@v5
               with:
                   branch: main
                   commit_message: "Prepare release ${{ steps.version.outputs.value }}"
                   file_pattern: 'package.json package-lock.json ${{ github.event.repository.name }}.php src/Plugin.php'
+
+            - name: Move tag to version bump commit
+              if: steps.commit.outputs.changes_detected == 'true'
+              run: |
+                  git tag -f "${{ github.event.release.tag_name }}" "${{ steps.commit.outputs.commit_hash }}"
+                  git push origin -f "refs/tags/${{ github.event.release.tag_name }}"
 
             - name: Package Plugin
               run: |
