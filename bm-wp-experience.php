@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: BM WP Experience
+ * Plugin Name: Bernskiold WP Experience
  * Plugin URI:  https://www.bernskiold.com
  * Description: Provides an opinionated WordPress experience with clean-up and tweaks that we at Bernskiold have found runs WordPress best.
  * Version:     4.0.0
