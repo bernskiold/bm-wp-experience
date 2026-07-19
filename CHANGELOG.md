@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 4.0.0 - 2026-07-19
+
+### Changed
+
+* **Breaking:** The minimum required PHP version is now 8.2.
+* Modernised the codebase to PHP 8.2 idioms: added a `MatomoRole` backed enum, converted `switch` ladders to `match()`, adopted `str_contains()`/`str_starts_with()`, added parameter/return types, and marked eligible properties `readonly`.
+
+### Fixed
+
+* **Security:** Two-factor recovery codes are now single-use and consumed on login instead of being reusable indefinitely.
+* **Security:** The two-factor AJAX handlers now require the `edit_user` capability when a user is logged in, closing an IDOR that allowed any authenticated user to enable, disable or reset another user's 2FA.
+* **Security:** Enabling 2FA now requires proof of a validated authenticator (secret plus stored recovery codes), preventing an unauthenticated request from enabling 2FA on — and locking out — an arbitrary account. Removed a debug statement that logged request data.
+* Two-factor login enforcement now respects the per-role restriction instead of applying to every user.
+* `Matomo_Api::make_request()` returns a proper error object on failure, so connection/API errors are no longer treated as success (which previously stored sites with an id of `0`).
+* `Helpers::is_network_active()` now resolves the correct plugin file and works on multisite.
+* WooCommerce marketing-feature removal no longer unsets the wrong feature when "marketing" is absent.
+* Configuration/secret file-permission health checks now evaluate exposure correctly (a locked `0600` `.env` is no longer reported as critical; a world-readable `0644` `wp-config.php` is now flagged).
+* The analytics and mail admin tabs now render the Visit/Dashboard links correctly.
+* REST basic-auth no longer emits a warning when only a username is supplied, and the REST "disable comments" filter now blocks insertion instead of returning `null`.
+* Hardened against PHP 8.1/8.2 "passing null to non-nullable" deprecations across the mail, security, cleanup, admin and htaccess modules.
+
 ## 3.11.6 - 2023-12-08
 
 ### What's Changed
