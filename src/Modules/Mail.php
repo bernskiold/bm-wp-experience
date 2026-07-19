@@ -176,15 +176,19 @@ class Mail extends Module {
 		$client  = new Client( self::get_postal_domain(), self::get_postal_api_key() );
 		$message = new SendMessage( $client );
 
-		if ( is_array( $atts['headers'] ) ) {
+		if ( is_array( $atts['headers'] ?? null ) ) {
 			$headers = $atts['headers'];
 		} else {
-			$headers = explode( "\n", str_replace( "\r\n", "\n", $atts['headers'] ) );
+			$headers = explode( "\n", str_replace( "\r\n", "\n", (string) ( $atts['headers'] ?? '' ) ) );
 		}
 
 		if ( ! empty( $headers ) ) {
 			foreach ( $headers as $header ) {
-				[ $name, $content ] = explode( ':', trim( $header ), 2 );
+				if ( ! str_contains( (string) $header, ':' ) ) {
+					continue;
+				}
+
+				[ $name, $content ] = explode( ':', trim( (string) $header ), 2 );
 				$message->header( $name, $content );
 			}
 		}
@@ -245,7 +249,12 @@ class Mail extends Module {
      */
     public static function change_username_in_from_email_address_setting( $from_email ){
         // get whatever is before the @ and then the domain
-        $parts = explode( '@', $from_email );
+        $parts = explode( '@', (string) $from_email );
+
+        // Without a domain part we cannot rebuild the address, so leave it untouched.
+        if ( ! isset( $parts[1] ) ) {
+            return $from_email;
+        }
 
         $username = __( 'notification', 'bm-wp-experience' );
 

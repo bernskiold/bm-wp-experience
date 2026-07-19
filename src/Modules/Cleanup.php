@@ -100,7 +100,7 @@ class Cleanup extends Module {
 
         $search_base = $wp_rewrite->search_base;
 
-        if ( is_search() && ! is_admin() && strpos( $_SERVER['REQUEST_URI'], "/{$search_base}/" ) === false ) {
+        if ( is_search() && ! is_admin() && ! str_contains( $_SERVER['REQUEST_URI'] ?? '', "/{$search_base}/" ) ) {
             wp_safe_redirect( home_url( "/{$search_base}/" . rawurlencode( get_query_var( 's' ) ) ) );
             exit();
         }

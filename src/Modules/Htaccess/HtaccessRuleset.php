@@ -35,7 +35,7 @@ abstract class HtaccessRuleset {
 			return true;
 		}
 
-		$existing_contents = preg_replace( $this->rules['disabled'], '', $this->wp_filesystem->get_contents( $this->get_path() ) );
+		$existing_contents = preg_replace( $this->rules['disabled'], '', (string) $this->wp_filesystem->get_contents( $this->get_path() ) );
 		$new_contents      = $this->wp_filesystem->get_contents( Plugin::get_path( 'stubs/htaccess/' . $this->template ) );
 
 		$contents = $new_contents . PHP_EOL . $existing_contents;
@@ -52,7 +52,7 @@ abstract class HtaccessRuleset {
 			return true;
 		}
 
-		$contents    = $this->wp_filesystem->get_contents( $this->get_path() );
+		$contents    = (string) $this->wp_filesystem->get_contents( $this->get_path() );
 		$new_content = preg_replace( $this->rules['disabled'], '', $contents );
 
 		return $this->write( $new_content );
@@ -96,7 +96,7 @@ abstract class HtaccessRuleset {
 	}
 
 	protected function is_enabled(): bool {
-		$contents = $this->wp_filesystem->get_contents( $this->get_path() );
+		$contents = (string) $this->wp_filesystem->get_contents( $this->get_path() );
 
 		return (bool) preg_match( $this->rules['enabled'], $contents );
 	}

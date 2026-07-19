@@ -118,7 +118,7 @@ class Admin implements Hookable {
         if( is_multisite() ){
             if( ! current_user_can('setup_network')){ // is not superadmin
                 $current_screen = get_current_screen();
-                if(strpos($current_screen->id, 'litespeed') !== false){
+                if( $current_screen && str_contains( (string) $current_screen->id, 'litespeed' ) ){
                     wp_redirect( admin_url( '' ) );
                     exit;
                 }
