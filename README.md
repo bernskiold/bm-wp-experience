@@ -7,6 +7,10 @@ the [Company Cloud platform](https://companycloud.io) or an install with any the
 
 For almost every feature there is a filter, constant or action allowing you to customize the behavior.
 
+## Requirements
+
+- PHP 8.2 or higher
+
 ## What do we do?
 
 ### Company Cloud

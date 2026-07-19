@@ -4,6 +4,9 @@ $finder = PhpCsFixer\Finder::create()->in( __DIR__ . DIRECTORY_SEPARATOR . 'src'
 
 $rules = [
 	'@PSR2'                                         => true,
+	'@PHP80Migration'                               => true,
+	'@PHP81Migration'                               => true,
+	'@PHP82Migration'                               => true,
 	'align_multiline_comment'                       => true,
 	'array_syntax'                                  => [ 'syntax' => 'short' ],
 	'binary_operator_spaces'                        => [

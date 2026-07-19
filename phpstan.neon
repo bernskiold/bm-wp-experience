@@ -4,6 +4,7 @@ includes:
     - vendor/bernskioldmedia/bm-wp-devtools/phpstan/extension.neon
 parameters:
     level: 4
+    phpVersion: 80200
     paths:
         - bm-wp-experience.php
         - src/
