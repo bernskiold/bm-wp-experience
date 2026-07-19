@@ -1,72 +1,80 @@
-name: Create Release
+name: Build & Attach Release
 on:
-    workflow_dispatch:
-        inputs:
-            versionName:
-                description: 'Version (ie 5.5.0)'
-                required: true
+    release:
+        types: [ published ]
+
+permissions:
+    contents: write
 
 jobs:
     release:
-        name: Create Release
+        name: Build & Attach Plugin
         runs-on: ubuntu-latest
         steps:
-        
+
             - name: Checkout Code
               uses: actions/checkout@v4
               with:
-                  ref: ${{ github.head_ref }}
-              
+                  ref: main
+
             - name: Setup Node
               uses: actions/setup-node@v4
               with:
-                  node-version: 14
-                  
-            - name: Cache dependencies
-              uses: actions/cache@v4
+                  node-version: 20
+                  cache: npm
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
               with:
-                  path: ~/.npm
-                  key: npm-${{ hashFiles('package-lock.json') }}
-                  restore-keys: npm-
-              
+                  php-version: '8.2'
+                  coverage: none
+                  tools: composer:v2
+
+            - name: Determine version
+              id: version
+              run: |
+                  VERSION="${{ github.event.release.tag_name }}"
+                  echo "value=${VERSION#v}" >> "$GITHUB_OUTPUT"
+
             - name: Modify Package.json
               uses: mingjun97/file-regex-replace@v1
               with:
                   regex: '"version": "([0-9\.]*)",'
-                  replacement: '"version": "${{ github.event.inputs.versionName }}",'
+                  replacement: '"version": "${{ steps.version.outputs.value }}",'
                   include: 'package\.json'
-                  
+
             - name: Modify Main Plugin File
               uses: mingjun97/file-regex-replace@v1
               with:
                   regex: 'Version:(\s+)(.+)'
-                  replacement: 'Version:$1${{ github.event.inputs.versionName }}'
-                  include: '${{ github.event.repository.name}}\.php'
-                  
+                  replacement: 'Version:$1${{ steps.version.outputs.value }}'
+                  include: '${{ github.event.repository.name }}\.php'
+
             - name: Modify Main Plugin Class
               uses: mingjun97/file-regex-replace@v1
               with:
                   regex: "version(\\s*\\t*)= '(.*)';"
-                  replacement: "version$1= '${{ github.event.inputs.versionName }}';"
+                  replacement: "version$1= '${{ steps.version.outputs.value }}';"
                   include: 'src/Plugin\.php'
-                  
-            - name: Install NPM Packages
-              run: npm ci --ignore-scripts
-            
+
             - name: Build
-              run: npm run production && composer install --no-dev -o
-              
-            - name: Commit
+              run: composer run release
+
+            - name: Commit version bump
               uses: stefanzweifel/git-auto-commit-action@v5
               with:
                   branch: main
-                  commit_message: "Prepare release ${{ github.event.inputs.versionName }}"
-                  
-            - name: Release
-              uses: softprops/action-gh-release@v2
-              with:
-                  draft: true
-                  prerelease: false
-                  name: ${{ github.event.inputs.versionName }}
-                  tag_name: ${{ github.event.inputs.versionName }}
-                  generate_release_notes: true
+                  commit_message: "Prepare release ${{ steps.version.outputs.value }}"
+                  file_pattern: 'package.json package-lock.json ${{ github.event.repository.name }}.php src/Plugin.php'
+
+            - name: Package Plugin
+              run: |
+                  mkdir build
+                  mkdir "${{ github.event.repository.name }}"
+                  rsync -rv . "${{ github.event.repository.name }}" --exclude="${{ github.event.repository.name }}" --exclude .git/ --exclude node_modules/ --exclude ".*" --exclude assets/styles/src/ --exclude composer.json --exclude composer.lock --exclude build/ --exclude config/ --exclude CHANGELOG.md --exclude README.md --exclude webpack.config.js --exclude package.json --exclude package-lock.json --exclude phpstan.neon
+                  zip -qq -r "build/${{ github.event.repository.name }}.zip" "${{ github.event.repository.name }}"
+
+            - name: Attach to Release
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: gh release upload "${{ github.event.release.tag_name }}" "build/${{ github.event.repository.name }}.zip" --clobber
