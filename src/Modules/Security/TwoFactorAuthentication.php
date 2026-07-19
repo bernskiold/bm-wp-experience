@@ -7,7 +7,7 @@ use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use BernskioldMedia\WP\Experience\Plugin;
-use BMWPEXP_Vendor\BernskioldMedia\WP\PluginBase\Interfaces\Hookable;
+use BernskioldMedia\WP\Experience\Core\Hookable;
 use PragmaRX\Google2FA\Google2FA;
 use PragmaRX\Recovery\Recovery;
 

@@ -1,7 +1,5 @@
 node_modules/
 vendor
-vendor_prefixed
-!vendor_prefixed/.gitkeep
 .php-cs-fixer.cache
 .idea
 *.zip

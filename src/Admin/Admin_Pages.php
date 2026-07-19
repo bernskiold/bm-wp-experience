@@ -8,7 +8,7 @@ namespace BernskioldMedia\WP\Experience\Admin;
 
 use BernskioldMedia\WP\Experience\Modules\Users;
 use BernskioldMedia\WP\Experience\Plugin;
-use BMWPEXP_Vendor\BernskioldMedia\WP\PluginBase\Interfaces\Hookable;
+use BernskioldMedia\WP\Experience\Core\Hookable;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

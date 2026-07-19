@@ -3,7 +3,7 @@
 namespace BernskioldMedia\WP\Experience;
 
 use BernskioldMedia\WP\Experience\Modules\Security\TwoFactorAuthentication;
-use BMWPEXP_Vendor\BernskioldMedia\WP\PluginBase\BasePlugin;
+use BernskioldMedia\WP\Experience\Core\BasePlugin;
 
 class Plugin extends BasePlugin {
 

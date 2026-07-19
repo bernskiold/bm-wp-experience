@@ -7,7 +7,7 @@ namespace BernskioldMedia\WP\Experience;
 
 use BernskioldMedia\WP\Experience\Modules\Htaccess\ResponseHeaders;
 use BernskioldMedia\WP\Experience\Modules\Htaccess\XMLRPC_Protection;
-use BMWPEXP_Vendor\BernskioldMedia\WP\PluginBase\Installer;
+use BernskioldMedia\WP\Experience\Core\Installer;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
