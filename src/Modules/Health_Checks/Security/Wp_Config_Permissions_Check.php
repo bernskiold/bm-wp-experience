@@ -16,7 +16,7 @@ class Wp_Config_Permissions_Check extends Security_Check {
 				__( 'When the wp-config.php file is protected there is less risk of important configuration secrets becoming exposed.', 'bm-wp-experience' ) ),
 		];
 
-		if ( Helpers::get_file_permissions( ABSPATH . 'wp-config.php' ) > 644 ) {
+		if ( Helpers::is_file_publicly_accessible( ABSPATH . 'wp-config.php' ) ) {
 			$result['status']      = 'critical';
 			$result['label']       = __( 'The wp-config.php file is publicly readable.', 'bm-wp-experience' );
 			$result['description'] = sprintf( '<p>%s</p>',

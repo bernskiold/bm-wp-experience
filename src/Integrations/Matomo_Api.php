@@ -169,7 +169,10 @@ class Matomo_Api
         ]);
 
         if (!$response || is_wp_error($response)) {
-            return json_decode("{'result': 'error', 'message': 'An error occurred with the API connection on the WordPress side.'}");
+            return (object) [
+                'result'  => 'error',
+                'message' => 'An error occurred with the API connection on the WordPress side.',
+            ];
         }
 
         return json_decode($response['body'] ?? '');

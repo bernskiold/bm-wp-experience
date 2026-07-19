@@ -81,8 +81,8 @@ class Admin_Mail_Tab extends Multisite_Tab
             <h1 id="edit-site"><?php printf(__('E-mail settings for: %s', 'bm-wp-experience'),
                     $site->blogname); ?></h1>
             <p class="edit-site-actions">
-                <a href="<?php esc_url(get_home_url($site->id, '/')); ?>"><?php esc_html_e('Visit',
-                        'bm-wp-experience'); ?></a> | <a href="<?php esc_url(get_admin_url($site->id,
+                <a href="<?php echo esc_url(get_home_url($site->id, '/')); ?>"><?php esc_html_e('Visit',
+                        'bm-wp-experience'); ?></a> | <a href="<?php echo esc_url(get_admin_url($site->id,
                     '/')); ?>"><?php esc_html_e('Dashboard', 'bm-wp-experience'); ?></a>
             </p>
 

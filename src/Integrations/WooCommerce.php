@@ -67,7 +67,10 @@ class WooCommerce extends Integration {
 
     public static function disable_marketing_features(array $features): array {
         $marketing = array_search( 'marketing', $features, true );
-        unset( $features[ $marketing ] );
+
+        if ( false !== $marketing ) {
+            unset( $features[ $marketing ] );
+        }
 
         return $features;
     }

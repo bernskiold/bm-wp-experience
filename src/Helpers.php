@@ -46,11 +46,28 @@ class Helpers {
 	 * Check if this plugin is activated for the entire network.
 	 */
 	public static function is_network_active(): bool {
-		return is_multisite() && array_key_exists( plugin_basename( __FILE__ ), (array) get_site_option( 'active_sitewide_plugins' ) );
+		return is_multisite() && array_key_exists( plugin_basename( BM_WP_EXPERIENCE_FILE_PATH ), (array) get_site_option( 'active_sitewide_plugins' ) );
 	}
 
+	/**
+	 * Get the file's permission bits (owner/group/other) as an integer.
+	 *
+	 * The return value is the raw octal permission value (e.g. 0640), not a
+	 * decimalised string, so it can be compared against octal literals directly.
+	 */
 	public static function get_file_permissions( string $file ): int {
-		return (int) decoct( fileperms( $file ) & 0777 );
+		return fileperms( $file ) & 0777;
+	}
+
+	/**
+	 * Determine whether a (secret) file is exposed to group or other users.
+	 *
+	 * Returns true when "other" has any permission, or when "group" is
+	 * writable. Owner permissions and group-read (e.g. 0600, 0640, 0440) are
+	 * considered safe for configuration files.
+	 */
+	public static function is_file_publicly_accessible( string $file ): bool {
+		return ( fileperms( $file ) & 0027 ) !== 0;
 	}
 
 	public static function setup_wp_filesystem() {

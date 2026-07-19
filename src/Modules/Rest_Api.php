@@ -101,7 +101,7 @@ class Rest_Api extends Module {
         }
 
         // Check that we're trying to authenticate
-        if (! isset($_SERVER['PHP_AUTH_USER'])) {
+        if (! isset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
             return $user;
         }
 
