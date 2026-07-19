@@ -132,7 +132,7 @@ class Mail extends Module {
 	}
 
 	protected static function are_all_configs_set(): bool {
-		return ! empty( self::get_smtp_host() ) && ! empty( self::get_smtp_username() ) && ! empty( self::get_smtp_password() ) && is_int( self::get_smtp_port() );
+		return ! empty( self::get_smtp_host() ) && ! empty( self::get_smtp_username() ) && ! empty( self::get_smtp_password() );
 	}
 
 	protected static function get_postal_domain(): ?string {
@@ -278,7 +278,7 @@ class Mail extends Module {
         }
 
         if( is_multisite() ) {
-            if ( get_blog_option(get_current_blog_id(), 'bm_wp_notifications_from_name') && "" !== get_blog_option(get_current_blog_id(), 'bm_wp_notifications_from_name') ) {
+            if ( get_blog_option(get_current_blog_id(), 'bm_wp_notifications_from_name') ) {
                 $name = get_blog_option(get_current_blog_id(), 'bm_wp_notifications_from_name');
             }
         }
@@ -295,7 +295,7 @@ class Mail extends Module {
         }
 
         if( is_multisite() ) {
-            if ( get_option('bm_wp_notifications_from_email_address') && "" !== get_option('bm_wp_notifications_from_email_address') ) {
+            if ( get_option('bm_wp_notifications_from_email_address') ) {
                 $from_email = get_option('bm_wp_notifications_from_email_address');
             }
         }

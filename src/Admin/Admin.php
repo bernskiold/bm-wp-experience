@@ -21,7 +21,7 @@ class Admin implements Hookable {
         add_filter( 'admin_footer_text', [ self::class, 'change_admin_footer_text' ] );
 
         // Remove the help tab.
-        add_filter( 'admin_head', [ self::class, 'remove_help_tab' ] );
+        add_action( 'admin_head', [ self::class, 'remove_help_tab' ] );
 
         // Add our help and support widget.
         add_action( 'admin_footer', [ self::class, 'add_help_widget' ] );

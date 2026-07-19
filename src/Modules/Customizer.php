@@ -113,7 +113,7 @@ class Customizer extends Module {
      * Get the custom CSS storage directory URL.
      */
     protected static function get_custom_css_storage_directory_uri(): string {
-        $path = WP_CONTENT_URL . '/custom-css';
+        $path = content_url( 'custom-css' );
 
         return apply_filters('bm_wpexp_custom_css_storage_directory_uri', $path);
     }

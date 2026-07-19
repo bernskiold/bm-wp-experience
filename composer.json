@@ -21,8 +21,10 @@
     "yahnis-elsts/plugin-update-checker": "^5.0"
   },
   "require-dev": {
-	"roave/security-advisories": "dev-latest",
-	"bernskioldmedia/bm-wp-devtools": "dev-main"
+    "bernskioldmedia/bm-wp-devtools": "dev-main",
+    "phpstan/phpstan": "^2.0",
+    "roave/security-advisories": "dev-latest",
+    "szepeviktor/phpstan-wordpress": "^2.0"
   },
   "license": "GPL-3.0-or-later",
   "authors": [

@@ -5,6 +5,9 @@ namespace BernskioldMedia\WP\Experience\Modules\Htaccess;
 use BernskioldMedia\WP\Experience\Helpers;
 use BernskioldMedia\WP\Experience\Plugin;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 abstract class HtaccessRuleset {
 
 	protected        $wp_filesystem;

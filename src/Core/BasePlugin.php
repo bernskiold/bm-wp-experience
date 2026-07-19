@@ -11,6 +11,8 @@ defined( 'ABSPATH' ) || exit;
  * Hookable classes, translation loading and path/URL helpers. Inlined from the
  * former bernskioldmedia/wp-plugin-base dependency and trimmed to what this
  * plugin actually uses.
+ *
+ * @phpstan-consistent-constructor
  */
 class BasePlugin {
 

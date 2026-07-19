@@ -7,7 +7,7 @@ class DownloadManager extends Integration {
 
     public static function hooks(): void {
         // Hide notice to install WC Admin.
-        add_filter( 'init', [ self::class, 'update_options' ], 10, 2 );
+        add_action( 'init', [ self::class, 'update_options' ] );
 
         add_action( 'admin_menu', [ self::class, 'remove_sub_menus' ], 9999999 );
     }

@@ -8,6 +8,12 @@ All notable changes to this project will be documented in this file. This projec
 
 * **Breaking:** The minimum required PHP version is now 8.2.
 * Modernised the codebase to PHP 8.2 idioms: added a `MatomoRole` backed enum, converted `switch` ladders to `match()`, adopted `str_contains()`/`str_starts_with()`, added parameter/return types, and marked eligible properties `readonly`.
+* Inlined the `bernskioldmedia/wp-plugin-base` foundation (`BasePlugin`, the `Hookable` interface, `Installer` and `Multisite_Tab`) as first-party code under a new `BernskioldMedia\WP\Experience\Core` namespace, and removed the `humbug/php-scoper` prefixing build step and `vendor_prefixed/` directory entirely.
+* Bumped all dependencies to their latest versions: `bacon/bacon-qr-code` ^3, `composer/installers` ^2, `postal/postal` ^2 (Guzzle-based), `pragmarx/google2fa` ^9 and `yahnis-elsts/plugin-update-checker` ^5, with the plugin code updated for the new Postal and Plugin Update Checker APIs.
+
+### Developer
+
+* Static analysis now runs on PHPStan 2 with `szepeviktor/phpstan-wordpress`, decoupled from the abandoned devtools package, and the codebase is clean at level 5.
 
 ### Fixed
 
@@ -15,6 +21,8 @@ All notable changes to this project will be documented in this file. This projec
 * **Security:** The two-factor AJAX handlers now require the `edit_user` capability when a user is logged in, closing an IDOR that allowed any authenticated user to enable, disable or reset another user's 2FA.
 * **Security:** Enabling 2FA now requires proof of a validated authenticator (secret plus stored recovery codes), preventing an unauthenticated request from enabling 2FA on — and locking out — an arbitrary account. Removed a debug statement that logged request data.
 * Two-factor login enforcement now respects the per-role restriction instead of applying to every user.
+* Site Health custom checks are now registered on the `site_status_tests` filter (previously an action, so the returned checks were silently discarded and never appeared).
+* `Matomo::get_subdomains_domain()` now returns the configured domain string instead of being incorrectly typed as `bool`.
 * `Matomo_Api::make_request()` returns a proper error object on failure, so connection/API errors are no longer treated as success (which previously stored sites with an id of `0`).
 * `Helpers::is_network_active()` now resolves the correct plugin file and works on multisite.
 * WooCommerce marketing-feature removal no longer unsets the wrong feature when "marketing" is absent.

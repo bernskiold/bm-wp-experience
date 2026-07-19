@@ -110,15 +110,12 @@ class Cleanup extends Module {
      * URL decode our search result to be able to search and display the search query properly
      * Special characters will otherwise look weird
      *
-     * @param $query
-     * @return mixed
+     * @param  \WP_Query  $query
      */
-    public static function query_vars_search_filter( $query ) {
+    public static function query_vars_search_filter( $query ): void {
         if ($query->is_search && !is_admin()) {
             $query->query_vars['s'] = urldecode( $query->query_vars['s'] );
         }
-
-        return $query;
     }
 
     /**

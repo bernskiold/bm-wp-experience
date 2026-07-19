@@ -124,7 +124,7 @@ class Admin_Mail_Tab extends Multisite_Tab
                 <?php submit_button(__('Save', 'bm-wp-experience')); ?>
 
                 <?php wp_nonce_field(self::$nonce.'-'.$site->id); ?>
-                <input type="hidden" name="id" value="<?php echo esc_attr($site->id); ?>">
+                <input type="hidden" name="id" value="<?php echo esc_attr((string) $site->id); ?>">
 
             </form>
 

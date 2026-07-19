@@ -99,14 +99,14 @@ class Matomo extends Module
         return apply_filters('bm_wpexp_matomo_enable_subdomains', $value);
     }
 
-    protected static function get_subdomains_domain(): bool
+    protected static function get_subdomains_domain(): string
     {
-        $value = false;
+        $value = '';
         if (is_multisite()) {
             $value = get_option('bm_wp_matomo_subdomains_domain', $value);
         }
 
-        return apply_filters('bm_wpexp_matomo_subdomains_domain', $value);
+        return (string) apply_filters('bm_wpexp_matomo_subdomains_domain', $value);
     }
 
     public static function analytics_code(): void
@@ -128,7 +128,7 @@ class Matomo extends Module
             <?php endif; ?>
             <?php do_action('bm_wpexp_matomo_configuration_before_pageview'); ?>
             <?php if($enable_user_id && is_user_logged_in()) : ?>
-            _paq.push(["setUserId", '<?php echo esc_js(get_current_user_id()); ?>']);
+            _paq.push(["setUserId", '<?php echo esc_js((string) get_current_user_id()); ?>']);
             <?php endif; ?>
             <?php if(is_search()) : ?>
             _paq.push([

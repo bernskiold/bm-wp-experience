@@ -13,7 +13,7 @@ class Site_Health extends Module {
     ];
 
     public static function hooks(): void {
-        add_action( 'site_status_tests', [ self::class, 'add_tests' ] );
+        add_filter( 'site_status_tests', [ self::class, 'add_tests' ] );
     }
 
     public static function add_tests(array $tests): array {

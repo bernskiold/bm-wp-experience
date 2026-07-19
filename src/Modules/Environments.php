@@ -17,7 +17,7 @@ use WP_Admin_Bar;
 
 class Environments extends Module {
     public static function hooks(): void {
-        add_filter( 'admin_bar_menu', [ self::class, 'show_in_admin_bar' ], 40 );
+        add_action( 'admin_bar_menu', [ self::class, 'show_in_admin_bar' ], 40 );
         add_action( 'wp_footer', [ self::class, 'show_public_staging_notice' ] );
         add_filter( 'wp_robots', [ self::class, 'disable_indexing_outside_production' ], 99999 );
 

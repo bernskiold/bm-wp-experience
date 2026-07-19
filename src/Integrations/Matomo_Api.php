@@ -88,7 +88,7 @@ class Matomo_Api
     }
 
     public static function add_existing_user_to_site(
-        string $matomo_id,
+        int|string $matomo_id,
         string $email,
         string $access = self::ROLE_NO_ACCESS
     ): void {
@@ -106,7 +106,7 @@ class Matomo_Api
     }
 
     public static function add_new_user_to_site(
-        string $matomo_id,
+        int|string $matomo_id,
         string $username,
         string $email,
         string $access = self::ROLE_NO_ACCESS
@@ -170,14 +170,14 @@ class Matomo_Api
             ], $body),
         ]);
 
-        if (!$response || is_wp_error($response)) {
+        if (is_wp_error($response)) {
             return (object) [
                 'result'  => 'error',
                 'message' => 'An error occurred with the API connection on the WordPress side.',
             ];
         }
 
-        return json_decode($response['body'] ?? '');
+        return json_decode($response['body']);
     }
 
     public static function is_request_error($response)
@@ -238,7 +238,7 @@ class Matomo_Api
 
         $password = str_shuffle($password);
 
-        $dash_len = floor(sqrt($length));
+        $dash_len = (int) floor(sqrt($length));
         $dash_str = '';
         while (strlen($password) > $dash_len) {
             $dash_str .= substr($password, 0, $dash_len).'-';

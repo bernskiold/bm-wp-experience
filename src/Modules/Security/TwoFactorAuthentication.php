@@ -323,7 +323,7 @@ class TwoFactorAuthentication implements Hookable {
 		}
 
 		$user_id     = (int) wp_strip_all_tags( $_POST['user_id'] );
-		$remember_me = (int) wp_strip_all_tags( $_POST['rememberme'] );
+		$remember_me = (bool) wp_strip_all_tags( (string) ( $_POST['rememberme'] ?? '' ) );
 		$token       = wp_strip_all_tags( $_POST['two_factor_token'] );
 
 		$is_valid = self::validate_code( $token, $user_id );
@@ -349,7 +349,7 @@ class TwoFactorAuthentication implements Hookable {
 		}
 
 		$user_id     = (int) wp_strip_all_tags( $_POST['user_id'] );
-		$remember_me = (int) wp_strip_all_tags( $_POST['rememberme'] );
+		$remember_me = (bool) wp_strip_all_tags( (string) ( $_POST['rememberme'] ?? '' ) );
 		$code        = wp_strip_all_tags( $_POST['backup_code'] );
 
 		$is_valid = self::validate_backup_code( $code, $user_id );
