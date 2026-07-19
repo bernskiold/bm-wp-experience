@@ -8,6 +8,5 @@ vendor
 .Trashes
 ehthumbs.db
 Thumbs.db
-mix-manifest.json
 assets/styles/dist/**
 /bm-wp-experience
