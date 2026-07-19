@@ -3,9 +3,9 @@
 namespace BernskioldMedia\WP\Experience\Modules;
 
 use PHPMailer\PHPMailer\PHPMailer;
+use Postal\ApiException;
 use Postal\Client;
-use Postal\Error;
-use Postal\SendMessage;
+use Postal\Send\Message;
 use WP_Error;
 
 class Mail extends Module {
@@ -174,7 +174,7 @@ class Mail extends Module {
 		}
 
 		$client  = new Client( self::get_postal_domain(), self::get_postal_api_key() );
-		$message = new SendMessage( $client );
+		$message = new Message();
 
 		if ( is_array( $atts['headers'] ?? null ) ) {
 			$headers = $atts['headers'];
@@ -231,10 +231,10 @@ class Mail extends Module {
 		}
 
 		try {
-			$result = $message->send();
+			$result = $client->send->message( $message );
 
 			return count( $result->recipients() ) >= 1;
-		} catch ( Error $error ) {
+		} catch ( ApiException $error ) {
 			do_action( 'wp_mail_failed', new WP_Error( 'wp_mail_failed', $error->getMessage(), $message ) );
 
 			return false;

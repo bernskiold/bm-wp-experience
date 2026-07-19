@@ -13,18 +13,18 @@
   "minimum-stability": "dev",
   "require": {
     "php": "^8.2",
-    "bacon/bacon-qr-code": "^2.0",
-    "composer/installers": "~1.0",
-    "postal/postal": "^1.0",
-    "pragmarx/google2fa": "^8.0",
+    "bacon/bacon-qr-code": "^3.0",
+    "composer/installers": "^2.0",
+    "postal/postal": "^2.0",
+    "pragmarx/google2fa": "^9.0",
     "pragmarx/recovery": "^0.2.1",
-    "yahnis-elsts/plugin-update-checker": "^4.8"
+    "yahnis-elsts/plugin-update-checker": "^5.0"
   },
   "require-dev": {
 	"roave/security-advisories": "dev-latest",
 	"bernskioldmedia/bm-wp-devtools": "dev-main"
   },
-  "license": "GPL-3.0+",
+  "license": "GPL-3.0-or-later",
   "authors": [
 	{
 	  "name": "Bernskiold",
