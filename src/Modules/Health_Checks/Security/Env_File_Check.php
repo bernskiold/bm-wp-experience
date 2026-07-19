@@ -1,8 +1,8 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Modules\Health_Checks\Security;
+namespace Bernskiold\WP\Experience\Modules\Health_Checks\Security;
 
-use BernskioldMedia\WP\Experience\Helpers;
+use Bernskiold\WP\Experience\Helpers;
 
 class Env_File_Check extends Security_Check {
     public static string $key = 'bm_env_file_check';

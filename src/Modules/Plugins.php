@@ -4,7 +4,7 @@
  *
  **/
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
 class Plugins extends Module {
     public static function hooks(): void {

@@ -4,11 +4,11 @@
  *
  **/
 
-namespace BernskioldMedia\WP\Experience\Admin;
+namespace Bernskiold\WP\Experience\Admin;
 
-use BernskioldMedia\WP\Experience\Helpers;
-use BernskioldMedia\WP\Experience\Plugin;
-use BernskioldMedia\WP\Experience\Core\Hookable;
+use Bernskiold\WP\Experience\Helpers;
+use Bernskiold\WP\Experience\Plugin;
+use Bernskiold\WP\Experience\Core\Hookable;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

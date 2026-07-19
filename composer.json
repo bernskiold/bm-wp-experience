@@ -1,5 +1,5 @@
 {
-  "name": "bernskioldmedia/bm-wp-experience",
+  "name": "bernskiold/bm-wp-experience",
   "description": "Provides an opinionated WordPress experience with clean-up and tweaks that we at Bernskiold have found runs WordPress best.",
   "type": "wordpress-plugin",
   "config": {
@@ -35,7 +35,7 @@
   ],
   "autoload": {
 	"psr-4": {
-	  "BernskioldMedia\\WP\\Experience\\": "src"
+	  "Bernskiold\\WP\\Experience\\": "src"
 	}
   },
   "scripts": {

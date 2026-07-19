@@ -9,10 +9,10 @@
  * @since   1.4.0
  **/
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
-use BernskioldMedia\WP\Experience\Helpers;
-use BernskioldMedia\WP\Experience\Plugin;
+use Bernskiold\WP\Experience\Helpers;
+use Bernskiold\WP\Experience\Plugin;
 use WP_Admin_Bar;
 
 class Environments extends Module {

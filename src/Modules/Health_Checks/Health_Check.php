@@ -1,6 +1,6 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Modules\Health_Checks;
+namespace Bernskiold\WP\Experience\Modules\Health_Checks;
 
 abstract class Health_Check {
     public static string $key;

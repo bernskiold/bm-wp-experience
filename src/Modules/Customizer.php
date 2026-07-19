@@ -5,7 +5,7 @@
  * Adds various opinionated tweaks to the customizer.
  */
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
 if (! defined('ABSPATH')) {
     exit;

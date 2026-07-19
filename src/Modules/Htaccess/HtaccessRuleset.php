@@ -1,9 +1,9 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Modules\Htaccess;
+namespace Bernskiold\WP\Experience\Modules\Htaccess;
 
-use BernskioldMedia\WP\Experience\Helpers;
-use BernskioldMedia\WP\Experience\Plugin;
+use Bernskiold\WP\Experience\Helpers;
+use Bernskiold\WP\Experience\Plugin;
 
 /**
  * @phpstan-consistent-constructor

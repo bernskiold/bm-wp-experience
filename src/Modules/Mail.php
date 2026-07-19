@@ -1,6 +1,6 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use Postal\ApiException;

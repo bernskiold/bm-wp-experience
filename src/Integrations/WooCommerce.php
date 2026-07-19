@@ -1,6 +1,6 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Integrations;
+namespace Bernskiold\WP\Experience\Integrations;
 
 class WooCommerce extends Integration {
     public static string $plugin_file = 'woocommerce/woocommerce.php';

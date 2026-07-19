@@ -1,9 +1,9 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience;
+namespace Bernskiold\WP\Experience;
 
-use BernskioldMedia\WP\Experience\Modules\Security\TwoFactorAuthentication;
-use BernskioldMedia\WP\Experience\Core\BasePlugin;
+use Bernskiold\WP\Experience\Modules\Security\TwoFactorAuthentication;
+use Bernskiold\WP\Experience\Core\BasePlugin;
 
 class Plugin extends BasePlugin {
 

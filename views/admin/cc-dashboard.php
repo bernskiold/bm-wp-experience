@@ -2,10 +2,10 @@
 /**
  * Admin Page View: About Bernskiold
  *
- * @package BernskioldMedia\WP\Experience
+ * @package Bernskiold\WP\Experience
  */
 
-namespace BernskioldMedia\WP\Experience;
+namespace Bernskiold\WP\Experience;
 
 $website_id = defined( 'BM_WP_WEBSITE_UUID' ) ? BM_WP_WEBSITE_UUID : null;
 

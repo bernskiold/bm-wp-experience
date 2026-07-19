@@ -11,7 +11,7 @@
  *
  **/
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
 use WP_Error;
 use WP_User;

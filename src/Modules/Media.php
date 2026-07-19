@@ -3,7 +3,7 @@
  * Media Tweaks
  **/
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
 class Media extends Module {
     public static function hooks(): void {

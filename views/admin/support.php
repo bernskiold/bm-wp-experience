@@ -2,10 +2,10 @@
 /**
  * Admin Page View: Support Page
  *
- * @package BernskioldMedia\WP\Experience
+ * @package Bernskiold\WP\Experience
  */
 
-namespace BernskioldMedia\WP\Experience;
+namespace Bernskiold\WP\Experience;
 
 ?>
 <div class="wrap">

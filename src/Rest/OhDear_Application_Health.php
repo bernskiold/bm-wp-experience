@@ -1,8 +1,8 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Rest;
+namespace Bernskiold\WP\Experience\Rest;
 
-use BernskioldMedia\WP\Experience\Core\Hookable;
+use Bernskiold\WP\Experience\Core\Hookable;
 use DateTime;
 use OhDear\HealthCheckResults\CheckResult;
 use OhDear\HealthCheckResults\CheckResults;

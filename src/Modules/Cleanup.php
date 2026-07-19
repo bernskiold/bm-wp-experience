@@ -6,7 +6,7 @@
  * These are cleanup and tweaks functions.
  */
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;

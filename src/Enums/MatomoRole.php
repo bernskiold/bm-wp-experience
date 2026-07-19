@@ -1,6 +1,6 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Enums;
+namespace Bernskiold\WP\Experience\Enums;
 
 /**
  * The access roles supported by the Matomo API.

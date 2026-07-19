@@ -1,8 +1,8 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Integrations;
+namespace Bernskiold\WP\Experience\Integrations;
 
-use BernskioldMedia\WP\Experience\Core\Hookable;
+use Bernskiold\WP\Experience\Core\Hookable;
 
 abstract class Integration implements Hookable {
     public static string $plugin_file;

@@ -1,8 +1,8 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Integrations;
+namespace Bernskiold\WP\Experience\Integrations;
 
-use BernskioldMedia\WP\Experience\Enums\MatomoRole;
+use Bernskiold\WP\Experience\Enums\MatomoRole;
 
 class Matomo_Api
 {

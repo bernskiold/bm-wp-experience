@@ -1,8 +1,8 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
-use BernskioldMedia\WP\Experience\Modules\Health_Checks\Security;
+use Bernskiold\WP\Experience\Modules\Health_Checks\Security;
 
 class Site_Health extends Module {
     protected static array $checks = [

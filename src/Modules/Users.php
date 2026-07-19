@@ -3,7 +3,7 @@
  * Users Tweaks
  **/
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
 class Users extends Module {
 
@@ -21,6 +21,8 @@ class Users extends Module {
      * in these domains (including sub-domains).
      */
     protected const EMAIL_DOMAINS = [
+        'bernskiold.com',
+        'bernskiold.se',
         'bernskioldmedia.com',
         'bernskioldmedia.se',
     ];

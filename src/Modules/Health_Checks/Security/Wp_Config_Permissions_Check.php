@@ -1,8 +1,8 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Modules\Health_Checks\Security;
+namespace Bernskiold\WP\Experience\Modules\Health_Checks\Security;
 
-use BernskioldMedia\WP\Experience\Helpers;
+use Bernskiold\WP\Experience\Helpers;
 
 class Wp_Config_Permissions_Check extends Security_Check {
 

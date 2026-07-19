@@ -6,10 +6,10 @@
  *
  **/
 
-namespace BernskioldMedia\WP\Experience\Admin;
+namespace Bernskiold\WP\Experience\Admin;
 
-use BernskioldMedia\WP\Experience\Modules\Users;
-use BernskioldMedia\WP\Experience\Core\Hookable;
+use Bernskiold\WP\Experience\Modules\Users;
+use Bernskiold\WP\Experience\Core\Hookable;
 
 class Admin implements Hookable {
     public static function hooks(): void {

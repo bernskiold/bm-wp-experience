@@ -1,6 +1,6 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Core;
+namespace Bernskiold\WP\Experience\Core;
 
 /**
  * Hookable

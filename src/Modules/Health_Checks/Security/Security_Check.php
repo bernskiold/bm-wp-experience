@@ -1,8 +1,8 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Modules\Health_Checks\Security;
+namespace Bernskiold\WP\Experience\Modules\Health_Checks\Security;
 
-use BernskioldMedia\WP\Experience\Modules\Health_Checks\Health_Check;
+use Bernskiold\WP\Experience\Modules\Health_Checks\Health_Check;
 
 abstract class Security_Check extends Health_Check {
     public static function get_badge_label(): string {

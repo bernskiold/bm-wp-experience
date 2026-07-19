@@ -6,7 +6,7 @@
  * and referenced on all sites running this as a platform base.
  */
 
-namespace BernskioldMedia\WP\Experience;
+namespace Bernskiold\WP\Experience;
 
 class Helpers {
 

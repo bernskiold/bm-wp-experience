@@ -1,8 +1,8 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
-use BernskioldMedia\WP\Experience\Integrations\Matomo_Api;
+use Bernskiold\WP\Experience\Integrations\Matomo_Api;
 
 class Matomo extends Module
 {

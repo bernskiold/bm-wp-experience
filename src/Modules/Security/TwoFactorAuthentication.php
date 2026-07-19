@@ -1,13 +1,13 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Modules\Security;
+namespace Bernskiold\WP\Experience\Modules\Security;
 
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
-use BernskioldMedia\WP\Experience\Plugin;
-use BernskioldMedia\WP\Experience\Core\Hookable;
+use Bernskiold\WP\Experience\Plugin;
+use Bernskiold\WP\Experience\Core\Hookable;
 use PragmaRX\Google2FA\Google2FA;
 use PragmaRX\Recovery\Recovery;
 

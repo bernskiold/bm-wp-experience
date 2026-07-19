@@ -5,11 +5,11 @@
  *
  **/
 
-namespace BernskioldMedia\WP\Experience\Admin;
+namespace Bernskiold\WP\Experience\Admin;
 
-use BernskioldMedia\WP\Experience\Integrations\Matomo_Api;
-use BernskioldMedia\WP\Experience\Modules\Matomo_Sync;
-use BernskioldMedia\WP\Experience\Core\Multisite_Tab;
+use Bernskiold\WP\Experience\Integrations\Matomo_Api;
+use Bernskiold\WP\Experience\Modules\Matomo_Sync;
+use Bernskiold\WP\Experience\Core\Multisite_Tab;
 
 if (!defined('ABSPATH')) {
     exit;

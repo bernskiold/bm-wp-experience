@@ -3,9 +3,9 @@
  * Adjustments to Comments
  */
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
-use BernskioldMedia\WP\Experience\Helpers;
+use Bernskiold\WP\Experience\Helpers;
 use WP_Admin_Bar;
 
 if (! defined('ABSPATH')) {
