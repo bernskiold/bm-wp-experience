@@ -21,6 +21,13 @@ class Block_Editor extends Module {
 		// Disable the block directory in the editor.
 		add_action( 'plugins_loaded', [ self::class, 'disable_block_directory' ] );
 
+		// Disable remote block patterns pulled from the .org pattern directory.
+		add_filter( 'should_load_remote_block_patterns', [ self::class, 'should_load_remote_block_patterns' ] );
+
+		// Lock down editor settings (Font Library, Openverse) that let editors
+		// pull in external fonts and media on a whim.
+		add_filter( 'block_editor_settings_all', [ self::class, 'filter_block_editor_settings' ] );
+
 		// As of WordPress 7.0 the post editor is always iframed. Styles that
 		// should affect the editor content must be enqueued through
 		// enqueue_block_assets (which loads inside the iframe) rather than
@@ -46,6 +53,49 @@ class Block_Editor extends Module {
 
 		remove_action( 'enqueue_block_editor_assets', 'wp_enqueue_editor_block_directory_assets' );
 		remove_action( 'enqueue_block_editor_assets', 'gutenberg_enqueue_block_editor_assets_block_directory' );
+	}
+
+	/**
+	 * Disable remote block patterns.
+	 *
+	 * WordPress pulls block patterns from the wordpress.org pattern
+	 * directory into the inserter. On managed builds we don't want editors
+	 * inserting arbitrary remote patterns, so we disable this by default.
+	 *
+	 * To keep remote patterns, define BM_WP_ENABLE_REMOTE_BLOCK_PATTERNS
+	 * as true in your config.
+	 */
+	public static function should_load_remote_block_patterns( bool $should_load ): bool {
+		if ( defined( 'BM_WP_ENABLE_REMOTE_BLOCK_PATTERNS' ) && BM_WP_ENABLE_REMOTE_BLOCK_PATTERNS ) {
+			return $should_load;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Lock down block editor settings.
+	 *
+	 * Disables the Font Library (WordPress 6.5+) and the Openverse external
+	 * media inserter by default. Both let editors pull external assets into
+	 * the site, which we typically want to control via the design system.
+	 *
+	 * Return the matching filters as true to re-enable either feature.
+	 *
+	 * @param array $settings The block editor settings.
+	 */
+	public static function filter_block_editor_settings( array $settings ): array {
+		// Font Library: disable installing/uploading fonts from the editor.
+		if ( true !== apply_filters( 'bm_wpexp_enable_font_library', false ) ) {
+			$settings['fontLibraryEnabled'] = false;
+		}
+
+		// Openverse: disable the external free media inserter.
+		if ( true !== apply_filters( 'bm_wpexp_enable_openverse', false ) ) {
+			$settings['enableOpenverseMediaCategory'] = false;
+		}
+
+		return $settings;
 	}
 
 	/**

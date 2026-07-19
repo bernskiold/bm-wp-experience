@@ -33,6 +33,9 @@ For almost every feature there is a filter, constant or action allowing you to c
 ### Block Editor
 
 - Disable the block directory.
+- Disable remote block patterns from the .org pattern directory unless specified by `BM_WP_ENABLE_REMOTE_BLOCK_PATTERNS`.
+- Disable the Font Library (WordPress 6.5+) so editors can't install external fonts. Re-enable with the `bm_wpexp_enable_font_library` filter.
+- Disable the Openverse external media inserter. Re-enable with the `bm_wpexp_enable_openverse` filter.
 - Remove Yoast SEO metabox in the block editor.
 - Styles the post editor and title to be less part of the page and more title to better go with the template.
 - Disable User Autocomplete unless specified by `BM_WP_ALLOW_USER_AUTOCOMPLETE`.
@@ -44,6 +47,7 @@ For almost every feature there is a filter, constant or action allowing you to c
 - Prevent empty search queries from redirecting to home page
 - Disable emoji styles
 - Remove links to feeds unless specified by `BM_WP_DISABLE_FEED_URLS`.
+- Disable the periodic admin email verification screen. Re-enable with the `bm_wpexp_enable_admin_email_verification` filter.
 
 ### Comments
 
@@ -128,6 +132,8 @@ The SearchWP integration automatically runs if SearchWP is active.
 ### Users
 
 - Prevent agency users from being indexed.
+- Block user enumeration via `?author=N` scans, which otherwise leak login names.
+- Disable Gravatar (remote avatars) by default to avoid phoning home to gravatar.com. A neutral local placeholder is used instead. Re-enable with `BM_WP_ENABLE_GRAVATAR`.
 - Remove color scheme picker.
 
 ### WooCommerce
@@ -171,6 +177,12 @@ false: `add_filter( 'bm_wpexp_enable_admin_ad_blocker', '__return_false' )`.
 
 **Enable Block Directory:** By default the block directory is disabled. Define and set `BM_WP_ENABLE_BLOCK_DIRECTORY` to `false` to allow it.
 
+**Enable Remote Block Patterns:** By default remote block patterns from the .org pattern directory are disabled. Define and set `BM_WP_ENABLE_REMOTE_BLOCK_PATTERNS` to `true` to allow them.
+
+`bm_wpexp_enable_font_library` - Return `true` to re-enable the Font Library (WordPress 6.5+) in the editor.
+
+`bm_wpexp_enable_openverse` - Return `true` to re-enable the Openverse external media inserter in the editor.
+
 **Disable Block Editor Styling** By default we ship a block editor styling. By returning the `bm_wpexp_enable_block_editor_styling` as false you can disable this, for example via a
 mu-plugin. `add_filter( 'bm_wpexp_enable_block_editor_styling', '__return_false' )`.
 
@@ -179,6 +191,8 @@ mu-plugin. `add_filter( 'bm_wpexp_enable_block_editor_styling', '__return_false'
 ### Cleanup
 
 **Allow Feed URLs:** By default we hide feed URLs from the header. If you are using feeds, set `BM_WP_DISABLE_FEED_URLS` to `false` in your configuration.
+
+`bm_wpexp_enable_admin_email_verification` - Return `true` to re-enable the periodic admin email verification screen shown on login.
 
 ### Comments
 
@@ -266,6 +280,10 @@ managed anyway (just not daily). Define `BM_WP_HAS_MAINTENANCE_PLAN` to `true` i
 `bm_wpexp_authors_email_domains` - Allows you to customize the array of email domains that designate agency users.
 
 `bm_wpexp_remove_color_scheme_picker` - Return `false` to override the default behavior of hide, and instead show the color scheme picker.
+
+`bm_wpexp_block_user_enumeration` - Return `false` to allow `?author=N` scans instead of blocking them.
+
+**Enable Gravatar:** By default remote avatars (Gravatar) are disabled to avoid phoning home to gravatar.com, and a local placeholder is shown. Define `BM_WP_ENABLE_GRAVATAR` to `true`, or return the `bm_wpexp_enable_gravatar` filter as `true`, to restore native avatar behavior.
 
 ### WooCommerce
 

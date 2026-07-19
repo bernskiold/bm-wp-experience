@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+
+* Disable remote block patterns from the wordpress.org pattern directory by default. Set `BM_WP_ENABLE_REMOTE_BLOCK_PATTERNS` to `true` to keep them.
+* Disable the Font Library (WordPress 6.5+) in the editor by default, so editors can't install external fonts. Re-enable with the `bm_wpexp_enable_font_library` filter.
+* Disable the Openverse external media inserter in the editor by default. Re-enable with the `bm_wpexp_enable_openverse` filter.
+* Block user enumeration via `?author=N` scans, which otherwise leak login names. Return the `bm_wpexp_block_user_enumeration` filter as `false` to allow it.
+* Disable the periodic admin email verification screen shown on login. Re-enable with the `bm_wpexp_enable_admin_email_verification` filter.
+* Disable Gravatar (remote avatars) by default to avoid phoning home to gravatar.com, showing a neutral local placeholder instead. Restore native behavior with the `BM_WP_ENABLE_GRAVATAR` constant or the `bm_wpexp_enable_gravatar` filter.
+
 ## 4.0.0 - 2026-07-19
 
 ### Changed
