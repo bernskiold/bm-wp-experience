@@ -1,6 +1,6 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Modules\Htaccess;
+namespace Bernskiold\WP\Experience\Modules\Htaccess;
 
 class XMLRPC_Protection extends HtaccessRuleset {
 

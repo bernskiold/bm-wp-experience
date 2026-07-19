@@ -1,6 +1,6 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Modules\Htaccess;
+namespace Bernskiold\WP\Experience\Modules\Htaccess;
 
 class ResponseHeaders extends HtaccessRuleset {
 

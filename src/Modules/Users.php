@@ -3,7 +3,7 @@
  * Users Tweaks
  **/
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
 class Users extends Module {
 
@@ -21,6 +21,8 @@ class Users extends Module {
      * in these domains (including sub-domains).
      */
     protected const EMAIL_DOMAINS = [
+        'bernskiold.com',
+        'bernskiold.se',
         'bernskioldmedia.com',
         'bernskioldmedia.se',
     ];
@@ -28,10 +30,85 @@ class Users extends Module {
     public static function hooks(): void {
         add_action( 'wp', [ self::class, 'maybe_disable_author_archive' ] );
 
+        // Block user enumeration via ?author=N scans. Runs before
+        // redirect_canonical (priority 10) so the username is never leaked.
+        add_action( 'template_redirect', [ self::class, 'block_author_enumeration' ], 0 );
+
+        // Disable Gravatar phone-home unless explicitly enabled.
+        if ( ! self::is_gravatar_enabled() ) {
+            add_filter( 'pre_get_avatar_data', [ self::class, 'disable_gravatar' ] );
+        }
+
         // Remove the color scheme picker from the admin.
         if ( true === apply_filters( 'bm_wpexp_remove_color_scheme_picker', true ) ) {
             remove_action( 'admin_color_scheme_picker', 'admin_color_scheme_picker' );
         }
+    }
+
+    /**
+     * Block user enumeration via ?author=N scans.
+     *
+     * By default WordPress redirects /?author=1 to /author/username/,
+     * leaking the login name. We intercept the numeric author query on the
+     * front end and redirect to the home page instead.
+     *
+     * Return the bm_wpexp_block_user_enumeration filter as false to allow it.
+     */
+    public static function block_author_enumeration(): void {
+        if ( is_admin() ) {
+            return;
+        }
+
+        if ( false === apply_filters( 'bm_wpexp_block_user_enumeration', true ) ) {
+            return;
+        }
+
+        if ( isset( $_GET['author'] ) && is_numeric( $_GET['author'] ) ) {
+            wp_safe_redirect( home_url(), 301 );
+            exit;
+        }
+    }
+
+    /**
+     * Replace the remote Gravatar URL with a local, inline placeholder so
+     * that no request is ever made to gravatar.com.
+     *
+     * Setting the url short-circuits get_avatar_data() before it builds the
+     * remote Gravatar URL.
+     *
+     * @param array $args The avatar data arguments.
+     */
+    public static function disable_gravatar( array $args ): array {
+        $args['url'] = self::get_local_avatar_url();
+
+        return $args;
+    }
+
+    /**
+     * Whether Gravatar (remote avatars) should be enabled.
+     *
+     * Enabled by default. To avoid phoning home to gravatar.com, define
+     * BM_WP_DISABLE_GRAVATAR as true, or return the bm_wpexp_enable_gravatar
+     * filter as false, and a local placeholder is shown instead.
+     */
+    protected static function is_gravatar_enabled(): bool {
+        if ( defined( 'BM_WP_DISABLE_GRAVATAR' ) && BM_WP_DISABLE_GRAVATAR ) {
+            return false;
+        }
+
+        return false !== apply_filters( 'bm_wpexp_enable_gravatar', true );
+    }
+
+    /**
+     * A neutral, inline SVG avatar used when Gravatar is disabled.
+     *
+     * Returned as a data URI so that rendering it never triggers an HTTP
+     * request to an external service.
+     */
+    protected static function get_local_avatar_url(): string {
+        $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect width="96" height="96" fill="#e6e6e6"/><circle cx="48" cy="38" r="18" fill="#b3b3b3"/><path d="M16 88c0-17.7 14.3-32 32-32s32 14.3 32 32z" fill="#b3b3b3"/></svg>';
+
+        return 'data:image/svg+xml;base64,' . base64_encode( $svg );
     }
 
     /**
@@ -48,9 +125,7 @@ class Users extends Module {
         $current_domain     = parse_url( get_site_url(), PHP_URL_HOST );
 
         // Perform partial match on domains to catch subdomains or variation of domain name
-        $filtered_domains = array_filter( self::get_allowlisted_domains(), function ($domain) use ($current_domain) {
-            return false !== stripos( $current_domain, $domain );
-        } );
+        $filtered_domains = array_filter( self::get_allowlisted_domains(), fn ( $domain ) => false !== stripos( $current_domain, $domain ) );
 
         /*
          * The user in the query must have an email,
@@ -86,20 +161,14 @@ class Users extends Module {
         return apply_filters( 'bm_wpexp_authors_email_domains', self::EMAIL_DOMAINS );
     }
 
-    public static function is_agency( $user ){
+    public static function is_agency( $user ): bool {
 
-        $is_agency = false;
         foreach ( self::get_email_domains() as $domain ) {
-            if ( $is_agency !== true && false !== stripos( $user->user_email, $domain ) ) {
-                $is_agency = true;
+            if ( false !== stripos( $user->user_email, $domain ) ) {
+                return true;
             }
         }
 
-        if( $is_agency ){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return false;
     }
 }

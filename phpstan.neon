@@ -1,19 +1,35 @@
-#$ vendor/bin/phpstan analyze
+#$ vendor/bin/phpstan analyse
 
 includes:
-    - vendor/bernskioldmedia/bm-wp-devtools/phpstan/extension.neon
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
 parameters:
-    level: 4
+    level: 5
+    phpVersion: 80200
     paths:
         - bm-wp-experience.php
         - src/
     ignoreErrors:
-    		-
-    			message: '#Function is_[a-zA-Z0-9\\_]+ not found.#'
-    			path: src/Integrations/WooCommerce.php
-    		-
-    			message: '#Call to an undefined method Puc_v4p11_Vcs_Api::enableReleaseAssets\(\).#'
-    			path: bm-wp-experience.php
-    		- '#Constant WP_CONTENT_DIR not found.#'
-    		- '#Constant WP_CONTENT_URL not found.#'
-    		- '#Function apply_filters invoked with 3 parameters, 2 required.#'
+        # WooCommerce template functions are not part of the WordPress stubs.
+        -
+            message: '#Function is_[a-zA-Z0-9\\_]+ not found.#'
+            path: src/Integrations/WooCommerce.php
+
+        # Optional Oh Dear health-check integration. Its SDK is provided at
+        # runtime by the Oh Dear reporting plugin and is not a Composer dependency.
+        -
+            identifier: class.notFound
+            path: src/Rest/OhDear_Application_Health.php
+
+        # Plugin configuration constants, defined per-site in wp-config.php.
+        - '#Constant BM_WP_[A-Z0-9_]+ not found\.#'
+
+        # PUC v5 exposes enableReleaseAssets() on the GitHub VCS API subclass,
+        # which PHPStan cannot narrow from the base Vcs\Api return type.
+        -
+            message: '#Call to an undefined method [a-zA-Z0-9\\_]+::enableReleaseAssets\(\)#'
+            path: bm-wp-experience.php
+
+        # __return_* callbacks intentionally ignore the passed filter arguments.
+        -
+            identifier: arguments.count
+            path: src/Modules/Comments.php

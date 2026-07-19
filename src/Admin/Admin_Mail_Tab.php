@@ -5,11 +5,11 @@
  *
  **/
 
-namespace BernskioldMedia\WP\Experience\Admin;
+namespace Bernskiold\WP\Experience\Admin;
 
-use BernskioldMedia\WP\Experience\Integrations\Matomo_Api;
-use BernskioldMedia\WP\Experience\Modules\Matomo_Sync;
-use BMWPEXP_Vendor\BernskioldMedia\WP\PluginBase\Admin\Multisite_Tab;
+use Bernskiold\WP\Experience\Integrations\Matomo_Api;
+use Bernskiold\WP\Experience\Modules\Matomo_Sync;
+use Bernskiold\WP\Experience\Core\Multisite_Tab;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -81,8 +81,8 @@ class Admin_Mail_Tab extends Multisite_Tab
             <h1 id="edit-site"><?php printf(__('E-mail settings for: %s', 'bm-wp-experience'),
                     $site->blogname); ?></h1>
             <p class="edit-site-actions">
-                <a href="<?php esc_url(get_home_url($site->id, '/')); ?>"><?php esc_html_e('Visit',
-                        'bm-wp-experience'); ?></a> | <a href="<?php esc_url(get_admin_url($site->id,
+                <a href="<?php echo esc_url(get_home_url($site->id, '/')); ?>"><?php esc_html_e('Visit',
+                        'bm-wp-experience'); ?></a> | <a href="<?php echo esc_url(get_admin_url($site->id,
                     '/')); ?>"><?php esc_html_e('Dashboard', 'bm-wp-experience'); ?></a>
             </p>
 
@@ -124,7 +124,7 @@ class Admin_Mail_Tab extends Multisite_Tab
                 <?php submit_button(__('Save', 'bm-wp-experience')); ?>
 
                 <?php wp_nonce_field(self::$nonce.'-'.$site->id); ?>
-                <input type="hidden" name="id" value="<?php echo esc_attr($site->id); ?>">
+                <input type="hidden" name="id" value="<?php echo esc_attr((string) $site->id); ?>">
 
             </form>
 

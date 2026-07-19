@@ -7,9 +7,9 @@
  * exist here.
  */
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
-use BernskioldMedia\WP\Experience\Plugin;
+use Bernskiold\WP\Experience\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -20,7 +20,19 @@ class Block_Editor extends Module {
 	public static function hooks(): void {
 		// Disable the block directory in the editor.
 		add_action( 'plugins_loaded', [ self::class, 'disable_block_directory' ] );
-		add_action( 'admin_enqueue_scripts', [ self::class, 'block_editor_styles' ] );
+
+		// Disable remote block patterns pulled from the .org pattern directory.
+		add_filter( 'should_load_remote_block_patterns', [ self::class, 'should_load_remote_block_patterns' ] );
+
+		// Lock down editor settings (Font Library, Openverse) that let editors
+		// pull in external fonts and media on a whim.
+		add_filter( 'block_editor_settings_all', [ self::class, 'filter_block_editor_settings' ] );
+
+		// As of WordPress 7.0 the post editor is always iframed. Styles that
+		// should affect the editor content must be enqueued through
+		// enqueue_block_assets (which loads inside the iframe) rather than
+		// admin_enqueue_scripts (which only loads in the parent frame).
+		add_action( 'enqueue_block_assets', [ self::class, 'block_editor_styles' ] );
 	}
 
 	/**
@@ -44,6 +56,49 @@ class Block_Editor extends Module {
 	}
 
 	/**
+	 * Disable remote block patterns.
+	 *
+	 * WordPress pulls block patterns from the wordpress.org pattern
+	 * directory into the inserter. On managed builds we don't want editors
+	 * inserting arbitrary remote patterns, so we disable this by default.
+	 *
+	 * To keep remote patterns, define BM_WP_ENABLE_REMOTE_BLOCK_PATTERNS
+	 * as true in your config.
+	 */
+	public static function should_load_remote_block_patterns( bool $should_load ): bool {
+		if ( defined( 'BM_WP_ENABLE_REMOTE_BLOCK_PATTERNS' ) && BM_WP_ENABLE_REMOTE_BLOCK_PATTERNS ) {
+			return $should_load;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Lock down block editor settings.
+	 *
+	 * Disables the Font Library (WordPress 6.5+) and the Openverse external
+	 * media inserter by default. Both let editors pull external assets into
+	 * the site, which we typically want to control via the design system.
+	 *
+	 * Return the matching filters as true to re-enable either feature.
+	 *
+	 * @param array $settings The block editor settings.
+	 */
+	public static function filter_block_editor_settings( array $settings ): array {
+		// Font Library: disable installing/uploading fonts from the editor.
+		if ( true !== apply_filters( 'bm_wpexp_enable_font_library', false ) ) {
+			$settings['fontLibraryEnabled'] = false;
+		}
+
+		// Openverse: disable the external free media inserter.
+		if ( true !== apply_filters( 'bm_wpexp_enable_openverse', false ) ) {
+			$settings['enableOpenverseMediaCategory'] = false;
+		}
+
+		return $settings;
+	}
+
+	/**
 	 * Remove the Yoast SEO metabox if we're in the block editor.
 	 * The sidebar options are much better for the block editor
 	 * so we don't actually need it.
@@ -57,7 +112,9 @@ class Block_Editor extends Module {
 	}
 
 	public static function block_editor_styles(): void {
-		if ( ! self::is_block_editor() ) {
+		// enqueue_block_assets also fires on the front end; we only want to
+		// style the editor itself, so bail out everywhere but the admin editor.
+		if ( ! is_admin() || ! self::is_block_editor() ) {
 			return;
 		}
 

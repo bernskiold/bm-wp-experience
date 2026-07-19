@@ -2,56 +2,99 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+
+* Disable remote block patterns from the wordpress.org pattern directory by default. Set `BM_WP_ENABLE_REMOTE_BLOCK_PATTERNS` to `true` to keep them.
+* Disable the Font Library (WordPress 6.5+) in the editor by default, so editors can't install external fonts. Re-enable with the `bm_wpexp_enable_font_library` filter.
+* Disable the Openverse external media inserter in the editor by default. Re-enable with the `bm_wpexp_enable_openverse` filter.
+* Block user enumeration via `?author=N` scans, which otherwise leak login names. Return the `bm_wpexp_block_user_enumeration` filter as `false` to allow it.
+* Disable the periodic admin email verification screen shown on login. Re-enable with the `bm_wpexp_enable_admin_email_verification` filter.
+* Optionally disable Gravatar (remote avatars) to avoid phoning home to gravatar.com, showing a neutral local placeholder instead. Enabled by default; disable with the `BM_WP_DISABLE_GRAVATAR` constant or by returning the `bm_wpexp_enable_gravatar` filter as `false`.
+
+## 4.0.0 - 2026-07-19
+
+### Changed
+
+* **Breaking:** The minimum required PHP version is now 8.2.
+* **Breaking:** The minimum required WordPress version is now 7.0.
+* Modernised the codebase to PHP 8.2 idioms: added a `MatomoRole` backed enum, converted `switch` ladders to `match()`, adopted `str_contains()`/`str_starts_with()`, added parameter/return types, and marked eligible properties `readonly`.
+* Inlined the `bernskioldmedia/wp-plugin-base` foundation (`BasePlugin`, the `Hookable` interface, `Installer` and `Multisite_Tab`) as first-party code under a new `Bernskiold\WP\Experience\Core` namespace, and removed the `humbug/php-scoper` prefixing build step and `vendor_prefixed/` directory entirely.
+* Bumped all dependencies to their latest versions: `bacon/bacon-qr-code` ^3, `composer/installers` ^2, `postal/postal` ^2 (Guzzle-based), `pragmarx/google2fa` ^9 and `yahnis-elsts/plugin-update-checker` ^5, with the plugin code updated for the new Postal and Plugin Update Checker APIs.
+
+### Developer
+
+* Static analysis now runs on PHPStan 2 with `szepeviktor/phpstan-wordpress`, decoupled from the abandoned devtools package, and the codebase is clean at level 5.
+
+### Fixed
+
+* **Security:** Two-factor recovery codes are now single-use and consumed on login instead of being reusable indefinitely.
+* **Security:** The two-factor AJAX handlers now require the `edit_user` capability when a user is logged in, closing an IDOR that allowed any authenticated user to enable, disable or reset another user's 2FA.
+* **Security:** Enabling 2FA now requires proof of a validated authenticator (secret plus stored recovery codes), preventing an unauthenticated request from enabling 2FA on — and locking out — an arbitrary account. Removed a debug statement that logged request data.
+* Two-factor login enforcement now respects the per-role restriction instead of applying to every user.
+* Site Health custom checks are now registered on the `site_status_tests` filter (previously an action, so the returned checks were silently discarded and never appeared).
+* `Matomo::get_subdomains_domain()` now returns the configured domain string instead of being incorrectly typed as `bool`.
+* `Matomo_Api::make_request()` returns a proper error object on failure, so connection/API errors are no longer treated as success (which previously stored sites with an id of `0`).
+* `Helpers::is_network_active()` now resolves the correct plugin file and works on multisite.
+* WooCommerce marketing-feature removal no longer unsets the wrong feature when "marketing" is absent.
+* Configuration/secret file-permission health checks now evaluate exposure correctly (a locked `0600` `.env` is no longer reported as critical; a world-readable `0644` `wp-config.php` is now flagged).
+* The analytics and mail admin tabs now render the Visit/Dashboard links correctly.
+* REST basic-auth no longer emits a warning when only a username is supplied, and the REST "disable comments" filter now blocks insertion instead of returning `null`.
+* Hardened against PHP 8.1/8.2 "passing null to non-nullable" deprecations across the mail, security, cleanup, admin and htaccess modules.
+* Block editor styling now loads inside the iframed post editor. WordPress 7.0 always iframes the editor, so the styles are enqueued through `enqueue_block_assets` (which runs inside the iframe) instead of `admin_enqueue_scripts` (which only reaches the parent frame).
+* The Download Manager admin styles no longer risk a fatal when `get_current_screen()` returns `null`.
+
 ## 3.11.6 - 2023-12-08
 
 ### What's Changed
 
-* Bump actions/checkout from 3 to 4 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/110
-* Bump dependabot/fetch-metadata from 1.5.1 to 1.6.0 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/105
-* Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskioldmedia/bm-wp-experience/pull/104
-* Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskioldmedia/bm-wp-experience/pull/112
-* Bump postcss and postcss-preset-env by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/113
-* Mail Settings by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/119
-* Bump browserify-sign from 4.2.1 to 4.2.2 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/118
-* Bump actions/setup-node from 3 to 4 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/117
-* Bump @babel/traverse from 7.23.0 to 7.23.2 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/116
-* Bump stefanzweifel/git-auto-commit-action from 4 to 5 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/115
-* Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskioldmedia/bm-wp-experience/pull/114
+* Bump actions/checkout from 3 to 4 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/110
+* Bump dependabot/fetch-metadata from 1.5.1 to 1.6.0 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/105
+* Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskiold/bm-wp-experience/pull/104
+* Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskiold/bm-wp-experience/pull/112
+* Bump postcss and postcss-preset-env by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/113
+* Mail Settings by @annlickander in https://github.com/bernskiold/bm-wp-experience/pull/119
+* Bump browserify-sign from 4.2.1 to 4.2.2 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/118
+* Bump actions/setup-node from 3 to 4 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/117
+* Bump @babel/traverse from 7.23.0 to 7.23.2 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/116
+* Bump stefanzweifel/git-auto-commit-action from 4 to 5 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/115
+* Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskiold/bm-wp-experience/pull/114
 
-**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.11.5...3.11.6
+**Full Changelog**: https://github.com/bernskiold/bm-wp-experience/compare/3.11.5...3.11.6
 
 ## 3.11.5 - 2023-09-18
 
 Fixes a bug where faulty code was introduced in the Mail module.
 
-**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.11.4...3.11.5
+**Full Changelog**: https://github.com/bernskiold/bm-wp-experience/compare/3.11.4...3.11.5
 
 ## 3.11.4 - 2023-09-18
 
 ### What's Changed
 
-- Make it possible to only use SMTP for some sites in a multisite by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/111
+- Make it possible to only use SMTP for some sites in a multisite by @annlickander in https://github.com/bernskiold/bm-wp-experience/pull/111
 
-**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.11.3...3.11.4
+**Full Changelog**: https://github.com/bernskiold/bm-wp-experience/compare/3.11.3...3.11.4
 
 ## 3.11.3 - 2023-08-31
 
 ### What's Changed
 
-- User access to admin pages by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/108
-- Default URL to analytics by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/109
+- User access to admin pages by @annlickander in https://github.com/bernskiold/bm-wp-experience/pull/108
+- Default URL to analytics by @annlickander in https://github.com/bernskiold/bm-wp-experience/pull/109
 
-**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.11.2...3.11.3
+**Full Changelog**: https://github.com/bernskiold/bm-wp-experience/compare/3.11.2...3.11.3
 
 ## 3.11.2 - 2023-08-09
 
 ### What's Changed
 
-- Fix issue where we get a warning about wp being undefined by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/106
-- fix issue where we get a warning about foreach when removing the lite… by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/107
+- Fix issue where we get a warning about wp being undefined by @annlickander in https://github.com/bernskiold/bm-wp-experience/pull/106
+- fix issue where we get a warning about foreach when removing the lite… by @annlickander in https://github.com/bernskiold/bm-wp-experience/pull/107
 - Fix issue where we get a warning for using an Imagick function when Imagick is not enabled
 
-**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.11.1...3.11.2
+**Full Changelog**: https://github.com/bernskiold/bm-wp-experience/compare/3.11.1...3.11.2
 
 ## 3.11.1 - 2023-06-26
 
@@ -60,69 +103,69 @@ Fixes a bug where faulty code was introduced in the Mail module.
 - Fixed an issue where the tracking URL was not properly set when using the Matomo Sync.
 - Save matomo site ID before automated sync is enabled to prevent cases where a duplicate website was mistakenly created
 
-**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.11.0...3.11.1
+**Full Changelog**: https://github.com/bernskiold/bm-wp-experience/compare/3.11.0...3.11.1
 
 ## 3.11.0 - 2023-06-26
 
 ### What's Changed
 
-- Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskioldmedia/bm-wp-experience/pull/93
-- Improve Comments Disabling by @ErikBernskiold in https://github.com/bernskioldmedia/bm-wp-experience/pull/100
-- Bump dependabot/fetch-metadata from 1.3.5 to 1.4.0 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/99
-- Bump peter-evans/create-pull-request from 4 to 5 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/98
-- Bump webpack from 5.75.0 to 5.76.1 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/97
-- Automated Matomo Sync by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/101
-- Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskioldmedia/bm-wp-experience/pull/103
-- Bump dependabot/fetch-metadata from 1.4.0 to 1.5.1 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/102
+- Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskiold/bm-wp-experience/pull/93
+- Improve Comments Disabling by @ErikBernskiold in https://github.com/bernskiold/bm-wp-experience/pull/100
+- Bump dependabot/fetch-metadata from 1.3.5 to 1.4.0 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/99
+- Bump peter-evans/create-pull-request from 4 to 5 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/98
+- Bump webpack from 5.75.0 to 5.76.1 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/97
+- Automated Matomo Sync by @annlickander in https://github.com/bernskiold/bm-wp-experience/pull/101
+- Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskiold/bm-wp-experience/pull/103
+- Bump dependabot/fetch-metadata from 1.4.0 to 1.5.1 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/102
 
-**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.10.3...3.11.0
+**Full Changelog**: https://github.com/bernskiold/bm-wp-experience/compare/3.10.3...3.11.0
 
 ## 3.10.3 - 2023-01-17
 
 ### What's Changed
 
-- Add support for sending mail via Postal by @ErikBernskiold in https://github.com/bernskioldmedia/bm-wp-experience/pull/87
-- Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskioldmedia/bm-wp-experience/pull/88
-- Bump dependabot/fetch-metadata from 1.3.4 to 1.3.5 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/89
-- Bump loader-utils from 1.4.0 to 1.4.2 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/91
-- Bump json5 from 1.0.1 to 1.0.2 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/92
-- Hide litespeed admin page for non superadmins by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/94
+- Add support for sending mail via Postal by @ErikBernskiold in https://github.com/bernskiold/bm-wp-experience/pull/87
+- Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskiold/bm-wp-experience/pull/88
+- Bump dependabot/fetch-metadata from 1.3.4 to 1.3.5 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/89
+- Bump loader-utils from 1.4.0 to 1.4.2 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/91
+- Bump json5 from 1.0.1 to 1.0.2 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/92
+- Hide litespeed admin page for non superadmins by @annlickander in https://github.com/bernskiold/bm-wp-experience/pull/94
 
-**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.10.2...3.10.3
+**Full Changelog**: https://github.com/bernskiold/bm-wp-experience/compare/3.10.2...3.10.3
 
 ## 3.10.2 - 2022-10-06
 
 ### What's Changed
 
-- Make sure we get the url option if multisite by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/86
+- Make sure we get the url option if multisite by @annlickander in https://github.com/bernskiold/bm-wp-experience/pull/86
 
-**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.10.1...3.10.2
+**Full Changelog**: https://github.com/bernskiold/bm-wp-experience/compare/3.10.1...3.10.2
 
 ## 3.10.1 - 2022-10-05
 
 ### What's Changed
 
-- Add the missing FacetWp file by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/85
+- Add the missing FacetWp file by @annlickander in https://github.com/bernskiold/bm-wp-experience/pull/85
 
-**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.10.0...3.10.1
+**Full Changelog**: https://github.com/bernskiold/bm-wp-experience/compare/3.10.0...3.10.1
 
 ## 3.10.0 - 2022-10-05
 
 ### What's Changed
 
-- Don't let facetwp run their pre_get_post on tribe_events queries by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/84
-- Bump dependabot/fetch-metadata from 1.3.3 to 1.3.4 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/83
-- Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskioldmedia/bm-wp-experience/pull/81
+- Don't let facetwp run their pre_get_post on tribe_events queries by @annlickander in https://github.com/bernskiold/bm-wp-experience/pull/84
+- Bump dependabot/fetch-metadata from 1.3.3 to 1.3.4 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/83
+- Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskiold/bm-wp-experience/pull/81
 
-**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.9.0...3.10.0
+**Full Changelog**: https://github.com/bernskiold/bm-wp-experience/compare/3.9.0...3.10.0
 
 ## 3.9.0 - 2022-09-21
 
 ### What's Changed
 
-- Remove user autocomplete from editor and make it possible to override by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/82
+- Remove user autocomplete from editor and make it possible to override by @annlickander in https://github.com/bernskiold/bm-wp-experience/pull/82
 
-**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.8.2...3.9.0
+**Full Changelog**: https://github.com/bernskiold/bm-wp-experience/compare/3.8.2...3.9.0
 
 ## 3.8.2 - 2022-09-05
 
@@ -130,41 +173,41 @@ Fixes a bug where faulty code was introduced in the Mail module.
 
 - Changed the iframe URL to the correct one
 
-**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.8.1...3.8.2
+**Full Changelog**: https://github.com/bernskiold/bm-wp-experience/compare/3.8.1...3.8.2
 
 ## 3.8.1 - 2022-09-04
 
 ### What's Changed
 
-- Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskioldmedia/bm-wp-experience/pull/80
+- Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskiold/bm-wp-experience/pull/80
 - Fixed a vendor prefix error that caused the entire site to get a fatal error
 - Changed the production URL on the my website embed
 
-**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.8.0...3.8.1
+**Full Changelog**: https://github.com/bernskiold/bm-wp-experience/compare/3.8.0...3.8.1
 
 ## 3.8.0 - 2022-09-02
 
 ### What's Changed
 
-- Bump montudor/action-zip from 0.1.0 to 1 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/71
-- Bump actions/upload-artifact from 2 to 3 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/73
-- Bump actions/checkout from 2 to 3 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/72
-- Bump peter-evans/create-pull-request from 3 to 4 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/70
-- Bump terser from 4.8.0 to 4.8.1 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/69
-- Bump minimist from 1.2.5 to 1.2.6 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/65
-- Bump async from 2.6.3 to 2.6.4 by @dependabot in https://github.com/bernskioldmedia/bm-wp-experience/pull/64
-- Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskioldmedia/bm-wp-experience/pull/74
-- Matomo Tracking Module by @ErikBernskiold in https://github.com/bernskioldmedia/bm-wp-experience/pull/75
-- Add "My Website" Dashboard by @ErikBernskiold in https://github.com/bernskioldmedia/bm-wp-experience/pull/76
-- Multisite support for Matomo by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/79
-- fixes issue with missing function when activating new user by @annlickander in https://github.com/bernskioldmedia/bm-wp-experience/pull/77
-- Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskioldmedia/bm-wp-experience/pull/78
+- Bump montudor/action-zip from 0.1.0 to 1 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/71
+- Bump actions/upload-artifact from 2 to 3 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/73
+- Bump actions/checkout from 2 to 3 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/72
+- Bump peter-evans/create-pull-request from 3 to 4 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/70
+- Bump terser from 4.8.0 to 4.8.1 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/69
+- Bump minimist from 1.2.5 to 1.2.6 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/65
+- Bump async from 2.6.3 to 2.6.4 by @dependabot in https://github.com/bernskiold/bm-wp-experience/pull/64
+- Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskiold/bm-wp-experience/pull/74
+- Matomo Tracking Module by @ErikBernskiold in https://github.com/bernskiold/bm-wp-experience/pull/75
+- Add "My Website" Dashboard by @ErikBernskiold in https://github.com/bernskiold/bm-wp-experience/pull/76
+- Multisite support for Matomo by @annlickander in https://github.com/bernskiold/bm-wp-experience/pull/79
+- fixes issue with missing function when activating new user by @annlickander in https://github.com/bernskiold/bm-wp-experience/pull/77
+- Upgrade NPM packages (automated) by @github-actions in https://github.com/bernskiold/bm-wp-experience/pull/78
 
 ### New Contributors
 
-- @github-actions made their first contribution in https://github.com/bernskioldmedia/bm-wp-experience/pull/74
+- @github-actions made their first contribution in https://github.com/bernskiold/bm-wp-experience/pull/74
 
-**Full Changelog**: https://github.com/bernskioldmedia/bm-wp-experience/compare/3.7.0...3.8.0
+**Full Changelog**: https://github.com/bernskiold/bm-wp-experience/compare/3.7.0...3.8.0
 
 ## 3.7.0 - 2022-06-14
 
@@ -176,36 +219,36 @@ Fixes a bug where faulty code was introduced in the Mail module.
 
 ### Added
 
-- Hide submenus and panels from Download Manager ([#68](https://github.com/bernskioldmedia/bm-wp-experience/pull/68))
+- Hide submenus and panels from Download Manager ([#68](https://github.com/bernskiold/bm-wp-experience/pull/68))
 
 ## 3.5.0 - 2022-05-31
 
 ### Added
 
-- Remove Simple History Dashboard Widget ([#67](https://github.com/bernskioldmedia/bm-wp-experience/pull/67))
-- Add default settings to Download Manager ([#66](https://github.com/bernskioldmedia/bm-wp-experience/pull/66))
+- Remove Simple History Dashboard Widget ([#67](https://github.com/bernskiold/bm-wp-experience/pull/67))
+- Add default settings to Download Manager ([#66](https://github.com/bernskiold/bm-wp-experience/pull/66))
 
 ## 3.4.2 - 2022-05-03
 
 ## Changed
 
-- remove ohdear functionality ([#63](https://github.com/bernskioldmedia/bm-wp-experience/pull/63))
+- remove ohdear functionality ([#63](https://github.com/bernskiold/bm-wp-experience/pull/63))
 
 ## 3.4.0 - 2022-03-17
 
 ## Added
 
-- Hide plugin ads in the admin panel ([#61](https://github.com/bernskioldmedia/bm-wp-experience/pull/61))
-- Add custom block editor styling for better experience ([#60](https://github.com/bernskioldmedia/bm-wp-experience/pull/60))
+- Hide plugin ads in the admin panel ([#61](https://github.com/bernskiold/bm-wp-experience/pull/61))
+- Add custom block editor styling for better experience ([#60](https://github.com/bernskiold/bm-wp-experience/pull/60))
 
 ## Fixed
 
-- Fatal error because of the wrong name on a function in the Comments Module ([#59](https://github.com/bernskioldmedia/bm-wp-experience/pull/59))
+- Fatal error because of the wrong name on a function in the Comments Module ([#59](https://github.com/bernskiold/bm-wp-experience/pull/59))
 
 ## Dependency Updates
 
-- Bump nanoid from 3.1.30 to 3.2.0 ([#56](https://github.com/bernskioldmedia/bm-wp-experience/pull/56))
-- Bump follow-redirects from 1.14.7 to 1.14.8 ([#58](https://github.com/bernskioldmedia/bm-wp-experience/pull/58))
+- Bump nanoid from 3.1.30 to 3.2.0 ([#56](https://github.com/bernskiold/bm-wp-experience/pull/56))
+- Bump follow-redirects from 1.14.7 to 1.14.8 ([#58](https://github.com/bernskiold/bm-wp-experience/pull/58))
 
 ## 3.3.3 - 2022-03-02
 
@@ -217,53 +260,53 @@ Fixes a bug where faulty code was introduced in the Mail module.
 
 ## Fixed
 
-- Fixed issue with yoast metabox after removing it ([#57](https://github.com/bernskioldmedia/bm-wp-experience/pull/57))
+- Fixed issue with yoast metabox after removing it ([#57](https://github.com/bernskiold/bm-wp-experience/pull/57))
 
 ## 3.3.1 - 2022-01-14
 
 ## Fixed
 
-- Mailer integration was not loading the right Hookable class ([#55](https://github.com/bernskioldmedia/bm-wp-experience/pull/55))
+- Mailer integration was not loading the right Hookable class ([#55](https://github.com/bernskiold/bm-wp-experience/pull/55))
 
 ## 3.3.0 - 2022-01-14
 
 ## Added
 
-- Seriously Simple Podcasting Integration: Show all episodes in feed ([#54](https://github.com/bernskioldmedia/bm-wp-experience/pull/54))
-- Add support for SMTP e-mail sending ([#52](https://github.com/bernskioldmedia/bm-wp-experience/pull/52))
+- Seriously Simple Podcasting Integration: Show all episodes in feed ([#54](https://github.com/bernskiold/bm-wp-experience/pull/54))
+- Add support for SMTP e-mail sending ([#52](https://github.com/bernskiold/bm-wp-experience/pull/52))
 
 ## Dependency Updates
 
-- Bump follow-redirects from 1.14.5 to 1.14.7 ([#53](https://github.com/bernskioldmedia/bm-wp-experience/pull/53))
+- Bump follow-redirects from 1.14.5 to 1.14.7 ([#53](https://github.com/bernskiold/bm-wp-experience/pull/53))
 
 ## 3.2.1 - 2021-12-17
 
 ## Fixed
 
-- File would be loaded twice causing error ([#51](https://github.com/bernskioldmedia/bm-wp-experience/pull/51))
+- File would be loaded twice causing error ([#51](https://github.com/bernskiold/bm-wp-experience/pull/51))
 
 ## 3.2.0 - 2021-12-17
 
 ## Added
 
-- OhDear Application Health Integration ([#49](https://github.com/bernskioldmedia/bm-wp-experience/pull/49))
+- OhDear Application Health Integration ([#49](https://github.com/bernskiold/bm-wp-experience/pull/49))
 
 ## Changed
 
-- Weaker checks for file permissions ([#50](https://github.com/bernskioldmedia/bm-wp-experience/pull/50))
+- Weaker checks for file permissions ([#50](https://github.com/bernskiold/bm-wp-experience/pull/50))
 
 ## 3.1.0 - 2021-12-04
 
 ## Added
 
-- Add security headers to .htaccess on activation ([#48](https://github.com/bernskioldmedia/bm-wp-experience/pull/48))
-- Add support for two-factor authentication ([#47](https://github.com/bernskioldmedia/bm-wp-experience/pull/47))
+- Add security headers to .htaccess on activation ([#48](https://github.com/bernskiold/bm-wp-experience/pull/48))
+- Add support for two-factor authentication ([#47](https://github.com/bernskiold/bm-wp-experience/pull/47))
 
 ## 3.0.2 - 2021-11-27
 
 ## Fixed
 
-- Fix warning on block editor ([#46](https://github.com/bernskioldmedia/bm-wp-experience/pull/46))
+- Fix warning on block editor ([#46](https://github.com/bernskiold/bm-wp-experience/pull/46))
 
 ## 3.0.1 - 2021-11-27
 

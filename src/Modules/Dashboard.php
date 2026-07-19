@@ -6,9 +6,9 @@
  * some custom ones too.
  */
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
-use BernskioldMedia\WP\Experience\Plugin;
+use Bernskiold\WP\Experience\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

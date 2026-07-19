@@ -6,7 +6,7 @@
  * that makes it inaccessible unless you are authorized.
  **/
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
 use WP_Error;
 use WP_Query;
@@ -101,7 +101,7 @@ class Rest_Api extends Module {
         }
 
         // Check that we're trying to authenticate
-        if (! isset($_SERVER['PHP_AUTH_USER'])) {
+        if (! isset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
             return $user;
         }
 

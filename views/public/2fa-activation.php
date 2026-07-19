@@ -1,6 +1,6 @@
 <?php
 
-use BernskioldMedia\WP\Experience\Modules\Security\TwoFactorAuthentication;
+use Bernskiold\WP\Experience\Modules\Security\TwoFactorAuthentication;
 
 ?>
 <form class="two-factor-activation-form" name="2fa_activation" id="loginform" x-data="twoFactorActivation" action="<?php echo esc_url( add_query_arg( 'action', '2fa_activation',
@@ -51,7 +51,7 @@ use BernskioldMedia\WP\Experience\Modules\Security\TwoFactorAuthentication;
 	</div>
 </form>
 
-<script src="<?php echo esc_url( \BernskioldMedia\WP\Experience\Plugin::get_assets_url( 'scripts/alpinejs.js' ) ); ?>" defer></script>
+<script src="<?php echo esc_url( \Bernskiold\WP\Experience\Plugin::get_assets_url( 'scripts/alpinejs.js' ) ); ?>" defer></script>
 <script>
 	document.addEventListener( 'alpine:init', () => {
 		Alpine.data( 'twoFactorActivation', () => ( {

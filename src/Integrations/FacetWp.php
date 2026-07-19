@@ -1,6 +1,6 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Integrations;
+namespace Bernskiold\WP\Experience\Integrations;
 
 class FacetWp extends Integration {
     public static string $plugin_file = 'facetwp/index.php';

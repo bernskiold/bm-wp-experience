@@ -2,10 +2,10 @@
 /**
  * Admin Page View: About Bernskiold
  *
- * @package BernskioldMedia\WP\Experience
+ * @package Bernskiold\WP\Experience
  */
 
-namespace BernskioldMedia\WP\Experience;
+namespace Bernskiold\WP\Experience;
 
 ?>
 <div class="wrap" style="margin: -8px 0 -20px -20px;">

@@ -9,15 +9,15 @@
  * @since   1.4.0
  **/
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
-use BernskioldMedia\WP\Experience\Helpers;
-use BernskioldMedia\WP\Experience\Plugin;
+use Bernskiold\WP\Experience\Helpers;
+use Bernskiold\WP\Experience\Plugin;
 use WP_Admin_Bar;
 
 class Environments extends Module {
     public static function hooks(): void {
-        add_filter( 'admin_bar_menu', [ self::class, 'show_in_admin_bar' ], 40 );
+        add_action( 'admin_bar_menu', [ self::class, 'show_in_admin_bar' ], 40 );
         add_action( 'wp_footer', [ self::class, 'show_public_staging_notice' ] );
         add_filter( 'wp_robots', [ self::class, 'disable_indexing_outside_production' ], 99999 );
 
@@ -124,21 +124,11 @@ class Environments extends Module {
     protected static function get_environment_label(): string {
         $environment = wp_get_environment_type();
 
-        switch ( $environment ) {
-            case 'local':
-            case 'development':
-                $label = __( 'Local', 'bm-wp-experience' );
-                break;
-
-            case 'staging':
-                $label = __( 'Staging', 'bm-wp-experience' );
-                break;
-
-            case 'production':
-            default:
-                $label = __( 'Production', 'bm-wp-experience' );
-                break;
-        }
+        $label = match ( $environment ) {
+            'local', 'development' => __( 'Local', 'bm-wp-experience' ),
+            'staging'              => __( 'Staging', 'bm-wp-experience' ),
+            default                => __( 'Production', 'bm-wp-experience' ),
+        };
 
         return apply_filters( 'bm_wpexp_staging_environment_label', $label, $environment );
     }

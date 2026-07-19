@@ -1,13 +1,15 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Integrations;
+namespace Bernskiold\WP\Experience\Integrations;
+
+use Bernskiold\WP\Experience\Enums\MatomoRole;
 
 class Matomo_Api
 {
 
-    public const ROLE_ADMIN = 'admin';
-    public const ROLE_VIEW = 'view';
-    const ROLE_NO_ACCESS = 'noaccess';
+    public const ROLE_ADMIN = MatomoRole::Admin->value;
+    public const ROLE_VIEW = MatomoRole::View->value;
+    public const ROLE_NO_ACCESS = MatomoRole::NoAccess->value;
 
     public static function create_site(string $site_name, string $site_url): ?int
     {
@@ -86,7 +88,7 @@ class Matomo_Api
     }
 
     public static function add_existing_user_to_site(
-        string $matomo_id,
+        int|string $matomo_id,
         string $email,
         string $access = self::ROLE_NO_ACCESS
     ): void {
@@ -104,7 +106,7 @@ class Matomo_Api
     }
 
     public static function add_new_user_to_site(
-        string $matomo_id,
+        int|string $matomo_id,
         string $username,
         string $email,
         string $access = self::ROLE_NO_ACCESS
@@ -168,11 +170,14 @@ class Matomo_Api
             ], $body),
         ]);
 
-        if (!$response || is_wp_error($response)) {
-            return json_decode("{'result': 'error', 'message': 'An error occurred with the API connection on the WordPress side.'}");
+        if (is_wp_error($response)) {
+            return (object) [
+                'result'  => 'error',
+                'message' => 'An error occurred with the API connection on the WordPress side.',
+            ];
         }
 
-        return json_decode($response['body'] ?? '');
+        return json_decode($response['body']);
     }
 
     public static function is_request_error($response)
@@ -202,20 +207,20 @@ class Matomo_Api
      * Note: the $add_dashes option will increase the length of the password by
      * floor(sqrt(N)) characters.
      * **/
-    public static function password_generator($length = 15, $available_sets = 'luds')
+    public static function password_generator(int $length = 15, string $available_sets = 'luds'): string
     {
 
         $sets = [];
-        if (strpos($available_sets, 'l') !== false) {
+        if (str_contains($available_sets, 'l')) {
             $sets[] = 'abcdefghjkmnpqrstuvwxyz';
         }
-        if (strpos($available_sets, 'u') !== false) {
+        if (str_contains($available_sets, 'u')) {
             $sets[] = 'ABCDEFGHJKMNPQRSTUVWXYZ';
         }
-        if (strpos($available_sets, 'd') !== false) {
+        if (str_contains($available_sets, 'd')) {
             $sets[] = '23456789';
         }
-        if (strpos($available_sets, 's') !== false) {
+        if (str_contains($available_sets, 's')) {
             $sets[] = '!@#$%&*?';
         }
 
@@ -233,7 +238,7 @@ class Matomo_Api
 
         $password = str_shuffle($password);
 
-        $dash_len = floor(sqrt($length));
+        $dash_len = (int) floor(sqrt($length));
         $dash_str = '';
         while (strlen($password) > $dash_len) {
             $dash_str .= substr($password, 0, $dash_len).'-';
@@ -245,7 +250,7 @@ class Matomo_Api
 
     //take a array and get random index, same function of array_rand, only diference is
     // intent use secure random algoritn on fail use mersene twistter, and on fail use defaul array_rand
-    public static function tweak_array_rand($array)
+    public static function tweak_array_rand(array $array): int
     {
         if (function_exists('random_int')) {
             return random_int(0, count($array) - 1);

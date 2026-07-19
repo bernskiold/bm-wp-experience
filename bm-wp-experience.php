@@ -3,11 +3,13 @@
  * Plugin Name: BM WP Experience
  * Plugin URI:  https://www.bernskiold.com
  * Description: Provides an opinionated WordPress experience with clean-up and tweaks that we at Bernskiold have found runs WordPress best.
- * Version:     3.11.6
+ * Version:     4.0.0
  * Author:      Bernskiold
  * Author URI:  https://www.bernskiold.com
  * Text Domain: bm-wp-experience
  * Domain Path: /languages/
+ * Requires at least: 7.0
+ * Requires PHP: 8.2
  *
  * **************************************************************************
  *
@@ -26,7 +28,7 @@
  *
  * **************************************************************************
  *
- * @package BernskioldMedia\WP\Experience
+ * @package Bernskiold\WP\Experience
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -53,7 +55,7 @@ define( 'BM_WP_EXPERIENCE_FILE_PATH', __FILE__ );
  * @return object
  */
 function bm_wp_experience() {
-	return \BernskioldMedia\WP\Experience\Plugin::instance();
+	return \Bernskiold\WP\Experience\Plugin::instance();
 }
 
 // Initialize the class instance only once.
@@ -63,13 +65,13 @@ bm_wp_experience();
  * Run update checker if not disabled.
  */
 if ( ! defined( 'BM_WP_EXPERIENCE_DISABLE_UPDATER' ) || ( defined( 'BM_WP_EXPERIENCE_DISABLE_UPDATER' ) && false === BM_WP_EXPERIENCE_DISABLE_UPDATER ) ) {
-	$bm_wp_experience_updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/bernskiold/bm-wp-experience', __FILE__, 'bm-wp-experience' );
+	$bm_wp_experience_updater = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker( 'https://github.com/bernskiold/bm-wp-experience', __FILE__, 'bm-wp-experience' );
 	$bm_wp_experience_updater->getVcsApi()->enableReleaseAssets();
 
 	// Add our own plugin icon.
 	$bm_wp_experience_updater->addResultFilter( function( $plugin_info ) {
 		$plugin_info->icons = [
-			'svg' => \BernskioldMedia\WP\Experience\Plugin::get_assets_url( 'icons/bm.svg' ),
+			'svg' => \Bernskiold\WP\Experience\Plugin::get_assets_url( 'icons/bm.svg' ),
 		];
 
 		return $plugin_info;

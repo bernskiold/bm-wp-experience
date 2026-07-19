@@ -3,9 +3,9 @@
  * Adjustments to Comments
  */
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
-use BernskioldMedia\WP\Experience\Helpers;
+use Bernskiold\WP\Experience\Helpers;
 use WP_Admin_Bar;
 
 if (! defined('ABSPATH')) {
@@ -133,11 +133,21 @@ class Comments extends Module {
     /**
      * Disables adding comments from the REST API.
      *
-     * @param array|\WP_Error $prepared_comment
-     * @param \WP_REST_Request $request
+     * Hooked onto `rest_pre_insert_comment`, which expects either the prepared
+     * comment array or a WP_Error. Returning a WP_Error actually blocks the
+     * insertion instead of silently nulling out the prepared comment.
+     *
+     * @param  array|\WP_Error  $prepared_comment
+     * @param  \WP_REST_Request|null  $request
+     *
+     * @return \WP_Error
      */
-    public static function disable_adding_comments_from_rest_api($prepared_comment, $request): void {
-        return;
+    public static function disable_adding_comments_from_rest_api($prepared_comment, $request = null) {
+        return new \WP_Error(
+            'rest_comment_insert_disabled',
+            __('Adding comments via the REST API is disabled.', 'bm-wp-experience'),
+            [ 'status' => 403 ]
+        );
     }
 
     /**

@@ -3,7 +3,7 @@
  * Updates Functions
  */
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
 if (! defined('ABSPATH')) {
     exit;

@@ -1,11 +1,11 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
 use PHPMailer\PHPMailer\PHPMailer;
+use Postal\ApiException;
 use Postal\Client;
-use Postal\Error;
-use Postal\SendMessage;
+use Postal\Send\Message;
 use WP_Error;
 
 class Mail extends Module {
@@ -132,7 +132,7 @@ class Mail extends Module {
 	}
 
 	protected static function are_all_configs_set(): bool {
-		return ! empty( self::get_smtp_host() ) && ! empty( self::get_smtp_username() ) && ! empty( self::get_smtp_password() ) && is_int( self::get_smtp_port() );
+		return ! empty( self::get_smtp_host() ) && ! empty( self::get_smtp_username() ) && ! empty( self::get_smtp_password() );
 	}
 
 	protected static function get_postal_domain(): ?string {
@@ -174,17 +174,21 @@ class Mail extends Module {
 		}
 
 		$client  = new Client( self::get_postal_domain(), self::get_postal_api_key() );
-		$message = new SendMessage( $client );
+		$message = new Message();
 
-		if ( is_array( $atts['headers'] ) ) {
+		if ( is_array( $atts['headers'] ?? null ) ) {
 			$headers = $atts['headers'];
 		} else {
-			$headers = explode( "\n", str_replace( "\r\n", "\n", $atts['headers'] ) );
+			$headers = explode( "\n", str_replace( "\r\n", "\n", (string) ( $atts['headers'] ?? '' ) ) );
 		}
 
 		if ( ! empty( $headers ) ) {
 			foreach ( $headers as $header ) {
-				[ $name, $content ] = explode( ':', trim( $header ), 2 );
+				if ( ! str_contains( (string) $header, ':' ) ) {
+					continue;
+				}
+
+				[ $name, $content ] = explode( ':', trim( (string) $header ), 2 );
 				$message->header( $name, $content );
 			}
 		}
@@ -208,7 +212,7 @@ class Mail extends Module {
 			$from_email = 'wordpress@';
 
 			if ( null !== $sitename ) {
-				if ( 'www.' === substr( $sitename, 0, 4 ) ) {
+				if ( str_starts_with( $sitename, 'www.' ) ) {
 					$sitename = substr( $sitename, 4 );
 				}
 
@@ -227,10 +231,10 @@ class Mail extends Module {
 		}
 
 		try {
-			$result = $message->send();
+			$result = $client->send->message( $message );
 
 			return count( $result->recipients() ) >= 1;
-		} catch ( Error $error ) {
+		} catch ( ApiException $error ) {
 			do_action( 'wp_mail_failed', new WP_Error( 'wp_mail_failed', $error->getMessage(), $message ) );
 
 			return false;
@@ -245,7 +249,12 @@ class Mail extends Module {
      */
     public static function change_username_in_from_email_address_setting( $from_email ){
         // get whatever is before the @ and then the domain
-        $parts = explode( '@', $from_email );
+        $parts = explode( '@', (string) $from_email );
+
+        // Without a domain part we cannot rebuild the address, so leave it untouched.
+        if ( ! isset( $parts[1] ) ) {
+            return $from_email;
+        }
 
         $username = __( 'notification', 'bm-wp-experience' );
 
@@ -269,7 +278,7 @@ class Mail extends Module {
         }
 
         if( is_multisite() ) {
-            if ( get_blog_option(get_current_blog_id(), 'bm_wp_notifications_from_name') && "" !== get_blog_option(get_current_blog_id(), 'bm_wp_notifications_from_name') ) {
+            if ( get_blog_option(get_current_blog_id(), 'bm_wp_notifications_from_name') ) {
                 $name = get_blog_option(get_current_blog_id(), 'bm_wp_notifications_from_name');
             }
         }
@@ -286,7 +295,7 @@ class Mail extends Module {
         }
 
         if( is_multisite() ) {
-            if ( get_option('bm_wp_notifications_from_email_address') && "" !== get_option('bm_wp_notifications_from_email_address') ) {
+            if ( get_option('bm_wp_notifications_from_email_address') ) {
                 $from_email = get_option('bm_wp_notifications_from_email_address');
             }
         }

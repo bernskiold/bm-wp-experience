@@ -10,7 +10,9 @@
 #adminmenu .wp-has-current-submenu.opensub .wp-submenu,
 #adminmenu li.menu-top:hover,
 #adminmenu li.opensub > a.menu-top,
-#adminmenu li > a.menu-top:focus {
+#adminmenu li > a.menu-top:focus,
+#adminmenu a:hover,
+#adminmenu a:focus {
 	background-color: #2b3b54;
 }
 
@@ -20,4 +22,73 @@
 
 #adminmenu li.wp-has-submenu.wp-not-current-submenu.opensub:hover:after {
 	border-right-color: #1f2b3d;
+}
+
+/**
+ * Accent colour.
+ *
+ * WordPress 7.0 refreshed the "Modern" admin scheme and now paints primary
+ * buttons, links and focus states in its own indigo (#3858e9), which clashes
+ * with the Sky Blue (#164fae) used by our menu. Re-point WordPress' admin
+ * accent at our brand blue so buttons, links and controls read as one colour.
+ */
+$bm-accent: #164fae;
+$bm-accent-dark: #134394;
+$bm-accent-darker: #102f6f;
+
+:root {
+	--wp-admin-theme-color: #{$bm-accent};
+	--wp-admin-theme-color-darker-10: #{$bm-accent-dark};
+	--wp-admin-theme-color-darker-20: #{$bm-accent-darker};
+	--wp-components-color-accent: #{$bm-accent};
+	--wp-components-color-accent-darker-10: #{$bm-accent-dark};
+	--wp-components-color-accent-darker-20: #{$bm-accent-darker};
+}
+
+.wp-core-ui .button-primary {
+	background: $bm-accent;
+	border-color: $bm-accent;
+	color: #fff;
+
+	&:hover,
+	&:focus {
+		background: $bm-accent-dark;
+		border-color: $bm-accent-dark;
+		color: #fff;
+	}
+
+	&:focus {
+		box-shadow: 0 0 0 1px #fff, 0 0 0 3px $bm-accent;
+	}
+
+	&:active {
+		background: $bm-accent-darker;
+		border-color: $bm-accent-darker;
+	}
+}
+
+.wp-core-ui .button,
+.wp-core-ui .button-secondary {
+	color: $bm-accent;
+	border-color: $bm-accent;
+
+	&:hover,
+	&:focus {
+		color: $bm-accent-dark;
+		border-color: $bm-accent-dark;
+	}
+}
+
+#wpbody-content {
+	a:not(.button):not(.button-primary):not(.page-title-action),
+	.row-title {
+		color: $bm-accent;
+	}
+
+	input:focus,
+	textarea:focus,
+	select:focus {
+		border-color: $bm-accent;
+		box-shadow: 0 0 0 1px $bm-accent;
+	}
 }

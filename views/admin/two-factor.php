@@ -1,6 +1,6 @@
 <?php
 
-use BernskioldMedia\WP\Experience\Modules\Security\TwoFactorAuthentication;
+use Bernskiold\WP\Experience\Modules\Security\TwoFactorAuthentication;
 
 ?>
 <div class="two-factor-section" x-data="twoFactorSettings">
@@ -73,7 +73,7 @@ use BernskioldMedia\WP\Experience\Modules\Security\TwoFactorAuthentication;
 	</div>
 
 </div>
-<script src="<?php echo esc_url( \BernskioldMedia\WP\Experience\Plugin::get_assets_url( 'scripts/alpinejs.js' ) ); ?>" defer></script>
+<script src="<?php echo esc_url( \Bernskiold\WP\Experience\Plugin::get_assets_url( 'scripts/alpinejs.js' ) ); ?>" defer></script>
 <script>
 	document.addEventListener( 'alpine:init', () => {
 		Alpine.data( 'twoFactorSettings', () => ( {

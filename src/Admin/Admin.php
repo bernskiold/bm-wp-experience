@@ -6,10 +6,10 @@
  *
  **/
 
-namespace BernskioldMedia\WP\Experience\Admin;
+namespace Bernskiold\WP\Experience\Admin;
 
-use BernskioldMedia\WP\Experience\Modules\Users;
-use BMWPEXP_Vendor\BernskioldMedia\WP\PluginBase\Interfaces\Hookable;
+use Bernskiold\WP\Experience\Modules\Users;
+use Bernskiold\WP\Experience\Core\Hookable;
 
 class Admin implements Hookable {
     public static function hooks(): void {
@@ -21,7 +21,7 @@ class Admin implements Hookable {
         add_filter( 'admin_footer_text', [ self::class, 'change_admin_footer_text' ] );
 
         // Remove the help tab.
-        add_filter( 'admin_head', [ self::class, 'remove_help_tab' ] );
+        add_action( 'admin_head', [ self::class, 'remove_help_tab' ] );
 
         // Add our help and support widget.
         add_action( 'admin_footer', [ self::class, 'add_help_widget' ] );
@@ -118,7 +118,7 @@ class Admin implements Hookable {
         if( is_multisite() ){
             if( ! current_user_can('setup_network')){ // is not superadmin
                 $current_screen = get_current_screen();
-                if(strpos($current_screen->id, 'litespeed') !== false){
+                if( $current_screen && str_contains( (string) $current_screen->id, 'litespeed' ) ){
                     wp_redirect( admin_url( '' ) );
                     exit;
                 }

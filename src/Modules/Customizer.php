@@ -5,7 +5,7 @@
  * Adds various opinionated tweaks to the customizer.
  */
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
 if (! defined('ABSPATH')) {
     exit;
@@ -22,7 +22,7 @@ class Customizer extends Module {
      *
      * @var string
      */
-    protected static $custom_css_file_name = 'app';
+    protected static string $custom_css_file_name = 'app';
 
     /**
      * Custom CSS ID.
@@ -113,7 +113,7 @@ class Customizer extends Module {
      * Get the custom CSS storage directory URL.
      */
     protected static function get_custom_css_storage_directory_uri(): string {
-        $path = WP_CONTENT_URL . '/custom-css';
+        $path = content_url( 'custom-css' );
 
         return apply_filters('bm_wpexp_custom_css_storage_directory_uri', $path);
     }

@@ -1,8 +1,8 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
-use BernskioldMedia\WP\Experience\Integrations\Matomo_Api;
+use Bernskiold\WP\Experience\Integrations\Matomo_Api;
 use WP_Site;
 use WP_User;
 
@@ -80,7 +80,7 @@ class Matomo_Sync extends Module
 
     public static function maybe_create_site_and_get_matomo_id($site){
 
-        if( get_blog_option($site->id, self::$matomo_id_option, false) && get_blog_option($site->id, self::$matomo_id_option, false) !== ''){
+        if( get_blog_option($site->id, self::$matomo_id_option, false) ){
             return get_blog_option($site->id, self::$matomo_id_option, true);
         }
 

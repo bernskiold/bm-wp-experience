@@ -1,8 +1,8 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Modules\Health_Checks\Security;
+namespace Bernskiold\WP\Experience\Modules\Health_Checks\Security;
 
-use BernskioldMedia\WP\Experience\Helpers;
+use Bernskiold\WP\Experience\Helpers;
 
 class Env_File_Check extends Security_Check {
     public static string $key = 'bm_env_file_check';
@@ -21,7 +21,7 @@ class Env_File_Check extends Security_Check {
             $result['description'] = sprintf( '<p>%s</p>', __( 'You are not using a .env file on this environment. No need to do anything.', 'bm-wp-experience' ) );
         }
 
-        if ( file_exists( $path ) && 440 < Helpers::get_file_permissions( $path ) ) {
+        if ( file_exists( $path ) && Helpers::is_file_publicly_accessible( $path ) ) {
             $result['status']      = 'critical';
             $result['label']       = __( 'The .env file is readable!', 'bm-wp-experience' );
             $result['description'] = sprintf(

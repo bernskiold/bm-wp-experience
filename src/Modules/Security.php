@@ -11,7 +11,7 @@
  *
  **/
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
 use WP_Error;
 use WP_User;
@@ -52,7 +52,7 @@ class Security extends Module {
         }
 
         // If the password is tweak, prevent saving.
-        if (in_array(strtolower(trim($password)), self::get_weak_passwords(), true)) {
+        if (in_array(strtolower(trim((string) $password)), self::get_weak_passwords(), true)) {
             /* translators: 1. Lost Password URL */
             $error_message = sprintf(
                 __('Please <a href="%s">reset your password</a> in order to meet the security guidelines for this website.', 'bm-wp-experience'),

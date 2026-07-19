@@ -1,13 +1,13 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Integrations;
+namespace Bernskiold\WP\Experience\Integrations;
 
 class DownloadManager extends Integration {
     public static string $plugin_file = 'download-manager/download-manager.php';
 
     public static function hooks(): void {
         // Hide notice to install WC Admin.
-        add_filter( 'init', [ self::class, 'update_options' ], 10, 2 );
+        add_action( 'init', [ self::class, 'update_options' ] );
 
         add_action( 'admin_menu', [ self::class, 'remove_sub_menus' ], 9999999 );
     }

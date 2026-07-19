@@ -1,8 +1,8 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Modules\Health_Checks\Security;
+namespace Bernskiold\WP\Experience\Modules\Health_Checks\Security;
 
-use BernskioldMedia\WP\Experience\Modules\Updates;
+use Bernskiold\WP\Experience\Modules\Updates;
 
 class Maintenance_Plan_Check extends Security_Check {
     public static string $key = 'bm_maintenance_plan';

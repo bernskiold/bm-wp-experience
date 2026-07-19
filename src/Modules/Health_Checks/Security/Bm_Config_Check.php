@@ -1,8 +1,8 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Modules\Health_Checks\Security;
+namespace Bernskiold\WP\Experience\Modules\Health_Checks\Security;
 
-use BernskioldMedia\WP\Experience\Helpers;
+use Bernskiold\WP\Experience\Helpers;
 
 class Bm_Config_Check extends Security_Check {
 
@@ -27,10 +27,10 @@ class Bm_Config_Check extends Security_Check {
 	}
 
 	protected static function all_files_pass(): bool {
-		$files = glob( ABSPATH . 'config{,*/,*/*/,*/*/*/}*.php', GLOB_BRACE );
+		$files = glob( ABSPATH . 'config{,*/,*/*/,*/*/*/}*.php', GLOB_BRACE ) ?: [];
 
 		foreach ( $files as $file ) {
-			if ( Helpers::get_file_permissions( $file ) > 640 ) {
+			if ( Helpers::is_file_publicly_accessible( $file ) ) {
 				return false;
 			}
 		}

@@ -3,11 +3,11 @@
  * Installer
  */
 
-namespace BernskioldMedia\WP\Experience;
+namespace Bernskiold\WP\Experience;
 
-use BernskioldMedia\WP\Experience\Modules\Htaccess\ResponseHeaders;
-use BernskioldMedia\WP\Experience\Modules\Htaccess\XMLRPC_Protection;
-use BMWPEXP_Vendor\BernskioldMedia\WP\PluginBase\Installer;
+use Bernskiold\WP\Experience\Modules\Htaccess\ResponseHeaders;
+use Bernskiold\WP\Experience\Modules\Htaccess\XMLRPC_Protection;
+use Bernskiold\WP\Experience\Core\Installer;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

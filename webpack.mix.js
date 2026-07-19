@@ -8,7 +8,7 @@
  * @link https://laravel.com/docs/5.6/mix
  *
  * @author  Bernskiold <info@bernskiold.com>
- * @package BernskioldMedia\WP\Experience
+ * @package Bernskiold\WP\Experience
  **/
 
 const mix = require( 'laravel-mix' );

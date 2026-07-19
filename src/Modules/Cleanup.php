@@ -6,7 +6,7 @@
  * These are cleanup and tweaks functions.
  */
 
-namespace BernskioldMedia\WP\Experience\Modules;
+namespace Bernskiold\WP\Experience\Modules;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -30,6 +30,13 @@ class Cleanup extends Module {
         // Disable Jetpack promotions.
         add_filter( 'jetpack_just_in_time_msgs', '__return_false', 20 );
         add_filter( 'jetpack_show_promotions', '__return_false', 20 );
+
+        // Disable the periodic "is this still your admin email?" verification
+        // screen. Runs during the login flow (wp-login.php), so it lives here
+        // rather than in the admin-only module.
+        if ( true !== apply_filters( 'bm_wpexp_enable_admin_email_verification', false ) ) {
+            add_filter( 'admin_email_check_interval', '__return_zero' );
+        }
     }
 
     /**
@@ -100,7 +107,7 @@ class Cleanup extends Module {
 
         $search_base = $wp_rewrite->search_base;
 
-        if ( is_search() && ! is_admin() && strpos( $_SERVER['REQUEST_URI'], "/{$search_base}/" ) === false ) {
+        if ( is_search() && ! is_admin() && ! str_contains( $_SERVER['REQUEST_URI'] ?? '', "/{$search_base}/" ) ) {
             wp_safe_redirect( home_url( "/{$search_base}/" . rawurlencode( get_query_var( 's' ) ) ) );
             exit();
         }
@@ -110,15 +117,12 @@ class Cleanup extends Module {
      * URL decode our search result to be able to search and display the search query properly
      * Special characters will otherwise look weird
      *
-     * @param $query
-     * @return mixed
+     * @param  \WP_Query  $query
      */
-    public static function query_vars_search_filter( $query ) {
+    public static function query_vars_search_filter( $query ): void {
         if ($query->is_search && !is_admin()) {
             $query->query_vars['s'] = urldecode( $query->query_vars['s'] );
         }
-
-        return $query;
     }
 
     /**

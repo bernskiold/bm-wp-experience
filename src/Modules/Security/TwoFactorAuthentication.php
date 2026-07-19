@@ -1,19 +1,19 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience\Modules\Security;
+namespace Bernskiold\WP\Experience\Modules\Security;
 
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
-use BernskioldMedia\WP\Experience\Plugin;
-use BMWPEXP_Vendor\BernskioldMedia\WP\PluginBase\Interfaces\Hookable;
+use Bernskiold\WP\Experience\Plugin;
+use Bernskiold\WP\Experience\Core\Hookable;
 use PragmaRX\Google2FA\Google2FA;
 use PragmaRX\Recovery\Recovery;
 
 class TwoFactorAuthentication implements Hookable {
 
-	protected Google2FA $two_factor;
+	protected readonly Google2FA $two_factor;
 	private const USER_SECRET_META_KEY       = 'bmwp_two_factor_secret';
 	private const TWO_FACTOR_STATUS_META_KEY = 'bmwp_two_factor_enabled';
 	private const RECOVERY_CODES_META_KEY    = 'bmwp_two_factor_recovery_codes';
@@ -153,13 +153,46 @@ class TwoFactorAuthentication implements Hookable {
 		return in_array( $code, $codes, true );
 	}
 
+	/**
+	 * Remove a used recovery code so it cannot be replayed.
+	 */
+	public static function consume_recovery_code( int $user_id, string $code ): void {
+		$remaining = array_values( array_filter(
+			self::get_recovery_codes( $user_id ),
+			static fn( $stored ) => ! hash_equals( (string) $stored, $code )
+		) );
+
+		update_user_meta( $user_id, self::RECOVERY_CODES_META_KEY, $remaining );
+	}
+
+	/**
+	 * Ensure the acting request is allowed to manage 2FA for the given user.
+	 *
+	 * When a user is logged in (e.g. the profile settings flow) we require the
+	 * edit_user capability, which blocks a logged-in user from tampering with
+	 * another account's 2FA. During the forced setup at login the user is
+	 * intentionally logged out, so capabilities are unavailable there; that
+	 * path is instead gated by possession of a valid authenticator secret.
+	 */
+	protected static function can_manage_two_factor_for( int $user_id ): bool {
+		if ( ! is_user_logged_in() ) {
+			return true;
+		}
+
+		return current_user_can( 'edit_user', $user_id );
+	}
+
 	public static function _ajax_validate(): void {
 		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'bmwp-validate-two-factor-nonce' ) ) {
 			return;
 		}
 
-		$token   = wp_strip_all_tags( $_REQUEST['token'] );
-		$user_id = (int) wp_strip_all_tags( $_REQUEST['user_id'] );
+		$token   = wp_strip_all_tags( (string) ( $_REQUEST['token'] ?? '' ) );
+		$user_id = (int) wp_strip_all_tags( (string) ( $_REQUEST['user_id'] ?? '' ) );
+
+		if ( ! self::can_manage_two_factor_for( $user_id ) ) {
+			wp_send_json_error();
+		}
 
 		$is_valid = self::validate_code( $token, $user_id );
 
@@ -181,7 +214,19 @@ class TwoFactorAuthentication implements Hookable {
 			return;
 		}
 
-		$user_id = (int) wp_strip_all_tags( $_REQUEST['user_id'] );
+		$user_id = (int) wp_strip_all_tags( (string) ( $_REQUEST['user_id'] ?? '' ) );
+
+		if ( ! self::can_manage_two_factor_for( $user_id ) ) {
+			wp_send_json_error();
+		}
+
+		// Only enable once the user has proven possession of the authenticator
+		// by validating a code, which is what stores the recovery codes. This
+		// prevents an unauthenticated request from enabling 2FA on — and thereby
+		// locking out — an arbitrary account.
+		if ( ! self::get_secret_for_user( $user_id ) || empty( self::get_recovery_codes( $user_id ) ) ) {
+			wp_send_json_error();
+		}
 
 		self::set_user_two_factor_enabled( true, $user_id );
 
@@ -193,12 +238,15 @@ class TwoFactorAuthentication implements Hookable {
 			wp_send_json_error();
 		}
 
-		error_log( print_r( $_POST, true ) );
+		$user_id = (int) wp_strip_all_tags( (string) ( $_REQUEST['user_id'] ?? '' ) );
 
-		$user_id = (int) wp_strip_all_tags( $_REQUEST['user_id'] );
+		if ( ! self::can_manage_two_factor_for( $user_id ) ) {
+			wp_send_json_error();
+		}
 
 		self::set_user_two_factor_enabled( false, $user_id );
 		self::set_secret_for_user( $user_id, '' );
+		delete_user_meta( $user_id, self::RECOVERY_CODES_META_KEY );
 
 		wp_send_json_success();
 	}
@@ -240,8 +288,9 @@ class TwoFactorAuthentication implements Hookable {
 			return;
 		}
 
-		// Check if the user should be required to enable 2FA.
-		if ( ! self::is_required_for_website() ) {
+		// Check if the user should be required to enable 2FA (respecting the
+		// per-role restriction, not just the global constant).
+		if ( ! self::is_required_for_user( $user->ID ) ) {
 			return;
 		}
 
@@ -274,7 +323,7 @@ class TwoFactorAuthentication implements Hookable {
 		}
 
 		$user_id     = (int) wp_strip_all_tags( $_POST['user_id'] );
-		$remember_me = (int) wp_strip_all_tags( $_POST['rememberme'] );
+		$remember_me = (bool) wp_strip_all_tags( (string) ( $_POST['rememberme'] ?? '' ) );
 		$token       = wp_strip_all_tags( $_POST['two_factor_token'] );
 
 		$is_valid = self::validate_code( $token, $user_id );
@@ -300,12 +349,15 @@ class TwoFactorAuthentication implements Hookable {
 		}
 
 		$user_id     = (int) wp_strip_all_tags( $_POST['user_id'] );
-		$remember_me = (int) wp_strip_all_tags( $_POST['rememberme'] );
+		$remember_me = (bool) wp_strip_all_tags( (string) ( $_POST['rememberme'] ?? '' ) );
 		$code        = wp_strip_all_tags( $_POST['backup_code'] );
 
 		$is_valid = self::validate_backup_code( $code, $user_id );
 
 		if ( $is_valid ) {
+			// A recovery code is single-use; consume it so it cannot be replayed.
+			self::consume_recovery_code( $user_id, $code );
+
 			wp_set_auth_cookie( $user_id, $remember_me );
 
 			$redirect_url = ! empty( $_POST['redirect_to'] ) ? wp_strip_all_tags( $_POST['redirect_to'] ) : get_admin_url();

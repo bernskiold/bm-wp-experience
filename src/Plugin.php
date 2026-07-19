@@ -1,14 +1,14 @@
 <?php
 
-namespace BernskioldMedia\WP\Experience;
+namespace Bernskiold\WP\Experience;
 
-use BernskioldMedia\WP\Experience\Modules\Security\TwoFactorAuthentication;
-use BMWPEXP_Vendor\BernskioldMedia\WP\PluginBase\BasePlugin;
+use Bernskiold\WP\Experience\Modules\Security\TwoFactorAuthentication;
+use Bernskiold\WP\Experience\Core\BasePlugin;
 
 class Plugin extends BasePlugin {
 
 	protected static string $slug = 'bm-wp-experience';
-	protected static string $version = '3.11.6';
+	protected static string $version = '4.0.0';
 	protected static string $textdomain = 'bm-wp-experience';
 	protected static string $plugin_file_path = BM_WP_EXPERIENCE_FILE_PATH;
 
