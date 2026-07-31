@@ -9,7 +9,7 @@ namespace BernskioldMedia\WP\Experience\Admin;
 
 use BernskioldMedia\WP\Experience\Integrations\Matomo_Api;
 use BernskioldMedia\WP\Experience\Modules\Matomo_Sync;
-use BMWPEXP_Vendor\BernskioldMedia\WP\PluginBase\Admin\Multisite_Tab;
+use BernskioldMedia\WP\Experience\Admin\Multisite_Tab;
 
 if (!defined('ABSPATH')) {
     exit;

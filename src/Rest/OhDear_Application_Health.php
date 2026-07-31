@@ -2,7 +2,7 @@
 
 namespace BernskioldMedia\WP\Experience\Rest;
 
-use BMWPEXP_Vendor\BernskioldMedia\WP\PluginBase\Interfaces\Hookable;
+use BernskioldMedia\WP\Experience\Hookable;
 use DateTime;
 use OhDear\HealthCheckResults\CheckResult;
 use OhDear\HealthCheckResults\CheckResults;

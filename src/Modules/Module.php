@@ -2,7 +2,7 @@
 
 namespace BernskioldMedia\WP\Experience\Modules;
 
-use BMWPEXP_Vendor\BernskioldMedia\WP\PluginBase\Interfaces\Hookable;
+use BernskioldMedia\WP\Experience\Hookable;
 
 abstract class Module implements Hookable {
 }

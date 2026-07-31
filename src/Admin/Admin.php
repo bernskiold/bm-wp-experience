@@ -9,7 +9,7 @@
 namespace BernskioldMedia\WP\Experience\Admin;
 
 use BernskioldMedia\WP\Experience\Modules\Users;
-use BMWPEXP_Vendor\BernskioldMedia\WP\PluginBase\Interfaces\Hookable;
+use BernskioldMedia\WP\Experience\Hookable;
 
 class Admin implements Hookable {
     public static function hooks(): void {

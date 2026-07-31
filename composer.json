@@ -22,9 +22,7 @@
   },
   "require-dev": {
 	"roave/security-advisories": "dev-latest",
-	"bernskioldmedia/bm-wp-devtools": "dev-main",
-	"bernskioldmedia/wp-plugin-base": "^2.4",
-	"humbug/php-scoper": "dev-master"
+	"bernskioldmedia/bm-wp-devtools": "dev-main"
   },
   "license": "GPL-3.0+",
   "authors": [
@@ -36,10 +34,7 @@
   "autoload": {
 	"psr-4": {
 	  "BernskioldMedia\\WP\\Experience\\": "src"
-	},
-	"classmap": [
-	  "vendor_prefixed/"
-	]
+	}
   },
   "scripts": {
 	"lint": "php-cs-fixer fix -v src",
@@ -58,11 +53,7 @@
 	  "composer install --no-dev -o"
 	],
 	"build": [
-	  "composer prefix-dependencies",
 	  "composer dump-autoload"
-	],
-	"prefix-dependencies": [
-	  "php ./vendor/humbug/php-scoper/bin/php-scoper add-prefix --prefix=BMWPEXP_Vendor --config config/php-scoper/bm-wp-plugin-base.php --output-dir vendor_prefixed/bernskioldmedia/wp-plugin-base --force"
 	]
   }
 }
