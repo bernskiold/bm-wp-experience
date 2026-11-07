@@ -1,12 +1,8 @@
 <?php
 
-$backup_codes_action = add_query_arg( [
-	'action'  => 'load_backup_codes',
-	'user_id' => $user->ID,
-], wp_login_url() );
+use Bernskiold\WP\Experience\Modules\Security\TwoFactorAuthentication;
 
-$redirect_to = isset( $_REQUEST['redirect_to'] ) ? esc_url_raw( wp_unslash( $_REQUEST['redirect_to'] ) ) : admin_url();
-$remember_me = ! empty( $_REQUEST['rememberme'] );
+$backup_codes_action = add_query_arg( 'action', 'load_backup_codes', wp_login_url() );
 ?>
 
 <?php if ( isset( $error ) ) : ?>
@@ -33,18 +29,17 @@ $remember_me = ! empty( $_REQUEST['rememberme'] );
 		/>
 	</p>
 
-	<input type="hidden" name="user_id" value="<?php echo esc_attr( $user->ID ); ?>" />
-	<input type="hidden" name="redirect_to" value="<?php echo $redirect_to; ?>" />
-	<input type="hidden" name="rememberme" id="rememberme" value="<?php echo $remember_me; ?>" />
+	<input type="hidden" name="<?php echo esc_attr( TwoFactorAuthentication::SESSION_FIELD ); ?>" value="<?php echo esc_attr( $session ); ?>" />
+	<?php wp_nonce_field( TwoFactorAuthentication::LOGIN_NONCE_ACTION ); ?>
 
 	<?php submit_button( __( 'Log In', 'bm-wp-experience' ) ); ?>
 </form>
 
-<p id="nav" class="two-factor-backup-code-action">
-	<a href="<?php echo esc_url( $backup_codes_action ); ?>">
-		<?php esc_html_e( 'Login using backup code', 'bm-wp-experience' ); ?>
-	</a>
-</p>
+<form id="nav" class="two-factor-backup-code-action" action="<?php echo esc_url( $backup_codes_action ); ?>" method="post">
+	<input type="hidden" name="<?php echo esc_attr( TwoFactorAuthentication::SESSION_FIELD ); ?>" value="<?php echo esc_attr( $session ); ?>" />
+	<?php wp_nonce_field( TwoFactorAuthentication::LOGIN_NONCE_ACTION ); ?>
+	<button type="submit" class="button-link"><?php esc_html_e( 'Login using backup code', 'bm-wp-experience' ); ?></button>
+</form>
 
 <style>
 	#login form.two-factor-validation-form > p:first-child {

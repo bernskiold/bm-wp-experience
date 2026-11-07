@@ -9,7 +9,6 @@ use BaconQrCode\Writer;
 use Bernskiold\WP\Experience\Plugin;
 use Bernskiold\WP\Experience\Core\Hookable;
 use PragmaRX\Google2FA\Google2FA;
-use PragmaRX\Recovery\Recovery;
 
 class TwoFactorAuthentication implements Hookable {
 
@@ -17,6 +16,18 @@ class TwoFactorAuthentication implements Hookable {
 	private const USER_SECRET_META_KEY       = 'bmwp_two_factor_secret';
 	private const TWO_FACTOR_STATUS_META_KEY = 'bmwp_two_factor_enabled';
 	private const RECOVERY_CODES_META_KEY    = 'bmwp_two_factor_recovery_codes';
+
+	/**
+	 * Verification sessions bind the second step of the login (and the
+	 * forced setup) to the user who completed the password step.
+	 */
+	public const SESSION_FIELD          = 'bmwp_2fa_session';
+	private const SESSION_PREFIX        = 'bmwp_2fa_session_';
+	private const SESSION_LIFETIME      = 10 * MINUTE_IN_SECONDS;
+	public const SESSION_PURPOSE_LOGIN  = 'login';
+	public const SESSION_PURPOSE_SETUP  = 'setup';
+	public const LOGIN_NONCE_ACTION     = 'bmwp-2fa-login';
+	private const ATTEMPTS_PREFIX       = 'bmwp_2fa_attempts_';
 
 	public function __construct() {
 		$this->two_factor = new Google2FA();
@@ -45,6 +56,7 @@ class TwoFactorAuthentication implements Hookable {
 		add_action( 'login_form_2fa_validation', [ self::class, 'validate_login' ] );
 		add_action( 'login_form_2fa_backup', [ self::class, 'validate_backup_login' ] );
 		add_action( 'login_form_load_backup_codes', [ self::class, 'load_backup_codes_form' ] );
+		add_filter( 'wp_login_errors', [ self::class, 'add_session_expired_error' ] );
 	}
 
     public static function admin_notice_no_imagick(): void {
@@ -165,42 +177,240 @@ class TwoFactorAuthentication implements Hookable {
 		update_user_meta( $user_id, self::RECOVERY_CODES_META_KEY, $remaining );
 	}
 
+	// ---------------------------------------------------------------------
+	// Verification sessions.
+	// ---------------------------------------------------------------------
+
 	/**
-	 * Ensure the acting request is allowed to manage 2FA for the given user.
-	 *
-	 * When a user is logged in (e.g. the profile settings flow) we require the
-	 * edit_user capability, which blocks a logged-in user from tampering with
-	 * another account's 2FA. During the forced setup at login the user is
-	 * intentionally logged out, so capabilities are unavailable there; that
-	 * path is instead gated by possession of a valid authenticator secret.
+	 * Start a verification session for a user who has just passed the
+	 * password step. Returns the token to hand to the browser.
 	 */
-	protected static function can_manage_two_factor_for( int $user_id ): bool {
-		if ( ! is_user_logged_in() ) {
-			return true;
+	public static function create_session( int $user_id, string $purpose, array $data = [] ): string {
+		$token = bin2hex( random_bytes( 32 ) );
+
+		set_transient( self::session_key( $token ), array_merge( $data, [
+			'user_id'   => $user_id,
+			'purpose'   => $purpose,
+			'validated' => false,
+		] ), self::SESSION_LIFETIME );
+
+		return $token;
+	}
+
+	/**
+	 * Get an active verification session, optionally for a given purpose.
+	 */
+	public static function get_session( string $token, ?string $purpose = null ): ?array {
+		if ( ! preg_match( '/^[a-f0-9]{64}$/', $token ) ) {
+			return null;
 		}
 
-		return current_user_can( 'edit_user', $user_id );
+		$session = get_transient( self::session_key( $token ) );
+
+		if ( ! is_array( $session ) || empty( $session['user_id'] ) ) {
+			return null;
+		}
+
+		if ( null !== $purpose && $purpose !== ( $session['purpose'] ?? null ) ) {
+			return null;
+		}
+
+		return $session;
+	}
+
+	protected static function update_session( string $token, array $session ): void {
+		set_transient( self::session_key( $token ), $session, self::SESSION_LIFETIME );
+	}
+
+	public static function end_session( string $token ): void {
+		if ( preg_match( '/^[a-f0-9]{64}$/', $token ) ) {
+			delete_transient( self::session_key( $token ) );
+		}
+	}
+
+	protected static function session_key( string $token ): string {
+		return self::SESSION_PREFIX . hash( 'sha256', $token );
+	}
+
+	protected static function get_request_session_token(): string {
+		return sanitize_text_field( wp_unslash( (string) ( $_REQUEST[ self::SESSION_FIELD ] ?? '' ) ) );
+	}
+
+	// ---------------------------------------------------------------------
+	// Attempt limiting.
+	// ---------------------------------------------------------------------
+
+	protected static function get_max_attempts( string $scope ): int {
+		$default = 'ip' === $scope ? 20 : 5;
+
+		return (int) apply_filters( 'bm_wpexp_two_factor_max_attempts', $default, $scope );
+	}
+
+	protected static function get_lockout_duration(): int {
+		return (int) apply_filters( 'bm_wpexp_two_factor_lockout_duration', 15 * MINUTE_IN_SECONDS );
+	}
+
+	protected static function get_client_ip(): string {
+		return (string) apply_filters( 'bm_wpexp_two_factor_client_ip', sanitize_text_field( wp_unslash( (string) ( $_SERVER['REMOTE_ADDR'] ?? '' ) ) ) );
+	}
+
+	/**
+	 * @return array<string, string> Scope => transient key.
+	 */
+	protected static function attempt_keys( int $user_id ): array {
+		$keys = [ 'user' => self::ATTEMPTS_PREFIX . 'u_' . $user_id ];
+		$ip   = self::get_client_ip();
+
+		if ( '' !== $ip ) {
+			$keys['ip'] = self::ATTEMPTS_PREFIX . 'ip_' . md5( $ip );
+		}
+
+		return $keys;
+	}
+
+	/**
+	 * Whether further verification attempts are paused for this user or
+	 * the current client.
+	 */
+	public static function is_locked_out( int $user_id ): bool {
+		foreach ( self::attempt_keys( $user_id ) as $scope => $key ) {
+			$attempts = (int) get_transient( $key );
+
+			if ( $attempts >= self::get_max_attempts( $scope ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Record a failed attempt. Each failure restarts the lockout window.
+	 */
+	public static function register_failed_attempt( int $user_id ): void {
+		foreach ( self::attempt_keys( $user_id ) as $key ) {
+			set_transient( $key, (int) get_transient( $key ) + 1, self::get_lockout_duration() );
+		}
+	}
+
+	public static function clear_failed_attempts( int $user_id ): void {
+		delete_transient( self::ATTEMPTS_PREFIX . 'u_' . $user_id );
+	}
+
+	/**
+	 * Verify a code with attempt limiting applied.
+	 *
+	 * @param callable $verify Receives the user ID and returns whether the code is valid.
+	 *
+	 * @return string 'valid', 'invalid' or 'locked'.
+	 */
+	protected static function attempt( int $user_id, callable $verify ): string {
+		if ( self::is_locked_out( $user_id ) ) {
+			return 'locked';
+		}
+
+		if ( $verify( $user_id ) ) {
+			self::clear_failed_attempts( $user_id );
+
+			return 'valid';
+		}
+
+		self::register_failed_attempt( $user_id );
+
+		return self::is_locked_out( $user_id ) ? 'locked' : 'invalid';
+	}
+
+	// ---------------------------------------------------------------------
+	// Setup (AJAX).
+	// ---------------------------------------------------------------------
+
+	/**
+	 * Nonce action for the setup requests. Profile nonces are bound to the
+	 * user being edited.
+	 */
+	public static function nonce_action( string $action, int $user_id = 0 ): string {
+		return 'bmwp-' . $action . '-two-factor-nonce' . ( $user_id ? '-' . $user_id : '' );
+	}
+
+	/**
+	 * Resolve which user a setup request acts on.
+	 *
+	 * Logged-in users (the profile screen) act on the posted user, which
+	 * requires the edit_user capability. During the forced setup at login
+	 * the user is logged out; the user then comes from the verification
+	 * session started after the password step, never from the request.
+	 *
+	 * @return array{0: int, 1: ?string}|null User ID and session token, or null if not allowed.
+	 */
+	protected static function resolve_setup_request( string $action ): ?array {
+		$nonce = sanitize_text_field( wp_unslash( (string) ( $_REQUEST['nonce'] ?? '' ) ) );
+
+		if ( is_user_logged_in() ) {
+			$user_id = (int) ( $_REQUEST['user_id'] ?? 0 );
+
+			if ( $user_id < 1 || ! current_user_can( 'edit_user', $user_id ) ) {
+				return null;
+			}
+
+			if ( ! wp_verify_nonce( $nonce, self::nonce_action( $action, $user_id ) ) ) {
+				return null;
+			}
+
+			return [ $user_id, null ];
+		}
+
+		if ( ! wp_verify_nonce( $nonce, self::nonce_action( $action ) ) ) {
+			return null;
+		}
+
+		$token   = self::get_request_session_token();
+		$session = self::get_session( $token, self::SESSION_PURPOSE_SETUP );
+
+		if ( ! $session ) {
+			return null;
+		}
+
+		$user_id = (int) $session['user_id'];
+
+		// The forced setup is only for users who have not enabled 2FA yet.
+		if ( self::has_user_two_factor( $user_id ) ) {
+			return null;
+		}
+
+		return [ $user_id, $token ];
 	}
 
 	public static function _ajax_validate(): void {
-		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'bmwp-validate-two-factor-nonce' ) ) {
-			return;
+		$request = self::resolve_setup_request( 'validate' );
+
+		if ( null === $request ) {
+			wp_send_json_error( [ 'is_valid' => false, 'recovery_codes' => [] ] );
 		}
 
-		$token   = wp_strip_all_tags( (string) ( $_REQUEST['token'] ?? '' ) );
-		$user_id = (int) wp_strip_all_tags( (string) ( $_REQUEST['user_id'] ?? '' ) );
+		[ $user_id, $token ] = $request;
 
-		if ( ! self::can_manage_two_factor_for( $user_id ) ) {
-			wp_send_json_error();
+		$token_value = sanitize_text_field( wp_unslash( (string) ( $_REQUEST['token'] ?? '' ) ) );
+		$result      = self::attempt( $user_id, static fn( int $id ) => self::validate_code( $token_value, $id ) );
+
+		if ( 'locked' === $result ) {
+			wp_send_json_error( [
+				'is_valid'       => false,
+				'locked'         => true,
+				'recovery_codes' => [],
+			] );
 		}
 
-		$is_valid = self::validate_code( $token, $user_id );
-
-		if ( ! $is_valid ) {
+		if ( 'valid' !== $result ) {
 			wp_send_json_success( [
 				'is_valid'       => false,
 				'recovery_codes' => [],
 			] );
+		}
+
+		if ( null !== $token ) {
+			$session              = (array) self::get_session( $token );
+			$session['validated'] = true;
+			self::update_session( $token, $session );
 		}
 
 		wp_send_json_success( [
@@ -210,22 +420,28 @@ class TwoFactorAuthentication implements Hookable {
 	}
 
 	public static function _ajax_activate(): void {
-		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'bmwp-activate-two-factor-nonce' ) ) {
-			return;
-		}
+		$request = self::resolve_setup_request( 'activate' );
 
-		$user_id = (int) wp_strip_all_tags( (string) ( $_REQUEST['user_id'] ?? '' ) );
-
-		if ( ! self::can_manage_two_factor_for( $user_id ) ) {
+		if ( null === $request ) {
 			wp_send_json_error();
 		}
 
-		// Only enable once the user has proven possession of the authenticator
-		// by validating a code, which is what stores the recovery codes. This
-		// prevents an unauthenticated request from enabling 2FA on — and thereby
-		// locking out — an arbitrary account.
+		[ $user_id, $token ] = $request;
+
+		// Only enable once a code has been validated, which is what stores
+		// the recovery codes.
 		if ( ! self::get_secret_for_user( $user_id ) || empty( self::get_recovery_codes( $user_id ) ) ) {
 			wp_send_json_error();
+		}
+
+		if ( null !== $token ) {
+			$session = self::get_session( $token, self::SESSION_PURPOSE_SETUP );
+
+			if ( empty( $session['validated'] ) ) {
+				wp_send_json_error();
+			}
+
+			self::end_session( $token );
 		}
 
 		self::set_user_two_factor_enabled( true, $user_id );
@@ -234,15 +450,19 @@ class TwoFactorAuthentication implements Hookable {
 	}
 
 	public static function _ajax_deactivate(): void {
-		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'bmwp-deactivate-two-factor-nonce' ) ) {
+		// Only available from the profile screen, for a logged-in user who
+		// may edit the target user.
+		if ( ! is_user_logged_in() ) {
 			wp_send_json_error();
 		}
 
-		$user_id = (int) wp_strip_all_tags( (string) ( $_REQUEST['user_id'] ?? '' ) );
+		$request = self::resolve_setup_request( 'deactivate' );
 
-		if ( ! self::can_manage_two_factor_for( $user_id ) ) {
+		if ( null === $request ) {
 			wp_send_json_error();
 		}
+
+		[ $user_id ] = $request;
 
 		self::set_user_two_factor_enabled( false, $user_id );
 		self::set_secret_for_user( $user_id, '' );
@@ -263,9 +483,32 @@ class TwoFactorAuthentication implements Hookable {
 		return $user_id ?? get_current_user_id();
 	}
 
+	/**
+	 * Generate eight unique, eight-digit numeric recovery codes.
+	 *
+	 * Same format as the former pragmarx/recovery setup (numeric, 1 block of
+	 * 8 characters, 8 codes), using a CSPRNG directly.
+	 *
+	 * @return string[]
+	 */
+	public static function generate_recovery_codes( int $count = 8, int $length = 8 ): array {
+		$codes = [];
+
+		while ( count( $codes ) < $count ) {
+			$code = '';
+
+			for ( $i = 0; $i < $length; $i++ ) {
+				$code .= (string) random_int( 0, 9 );
+			}
+
+			$codes[ $code ] = $code;
+		}
+
+		return array_values( $codes );
+	}
+
 	public static function generate_and_save_recovery_codes( int $user_id ): array {
-		$recovery = new Recovery();
-		$codes    = $recovery->numeric()->setCount( 8 )->setBlocks( 1 )->setChars( 8 )->toArray();
+		$codes = self::generate_recovery_codes();
 
 		update_user_meta( $user_id, self::RECOVERY_CODES_META_KEY, $codes );
 
@@ -298,7 +541,8 @@ class TwoFactorAuthentication implements Hookable {
 		wp_clear_auth_cookie();
 
 		self::load_login_template( '2fa-activation', [
-			'user' => $user,
+			'user'    => $user,
+			'session' => self::create_session( $user->ID, self::SESSION_PURPOSE_SETUP ),
 		] );
 	}
 
@@ -312,73 +556,154 @@ class TwoFactorAuthentication implements Hookable {
 		// so that we can validate the token first. Then we re-authenticate them.
 		wp_clear_auth_cookie();
 
-		self::load_login_template( '2fa-login', [
-			'user' => $user,
+		$session = self::create_session( $user->ID, self::SESSION_PURPOSE_LOGIN, [
+			'remember'    => ! empty( $_POST['rememberme'] ),
+			'redirect_to' => isset( $_REQUEST['redirect_to'] ) ? esc_url_raw( wp_unslash( (string) $_REQUEST['redirect_to'] ) ) : '',
 		] );
+
+		self::load_login_template( '2fa-login', [
+			'user'    => $user,
+			'session' => $session,
+		] );
+	}
+
+	/**
+	 * Resolve the verification session for a second-step login request.
+	 * Redirects back to the login screen when there is no active session.
+	 *
+	 * @return array{0: string, 1: array}|null Token and session.
+	 */
+	protected static function resolve_login_request(): ?array {
+		if ( 'POST' !== ( $_SERVER['REQUEST_METHOD'] ?? '' ) ) {
+			return null;
+		}
+
+		$token   = self::get_request_session_token();
+		$session = self::get_session( $token, self::SESSION_PURPOSE_LOGIN );
+		$nonce   = sanitize_text_field( wp_unslash( (string) ( $_POST['_wpnonce'] ?? '' ) ) );
+
+		if ( ! $session || ! wp_verify_nonce( $nonce, self::LOGIN_NONCE_ACTION ) ) {
+			wp_safe_redirect( add_query_arg( 'bmwp_2fa', 'expired', wp_login_url() ) );
+			exit;
+		}
+
+		return [ $token, $session ];
+	}
+
+	protected static function complete_login( string $token, array $session ): void {
+		self::end_session( $token );
+
+		$user_id = (int) $session['user_id'];
+
+		wp_set_auth_cookie( $user_id, ! empty( $session['remember'] ) );
+
+		$redirect_to = ! empty( $session['redirect_to'] ) ? $session['redirect_to'] : admin_url();
+
+		wp_safe_redirect( wp_validate_redirect( $redirect_to, admin_url() ) );
+		exit;
 	}
 
 	public static function validate_login(): void {
-		if ( ! isset( $_POST['user_id'] ) ) {
+		$request = self::resolve_login_request();
+
+		if ( null === $request ) {
 			return;
 		}
 
-		$user_id     = (int) wp_strip_all_tags( $_POST['user_id'] );
-		$remember_me = (bool) wp_strip_all_tags( (string) ( $_POST['rememberme'] ?? '' ) );
-		$token       = wp_strip_all_tags( $_POST['two_factor_token'] );
+		[ $token, $session ] = $request;
 
-		$is_valid = self::validate_code( $token, $user_id );
+		$user_id = (int) $session['user_id'];
+		$code    = sanitize_text_field( wp_unslash( (string) ( $_POST['two_factor_token'] ?? '' ) ) );
+		$result  = self::attempt( $user_id, static fn( int $id ) => self::validate_code( $code, $id ) );
 
-		if ( $is_valid ) {
-			wp_set_auth_cookie( $user_id, $remember_me );
-
-			$redirect_url = ! empty( $_POST['redirect_to'] ) ? wp_strip_all_tags( $_POST['redirect_to'] ) : get_admin_url();
-
-			wp_safe_redirect( esc_url_raw( $redirect_url ) );
-			exit;
+		if ( 'valid' === $result ) {
+			self::complete_login( $token, $session );
 		}
 
-		self::load_login_template( '2fa-login', [
-			'user'  => get_user_by( 'ID', $user_id ),
-			'error' => __( 'The code you entered is not valid. Please try again.', 'bm-wp-experience' ),
-		] );
+		self::render_failed_attempt( '2fa-login', $result, $token, $user_id,
+			__( 'The code you entered is not valid. Please try again.', 'bm-wp-experience' ) );
 	}
 
 	public static function validate_backup_login(): void {
-		if ( ! isset( $_POST['user_id'] ) ) {
+		$request = self::resolve_login_request();
+
+		if ( null === $request ) {
 			return;
 		}
 
-		$user_id     = (int) wp_strip_all_tags( $_POST['user_id'] );
-		$remember_me = (bool) wp_strip_all_tags( (string) ( $_POST['rememberme'] ?? '' ) );
-		$code        = wp_strip_all_tags( $_POST['backup_code'] );
+		[ $token, $session ] = $request;
 
-		$is_valid = self::validate_backup_code( $code, $user_id );
+		$user_id = (int) $session['user_id'];
+		$code    = sanitize_text_field( wp_unslash( (string) ( $_POST['backup_code'] ?? '' ) ) );
+		$result  = self::attempt( $user_id, static fn( int $id ) => self::validate_backup_code( $code, $id ) );
 
-		if ( $is_valid ) {
+		if ( 'valid' === $result ) {
 			// A recovery code is single-use; consume it so it cannot be replayed.
 			self::consume_recovery_code( $user_id, $code );
+			self::complete_login( $token, $session );
+		}
 
-			wp_set_auth_cookie( $user_id, $remember_me );
+		self::render_failed_attempt( '2fa-backup', $result, $token, $user_id,
+			__( 'The backup code you entered is not valid. Please try again.', 'bm-wp-experience' ) );
+	}
 
-			$redirect_url = ! empty( $_POST['redirect_to'] ) ? wp_strip_all_tags( $_POST['redirect_to'] ) : get_admin_url();
-
-			wp_safe_redirect( esc_url_raw( $redirect_url ) );
+	/**
+	 * Show the form again after a failed attempt, or end the session once
+	 * attempts are paused.
+	 */
+	protected static function render_failed_attempt( string $template, string $result, string $token, int $user_id, string $error ): void {
+		if ( 'locked' === $result ) {
+			self::end_session( $token );
+			wp_safe_redirect( add_query_arg( 'bmwp_2fa', 'locked', wp_login_url() ) );
 			exit;
 		}
 
-		self::load_login_template( '2fa-backup', [
-			'user'  => get_user_by( 'ID', $user_id ),
-			'error' => __( 'The backup code you entered is not valid. Please try again.', 'bm-wp-experience' ),
+		self::load_login_template( $template, [
+			'user'    => get_user_by( 'ID', $user_id ),
+			'session' => $token,
+			'error'   => $error,
 		] );
 	}
 
 	public static function load_backup_codes_form(): void {
+		$request = self::resolve_login_request();
+
+		if ( null === $request ) {
+			return;
+		}
+
+		[ $token, $session ] = $request;
+
 		self::load_login_template( '2fa-backup', [
-			'user' => get_user_by( 'ID', (int) wp_strip_all_tags( $_GET['user_id'] ) ),
+			'user'    => get_user_by( 'ID', (int) $session['user_id'] ),
+			'session' => $token,
 		] );
 	}
 
+	/**
+	 * Explain on the login screen why the user was sent back to it.
+	 */
+	public static function add_session_expired_error( \WP_Error $errors ): \WP_Error {
+		$reason = sanitize_key( (string) ( $_GET['bmwp_2fa'] ?? '' ) );
+
+		if ( 'expired' === $reason ) {
+			$errors->add( 'bmwp_2fa_expired', __( 'Your verification session has expired. Please log in again.', 'bm-wp-experience' ) );
+		} elseif ( 'locked' === $reason ) {
+			$errors->add( 'bmwp_2fa_locked', __( 'Too many incorrect codes. Please wait a few minutes and log in again.', 'bm-wp-experience' ) );
+		}
+
+		return $errors;
+	}
+
 	protected static function load_login_template( string $template, array $args = [] ): void {
+		/**
+		 * Fires before a two-factor login screen is rendered.
+		 *
+		 * @param string $template Template name (e.g. "2fa-login").
+		 * @param array  $args     Template variables.
+		 */
+		do_action( 'bm_wpexp_before_two_factor_login_template', $template, $args );
+
 		if ( ! function_exists( 'login_header' ) ) {
 			include_once ABSPATH . 'wp-login.php';
 		}
