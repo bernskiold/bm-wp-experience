@@ -22,15 +22,3 @@ use Bernskiold\WP\Experience\Modules\Security\TwoFactorAuthentication;
 
 	<?php submit_button( __( 'Log In', 'bm-wp-experience' ) ); ?>
 </form>
-
-<style>
-	#login form.two-factor-validation-form > p:first-child {
-		margin-bottom: 0.75rem;
-	}
-
-	input[type=number]::-webkit-inner-spin-button,
-	input[type=number]::-webkit-outer-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
-</style>

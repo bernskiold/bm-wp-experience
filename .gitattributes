@@ -17,6 +17,7 @@
 /eslint.config.cjs       export-ignore
 /.nvmrc                  export-ignore
 /assets/styles/src       export-ignore
+/assets/scripts/src      export-ignore
 
 ##
 # Handle line endings.

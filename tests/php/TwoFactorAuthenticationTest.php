@@ -555,10 +555,10 @@ class TwoFactorAuthenticationTest extends WP_Ajax_UnitTestCase {
 		TwoFactorAuthentication::user_profile_section_content( get_user_by( 'ID', $this->editor_id ) );
 		$html = ob_get_clean();
 
-		$this->assertStringContainsString( '@click.prevent="modalOpen = true"', $html, 'Offers to enable for the edited user.' );
-		$this->assertStringNotContainsString( '@click.prevent="disable"', $html );
-		$this->assertStringContainsString( wp_create_nonce( TwoFactorAuthentication::nonce_action( 'deactivate', $this->editor_id ) ), $html );
-		$this->assertStringContainsString( "body.append( 'user_id', '" . $this->editor_id . "' )", $html );
+		$this->assertStringContainsString( 'data-two-factor-action="open"', $html, 'Offers to enable for the edited user.' );
+		$this->assertStringNotContainsString( 'data-two-factor-action="disable"', $html );
+		$this->assertStringContainsString( 'data-nonce-deactivate="' . wp_create_nonce( TwoFactorAuthentication::nonce_action( 'deactivate', $this->editor_id ) ) . '"', $html );
+		$this->assertStringContainsString( 'data-user-id="' . $this->editor_id . '"', $html );
 	}
 
 	// ---------------------------------------------------------------------

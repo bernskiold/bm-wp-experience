@@ -1,0 +1,86 @@
+/**
+ * Two-factor authentication.
+ *
+ * Shared by the profile settings (views/admin/two-factor.php) and the login
+ * screen views (views/public/2fa-*.php).
+ */
+
+// Elements toggled by assets/scripts/src/two-factor.js use the `hidden`
+// attribute; make sure no core display rule (e.g. `.notice.inline`) wins.
+[data-bmwp-two-factor] [hidden] {
+	display: none !important;
+}
+
+// Profile settings.
+.two-factor-section {
+	margin-top: 2rem;
+}
+
+.two-factor-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 9999;
+	background-color: rgba(0, 0, 0, 0.75);
+}
+
+.two-factor-modal {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 9999;
+	background-color: #fff;
+	padding: 2.5rem;
+	box-shadow: 1px 3px 50px rgba(0, 0, 0, 0.1);
+	width: 100%;
+	max-width: 30rem;
+}
+
+.two-factor-modal-step-actions,
+.two-factor-step-actions {
+	background-color: #f9f9f9;
+	border-top: 1px solid #eee;
+	padding: 1.5rem 2.5rem 1.5rem 2.5rem;
+	margin: 2.5rem -2.5rem -2.5rem;
+	display: flex;
+	justify-content: space-between;
+}
+
+// Login screen.
+.two-factor-step h3,
+#login form .two-factor-step p {
+	margin-bottom: 1em;
+}
+
+#login form.two-factor-validation-form > p:first-child {
+	margin-bottom: 0.75rem;
+}
+
+// Shared.
+.two-factor-token-input {
+	font-size: 22px;
+}
+
+.two-factor-token-input::-webkit-inner-spin-button,
+.two-factor-token-input::-webkit-outer-spin-button,
+.two-factor-validation-form input[type="number"]::-webkit-inner-spin-button,
+.two-factor-validation-form input[type="number"]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+.two-factor-qr-code {
+	width: 280px;
+	height: 280px;
+	display: block;
+	margin: 1rem auto;
+}
+
+.two-factor-recovery-codes {
+	background-color: #f9f9f9;
+	padding: 1rem;
+	font-family: monospace;
+}

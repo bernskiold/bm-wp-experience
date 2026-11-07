@@ -27,6 +27,7 @@
 		"npm": ">=11"
 	},
 	"devDependencies": {
+		"@wordpress/dependency-extraction-webpack-plugin": "^7.1.0",
 		"@wordpress/scripts": "^37.1.0",
 		"globals": "^17.14.0",
 		"webpack-remove-empty-scripts": "^1.1.1"

@@ -25,9 +25,6 @@ module.exports = [
 			'node_modules/**',
 			'vendor/**',
 			'languages/**',
-			// Legacy scripts, replaced in the WordPress 7 modernisation.
-			'assets/scripts/alpinejs.js',
-			'assets/scripts/admin-customize-support.js',
 		],
 	},
 
