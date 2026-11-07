@@ -16,6 +16,10 @@
 /phpunit.xml.dist        export-ignore
 /eslint.config.cjs       export-ignore
 /.nvmrc                  export-ignore
+/bin                     export-ignore
+/tests                   export-ignore
+/phpunit.xml.dist        export-ignore
+/vitest.config.mjs       export-ignore
 /assets/styles/src       export-ignore
 /assets/scripts/src      export-ignore
 
