@@ -74,6 +74,9 @@ class Cleanup extends Module {
         }
 
         if ( true === apply_filters( 'bm_wpexp_disable_oembed_discovery', true ) ) {
+            // Core hooks the discovery links at priority 4, plus a back-compat
+            // copy at the default priority 10; remove both.
+            remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 4 );
             remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 10 );
         }
     }
