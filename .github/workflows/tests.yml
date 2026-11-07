@@ -23,3 +23,5 @@ jobs:
             php-lint: true
             js-lint: true
             check-dist: true
+            # Imagick renders the 2FA QR code; without it those tests skip.
+            php-extensions: 'mysqli, imagick'
