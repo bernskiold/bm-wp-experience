@@ -260,6 +260,168 @@ class TwoFactorAuthenticationTest extends WP_Ajax_UnitTestCase {
 	}
 
 	// ---------------------------------------------------------------------
+	// Registration, status, QR code and profile markup.
+	// ---------------------------------------------------------------------
+
+	public function test_login_and_profile_hooks_are_registered_when_imagick_is_available(): void {
+		if ( ! extension_loaded( 'imagick' ) ) {
+			$this->assertNotFalse( has_action( 'admin_notices', [ TwoFactorAuthentication::class, 'admin_notice_no_imagick' ] ) );
+			$this->markTestSkipped( 'Imagick is not loaded; only the admin notice is registered.' );
+		}
+
+		$this->assertSame( 2, has_action( 'wp_login', [ TwoFactorAuthentication::class, 'handle_2fa_check_on_login' ] ) );
+		$this->assertSame( 3, has_action( 'wp_login', [ TwoFactorAuthentication::class, 'handle_login' ] ) );
+		$this->assertNotFalse( has_action( 'login_form_2fa_validation', [ TwoFactorAuthentication::class, 'validate_login' ] ) );
+		$this->assertNotFalse( has_action( 'login_form_2fa_backup', [ TwoFactorAuthentication::class, 'validate_backup_login' ] ) );
+		$this->assertNotFalse( has_action( 'login_form_load_backup_codes', [ TwoFactorAuthentication::class, 'load_backup_codes_form' ] ) );
+		$this->assertNotFalse( has_action( 'show_user_profile', [ TwoFactorAuthentication::class, 'user_profile_section_content' ] ) );
+		$this->assertNotFalse( has_action( 'edit_user_profile', [ TwoFactorAuthentication::class, 'user_profile_section_content' ] ) );
+		$this->assertNotFalse( has_action( 'admin_enqueue_scripts', [ TwoFactorAuthentication::class, 'enqueue_profile_assets' ] ) );
+		$this->assertNotFalse( has_filter( 'wp_login_errors', [ TwoFactorAuthentication::class, 'add_session_expired_error' ] ) );
+
+		// Deactivation is only available to logged-in users.
+		$this->assertFalse( has_action( 'wp_ajax_nopriv_bmwp_deactivate_two_factor' ) );
+	}
+
+	public function test_secrets_are_unique_per_user(): void {
+		$this->assertNotSame(
+			TwoFactorAuthentication::get_or_generate_secret_for_user( $this->editor_id ),
+			TwoFactorAuthentication::get_or_generate_secret_for_user( $this->other_editor_id )
+		);
+	}
+
+	public function test_qr_code_url_contains_site_email_and_secret(): void {
+		$user   = get_user_by( 'ID', $this->editor_id );
+		$url    = ( new TwoFactorAuthentication() )->generate_qr_code_url( $user );
+		$secret = TwoFactorAuthentication::get_secret_for_user( $this->editor_id );
+
+		$this->assertStringStartsWith( 'otpauth://totp/', $url );
+		$this->assertStringContainsString( rawurlencode( 'editor@example.org' ), $url );
+		$this->assertStringContainsString( 'secret=' . $secret, $url );
+		$this->assertStringContainsString( 'issuer=' . rawurlencode( get_bloginfo( 'name' ) ), $url );
+	}
+
+	public function test_qr_code_image_is_a_png_data_uri(): void {
+		if ( ! extension_loaded( 'imagick' ) ) {
+			$this->markTestSkipped( 'Imagick is required to render the QR code.' );
+		}
+
+		$image = ( new TwoFactorAuthentication() )->generate_qr_code_image( get_user_by( 'ID', $this->editor_id ) );
+
+		$this->assertStringStartsWith( 'data:image/png;base64, ', $image );
+		$this->assertStringStartsWith( "\x89PNG", base64_decode( substr( $image, strlen( 'data:image/png;base64, ' ) ) ) );
+	}
+
+	public function test_two_factor_status_can_be_toggled(): void {
+		$this->assertFalse( TwoFactorAuthentication::has_user_two_factor( $this->editor_id ) );
+
+		TwoFactorAuthentication::set_user_two_factor_enabled( true, $this->editor_id );
+		$this->assertTrue( TwoFactorAuthentication::has_user_two_factor( $this->editor_id ) );
+
+		TwoFactorAuthentication::set_user_two_factor_enabled( false, $this->editor_id );
+		$this->assertFalse( TwoFactorAuthentication::has_user_two_factor( $this->editor_id ) );
+	}
+
+	public function test_recovery_codes_default_to_an_empty_list(): void {
+		$this->assertSame( [], TwoFactorAuthentication::get_recovery_codes( $this->editor_id ) );
+
+		update_user_meta( $this->editor_id, self::RECOVERY_KEY, 'not-an-array' );
+		$this->assertSame( [], TwoFactorAuthentication::get_recovery_codes( $this->editor_id ) );
+	}
+
+	public function test_backup_codes_are_validated_against_the_users_codes(): void {
+		$codes = TwoFactorAuthentication::generate_and_save_recovery_codes( $this->editor_id );
+
+		$this->assertTrue( TwoFactorAuthentication::validate_backup_code( $codes[3], $this->editor_id ) );
+		$this->assertFalse( TwoFactorAuthentication::validate_backup_code( '00000000', $this->editor_id ) );
+		$this->assertFalse( TwoFactorAuthentication::validate_backup_code( $codes[3], $this->other_editor_id ) );
+	}
+
+	public function test_required_roles_are_filterable(): void {
+		add_filter( 'bm_wpexp_roles_requiring_two_factor', static fn() => [ 'administrator' ] );
+
+		$method = new \ReflectionMethod( TwoFactorAuthentication::class, 'is_required_for_user' );
+
+		$this->assertTrue( $method->invoke( null, $this->admin_id ) );
+		$this->assertFalse( $method->invoke( null, $this->editor_id ) );
+	}
+
+	public function test_assets_are_enqueued_on_profile_screens_only(): void {
+		TwoFactorAuthentication::enqueue_profile_assets( 'index.php' );
+		$this->assertFalse( wp_script_is( TwoFactorAuthentication::ASSET_HANDLE, 'enqueued' ) );
+
+		foreach ( [ 'profile.php', 'user-edit.php' ] as $hook_suffix ) {
+			wp_dequeue_script( TwoFactorAuthentication::ASSET_HANDLE );
+			wp_dequeue_style( TwoFactorAuthentication::ASSET_HANDLE );
+
+			TwoFactorAuthentication::enqueue_profile_assets( $hook_suffix );
+
+			$this->assertTrue( wp_script_is( TwoFactorAuthentication::ASSET_HANDLE, 'enqueued' ), $hook_suffix );
+			$this->assertTrue( wp_style_is( TwoFactorAuthentication::ASSET_HANDLE, 'enqueued' ), $hook_suffix );
+		}
+
+		$script = wp_scripts()->registered[ TwoFactorAuthentication::ASSET_HANDLE ];
+		$this->assertStringEndsWith( 'assets/scripts/dist/two-factor.js', $script->src );
+		$this->assertSame( 1, $script->extra['group'] ?? null, 'Printed in the footer.' );
+		$this->assertStringEndsWith( 'assets/styles/dist/two-factor.css', wp_styles()->registered[ TwoFactorAuthentication::ASSET_HANDLE ]->src );
+	}
+
+	public function test_profile_section_renders_the_setup_markup(): void {
+		if ( ! extension_loaded( 'imagick' ) ) {
+			$this->markTestSkipped( 'Imagick is required to render the QR code.' );
+		}
+
+		wp_set_current_user( $this->editor_id );
+
+		ob_start();
+		TwoFactorAuthentication::user_profile_section_content( get_user_by( 'ID', $this->editor_id ) );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'data-bmwp-two-factor', $html );
+		$this->assertStringContainsString( 'data-user-id="' . $this->editor_id . '"', $html );
+		$this->assertStringContainsString( 'data-ajax-url="' . esc_url( admin_url( 'admin-ajax.php' ) ) . '"', $html );
+		$this->assertStringContainsString( 'data-two-factor-action="open"', $html );
+		$this->assertStringContainsString( 'class="two-factor-qr-code"', $html );
+
+		foreach ( [ 'validate', 'activate', 'deactivate' ] as $action ) {
+			$this->assertMatchesRegularExpression( '/data-nonce-' . $action . '="([a-f0-9]{10})"/', $html );
+			preg_match( '/data-nonce-' . $action . '="([a-f0-9]{10})"/', $html, $matches );
+			$this->assertSame( 1, wp_verify_nonce( $matches[1], TwoFactorAuthentication::nonce_action( $action, $this->editor_id ) ) );
+		}
+
+		// Only the first step is visible before the script runs, and no
+		// Alpine or inline scripts remain.
+		$this->assertStringContainsString( 'data-step="1">', $html );
+		foreach ( [ 2, 3, 4 ] as $step ) {
+			$this->assertStringContainsString( 'data-step="' . $step . '" hidden', $html );
+		}
+		$this->assertStringNotContainsString( '<script', $html );
+		$this->assertStringNotContainsString( 'x-data', $html );
+
+		// Every control is a non-submitting button.
+		preg_match_all( '/<button[^>]*>/', $html, $buttons );
+		foreach ( $buttons[0] as $button ) {
+			$this->assertStringContainsString( 'type="button"', $button );
+		}
+	}
+
+	public function test_profile_section_offers_disable_when_two_factor_is_enabled(): void {
+		if ( ! extension_loaded( 'imagick' ) ) {
+			$this->markTestSkipped( 'Imagick is required to render the QR code.' );
+		}
+
+		wp_set_current_user( $this->editor_id );
+		$this->enable_for( $this->editor_id );
+
+		ob_start();
+		TwoFactorAuthentication::user_profile_section_content( get_user_by( 'ID', $this->editor_id ) );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'data-two-factor-action="disable"', $html );
+		$this->assertStringNotContainsString( 'data-two-factor-action="open"', $html );
+	}
+
+	// ---------------------------------------------------------------------
 	// Verification sessions.
 	// ---------------------------------------------------------------------
 

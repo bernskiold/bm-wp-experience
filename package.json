@@ -10,7 +10,8 @@
 		"i18n": "npm run i18n:pot",
 		"i18n:pot": "wp i18n make-pot . ./languages/bm-wp-experience.pot --exclude=node_modules,vendor,assets/styles/dist",
 		"check-engines": "wp-scripts check-engines",
-		"lint:js": "wp-scripts lint-js"
+		"lint:js": "wp-scripts lint-js",
+		"test:unit": "wp-scripts test-unit-js"
 	},
 	"repository": {
 		"type": "git",
@@ -30,6 +31,9 @@
 		"@wordpress/dependency-extraction-webpack-plugin": "^7.1.0",
 		"@wordpress/scripts": "^37.1.0",
 		"globals": "^17.14.0",
+		"jsdom": "^31.0.0",
+		"vite": "^8.3.6",
+		"vitest": "^5.1.0",
 		"webpack-remove-empty-scripts": "^1.1.1"
 	}
 }
