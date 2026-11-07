@@ -1,87 +1,18 @@
-name: Build & Attach Release
+name: Build Release
+
 on:
     release:
-        types: [ published ]
+        types: [published]
 
 permissions:
     contents: write
 
 jobs:
     release:
-        name: Build & Attach Plugin
-        runs-on: ubuntu-latest
-        steps:
-
-            - name: Checkout Code
-              uses: actions/checkout@v4
-              with:
-                  ref: main
-
-            - name: Setup Node
-              uses: actions/setup-node@v4
-              with:
-                  node-version: '26'
-                  cache: npm
-
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: '8.2'
-                  coverage: none
-                  tools: composer:v2
-
-            - name: Determine version
-              id: version
-              run: |
-                  VERSION="${{ github.event.release.tag_name }}"
-                  echo "value=${VERSION#v}" >> "$GITHUB_OUTPUT"
-
-            - name: Modify Package.json
-              uses: mingjun97/file-regex-replace@v1
-              with:
-                  regex: '"version": "([0-9\.]*)",'
-                  replacement: '"version": "${{ steps.version.outputs.value }}",'
-                  include: 'package\.json'
-
-            - name: Modify Main Plugin File
-              uses: mingjun97/file-regex-replace@v1
-              with:
-                  regex: 'Version:(\s+)(.+)'
-                  replacement: 'Version:$1${{ steps.version.outputs.value }}'
-                  include: '${{ github.event.repository.name }}\.php'
-
-            - name: Modify Main Plugin Class
-              uses: mingjun97/file-regex-replace@v1
-              with:
-                  regex: "version(\\s*\\t*)= '(.*)';"
-                  replacement: "version$1= '${{ steps.version.outputs.value }}';"
-                  include: 'src/Plugin\.php'
-
-            - name: Build
-              run: composer run release
-
-            - name: Commit version bump
-              id: commit
-              uses: stefanzweifel/git-auto-commit-action@v5
-              with:
-                  branch: main
-                  commit_message: "Prepare release ${{ steps.version.outputs.value }}"
-                  file_pattern: 'package.json package-lock.json ${{ github.event.repository.name }}.php src/Plugin.php'
-
-            - name: Move tag to version bump commit
-              if: steps.commit.outputs.changes_detected == 'true'
-              run: |
-                  git tag -f "${{ github.event.release.tag_name }}" "${{ steps.commit.outputs.commit_hash }}"
-                  git push origin -f "refs/tags/${{ github.event.release.tag_name }}"
-
-            - name: Package Plugin
-              run: |
-                  mkdir build
-                  mkdir "${{ github.event.repository.name }}"
-                  rsync -rv . "${{ github.event.repository.name }}" --exclude="${{ github.event.repository.name }}" --exclude .git/ --exclude node_modules/ --exclude ".*" --exclude assets/styles/src/ --exclude assets/scripts/src/ --exclude composer.json --exclude composer.lock --exclude build/ --exclude config/ --exclude CHANGELOG.md --exclude README.md --exclude webpack.config.js --exclude package.json --exclude package-lock.json --exclude phpstan.neon --exclude tests/ --exclude bin/ --exclude phpunit.xml.dist --exclude eslint.config.cjs --exclude vitest.config.mjs
-                  zip -qq -r "build/${{ github.event.repository.name }}.zip" "${{ github.event.repository.name }}"
-
-            - name: Attach to Release
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: gh release upload "${{ github.event.release.tag_name }}" "build/${{ github.event.repository.name }}.zip" --clobber
+        uses: bernskiold/.github/.github/workflows/wordpress-plugin-release.yml@main
+        with:
+            version-files: |
+                src/Plugin.php
+            # The plugin needs its runtime Composer dependencies (Google2FA,
+            # BaconQrCode, Postal, the update checker) and autoloader.
+            composer: true

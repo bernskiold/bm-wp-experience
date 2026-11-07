@@ -1,0 +1,1 @@
+(()=>{const e=window.bmexpDeactivationWarning?.message;e&&document.addEventListener("click",t=>{t.target.closest('.wp-list-table.plugins tr[data-slug="bm-wp-experience"] .deactivate')&&!window.confirm(e)&&t.preventDefault()})})();

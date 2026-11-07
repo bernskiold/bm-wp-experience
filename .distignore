@@ -1,0 +1,9 @@
+# Applied by the shared release workflow on top of .gitattributes
+# export-ignore. Keeps composer.json in GitHub/Composer archives while leaving
+# it (and docs) out of the plugin ZIP.
+/composer.json
+/composer.lock
+/README.md
+/CHANGELOG.md
+/phpstan.neon
+/.php-cs-fixer.dist.php

@@ -48,7 +48,8 @@
     }
   },
   "scripts": {
-    "lint": "php-cs-fixer fix -v src",
+    "lint": "@test:types",
+    "format": "php-cs-fixer fix -v src",
     "test": "phpunit",
     "test:types": "phpstan analyse --ansi --memory-limit=-1",
     "test:lint": "php-cs-fixer fix -v --dry-run src",
