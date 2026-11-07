@@ -8,8 +8,5 @@ vendor
 .Trashes
 ehthumbs.db
 Thumbs.db
-assets/styles/dist/**
 /bm-wp-experience
-.phpunit.result.cache
-assets/scripts/dist/**
 .phpunit.result.cache

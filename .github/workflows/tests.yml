@@ -1,0 +1,27 @@
+name: Tests
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+
+permissions:
+    contents: read
+
+concurrency:
+    group: tests-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    tests:
+        uses: bernskiold/.github/.github/workflows/wordpress-plugin-tests.yml@main
+        with:
+            php-versions: '["8.2","8.3","8.4","8.5"]'
+            wp-versions: '["7.0","latest"]'
+            js-unit: true
+            # `composer lint` runs PHPStan (formerly the QA workflow).
+            php-lint: true
+            js-lint: true
+            check-dist: true
+            # Imagick renders the 2FA QR code; without it those tests skip.
+            php-extensions: 'mysqli, imagick'

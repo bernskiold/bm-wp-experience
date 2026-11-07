@@ -1,0 +1,1 @@
+(window.bmexp_supports||{}).allow_autocomplete||void 0===window.wp||"function"!=typeof window.wp.hooks?.removeFilter||window.wp.hooks.removeFilter("editor.Autocomplete.completers","editor/autocompleters/set-default-completers");
