@@ -45,6 +45,7 @@ class Plugin extends BasePlugin {
 		Modules\Site_Health::class,
 		Modules\Updates::class,
 		Modules\Users::class,
+		Modules\XML_RPC::class,
 	];
 
 	protected static array $integrations = [
