@@ -16,6 +16,7 @@ class TwoFactorAuthentication implements Hookable {
 	private const USER_SECRET_META_KEY       = 'bmwp_two_factor_secret';
 	private const TWO_FACTOR_STATUS_META_KEY = 'bmwp_two_factor_enabled';
 	private const RECOVERY_CODES_META_KEY    = 'bmwp_two_factor_recovery_codes';
+	public const LAST_USED_META_KEY          = 'bm_wpexp_2fa_last_used_ts';
 
 	/**
 	 * Verification sessions bind the second step of the login (and the
@@ -155,7 +156,18 @@ class TwoFactorAuthentication implements Hookable {
 			return false;
 		}
 
-		return (bool) ( new self() )->two_factor->verifyKey( $secret, $code );
+		// Each code is accepted once: only codes from a time step after the
+		// last accepted one match. The validity window is unchanged.
+		$last_used = (int) get_user_meta( $user_id, self::LAST_USED_META_KEY, true );
+		$matched   = ( new self() )->two_factor->verifyKeyNewer( $secret, $code, $last_used );
+
+		if ( false === $matched ) {
+			return false;
+		}
+
+		update_user_meta( $user_id, self::LAST_USED_META_KEY, (int) $matched );
+
+		return true;
 	}
 
 	public static function validate_backup_code( string $code, ?int $user_id = null ): bool {

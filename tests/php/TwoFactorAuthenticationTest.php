@@ -182,6 +182,56 @@ class TwoFactorAuthenticationTest extends WP_Ajax_UnitTestCase {
 		$this->assertFalse( TwoFactorAuthentication::validate_code( '123456', $this->other_editor_id ), 'No secret, no match.' );
 	}
 
+	private function code_for_step( int $user_id, int $offset ): string {
+		$google2fa = new Google2FA();
+
+		return $google2fa->oathTotp( TwoFactorAuthentication::get_secret_for_user( $user_id ), $google2fa->getTimestamp() + $offset );
+	}
+
+	public function test_each_code_is_accepted_only_once(): void {
+		TwoFactorAuthentication::get_or_generate_secret_for_user( $this->editor_id );
+		$code = $this->current_code( $this->editor_id );
+
+		$this->assertTrue( TwoFactorAuthentication::validate_code( $code, $this->editor_id ) );
+		$this->assertFalse( TwoFactorAuthentication::validate_code( $code, $this->editor_id ), 'Same code a second time.' );
+	}
+
+	public function test_an_older_code_is_refused_after_a_newer_one(): void {
+		TwoFactorAuthentication::get_or_generate_secret_for_user( $this->editor_id );
+
+		$this->assertTrue( TwoFactorAuthentication::validate_code( $this->code_for_step( $this->editor_id, 0 ), $this->editor_id ) );
+		$this->assertFalse( TwoFactorAuthentication::validate_code( $this->code_for_step( $this->editor_id, -1 ), $this->editor_id ) );
+	}
+
+	public function test_the_next_steps_code_is_accepted(): void {
+		TwoFactorAuthentication::get_or_generate_secret_for_user( $this->editor_id );
+
+		$this->assertTrue( TwoFactorAuthentication::validate_code( $this->code_for_step( $this->editor_id, 0 ), $this->editor_id ) );
+		$this->assertTrue( TwoFactorAuthentication::validate_code( $this->code_for_step( $this->editor_id, 1 ), $this->editor_id ) );
+	}
+
+	public function test_the_validity_window_is_unchanged(): void {
+		TwoFactorAuthentication::get_or_generate_secret_for_user( $this->editor_id );
+
+		$this->assertTrue( TwoFactorAuthentication::validate_code( $this->code_for_step( $this->editor_id, -1 ), $this->editor_id ), 'Previous step still accepted when unused.' );
+		$this->assertFalse( TwoFactorAuthentication::validate_code( $this->code_for_step( $this->editor_id, -3 ), $this->editor_id ), 'Outside the window.' );
+	}
+
+	public function test_last_used_step_is_stored_only_on_success(): void {
+		TwoFactorAuthentication::get_or_generate_secret_for_user( $this->editor_id );
+
+		TwoFactorAuthentication::validate_code( $this->invalid_code( $this->editor_id ), $this->editor_id );
+		$this->assertFalse( metadata_exists( 'user', $this->editor_id, TwoFactorAuthentication::LAST_USED_META_KEY ) );
+
+		$step = ( new Google2FA() )->getTimestamp();
+		TwoFactorAuthentication::validate_code( $this->code_for_step( $this->editor_id, 0 ), $this->editor_id );
+		$stored = (int) get_user_meta( $this->editor_id, TwoFactorAuthentication::LAST_USED_META_KEY, true );
+		$this->assertContains( $stored, [ $step, $step + 1 ], 'The accepted time step is stored.' );
+
+		TwoFactorAuthentication::validate_code( $this->code_for_step( $this->editor_id, 0 ), $this->editor_id );
+		$this->assertSame( $stored, (int) get_user_meta( $this->editor_id, TwoFactorAuthentication::LAST_USED_META_KEY, true ), 'Unchanged after a refused code.' );
+	}
+
 	public function test_recovery_codes_are_eight_unique_eight_digit_codes(): void {
 		$codes = TwoFactorAuthentication::generate_and_save_recovery_codes( $this->editor_id );
 
@@ -608,6 +658,41 @@ class TwoFactorAuthenticationTest extends WP_Ajax_UnitTestCase {
 
 		$this->assertStringContainsString( 'bmwp_2fa=locked', $result['value'] );
 		$this->assertNull( $result['cookie'] );
+	}
+
+	public function test_a_code_used_for_setup_cannot_be_used_to_sign_in(): void {
+		TwoFactorAuthentication::get_or_generate_secret_for_user( $this->editor_id );
+		$code    = $this->current_code( $this->editor_id );
+		$session = $this->setup_session( $this->editor_id );
+
+		$this->setup_request( 'validate', $session, [ 'token' => $code ] );
+		$this->setup_request( 'activate', $session );
+		$this->assertTrue( TwoFactorAuthentication::has_user_two_factor( $this->editor_id ) );
+
+		$result = $this->submit_login( [ TwoFactorAuthentication::class, 'validate_login' ], [
+			TwoFactorAuthentication::SESSION_FIELD => $this->login_session( $this->editor_id ),
+			'two_factor_token'                     => $code,
+		] );
+
+		$this->assertSame( 'template', $result['type'] );
+		$this->assertNull( $result['cookie'] );
+	}
+
+	public function test_a_refused_repeat_code_counts_as_a_failed_attempt(): void {
+		$this->enable_for( $this->editor_id );
+		$code = $this->current_code( $this->editor_id );
+
+		$this->assertTrue( TwoFactorAuthentication::validate_code( $code, $this->editor_id ) );
+
+		for ( $i = 0; $i < 5; $i++ ) {
+			$result = $this->submit_login( [ TwoFactorAuthentication::class, 'validate_login' ], [
+				TwoFactorAuthentication::SESSION_FIELD => $this->login_session( $this->editor_id ),
+				'two_factor_token'                     => $code,
+			] );
+		}
+
+		$this->assertStringContainsString( 'bmwp_2fa=locked', $result['value'] );
+		$this->assertTrue( TwoFactorAuthentication::is_locked_out( $this->editor_id ) );
 	}
 
 	public function test_backup_code_signs_in_once(): void {
