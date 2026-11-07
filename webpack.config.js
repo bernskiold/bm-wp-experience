@@ -1,15 +1,12 @@
 /**
- * Webpack Configuration
+ * Webpack configuration.
  *
- * Extends the default @wordpress/scripts webpack configuration to compile
+ * Extends the default `@wordpress/scripts` webpack configuration to compile
  * the plugin's SCSS stylesheets from `assets/styles/src` into minified CSS
  * in `assets/styles/dist`.
  *
- * @link https://developer.wordpress.org/block-editor/reference-guides/packages/packages-scripts/
- *
- * @author  Bernskiold <info@bernskiold.com>
- * @package Bernskiold\WP\Experience
- **/
+ * See https://developer.wordpress.org/block-editor/reference-guides/packages/packages-scripts/
+ */
 
 const path = require( 'path' );
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
@@ -26,7 +23,10 @@ const stylesheets = [
 module.exports = {
 	...defaultConfig,
 	entry: stylesheets.reduce( ( entries, name ) => {
-		entries[ name ] = path.resolve( __dirname, `assets/styles/src/${ name }.scss` );
+		entries[ name ] = path.resolve(
+			__dirname,
+			`assets/styles/src/${ name }.scss`
+		);
 		return entries;
 	}, {} ),
 	output: {

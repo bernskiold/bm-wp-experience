@@ -20,7 +20,7 @@
     "composer/installers": "^2.0",
     "postal/postal": "^2.0",
     "pragmarx/google2fa": "^9.0",
-    "yahnis-elsts/plugin-update-checker": "^5.0"
+    "yahnis-elsts/plugin-update-checker": "^6.0"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.0",
@@ -53,8 +53,8 @@
     "test:types": "phpstan analyse --ansi --memory-limit=-1",
     "test:lint": "php-cs-fixer fix -v --dry-run src",
     "release": [
-      "npm install",
-      "npm run release",
+      "npm ci",
+      "npm run build",
       "composer install --no-dev -o"
     ]
   }

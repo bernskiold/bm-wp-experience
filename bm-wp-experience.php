@@ -9,6 +9,7 @@
  * Text Domain: bm-wp-experience
  * Domain Path: /languages/
  * Requires at least: 7.0
+ * Tested up to: 7.1
  * Requires PHP: 8.2
  *
  * **************************************************************************
@@ -65,7 +66,7 @@ bm_wp_experience();
  * Run update checker if not disabled.
  */
 if ( ! defined( 'BM_WP_EXPERIENCE_DISABLE_UPDATER' ) || ( defined( 'BM_WP_EXPERIENCE_DISABLE_UPDATER' ) && false === BM_WP_EXPERIENCE_DISABLE_UPDATER ) ) {
-	$bm_wp_experience_updater = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker( 'https://github.com/bernskiold/bm-wp-experience', __FILE__, 'bm-wp-experience' );
+	$bm_wp_experience_updater = \YahnisElsts\PluginUpdateChecker\v6\PucFactory::buildUpdateChecker( 'https://github.com/bernskiold/bm-wp-experience', __FILE__, 'bm-wp-experience' );
 	$bm_wp_experience_updater->getVcsApi()->enableReleaseAssets();
 
 	// Add our own plugin icon.
