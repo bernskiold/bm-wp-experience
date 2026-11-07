@@ -2,7 +2,36 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 4.0.0 - 2026-11-07
+
+### Requirements
+- **PHP 8.2** or later and **WordPress 7.0** or later are now required.
+
+### Two-factor authentication improvements
+- Stricter verification flow: each sign-in and setup step is tied to a short-lived, single-use session.
+- Attempt limiting: after 5 incorrect codes for an account, or 20 from one IP address, verification pauses for 15 minutes. Limits are filterable (`bm_wpexp_two_factor_max_attempts`, `bm_wpexp_two_factor_lockout_duration`, `bm_wpexp_two_factor_client_ip`).
+- Each verification code is accepted only once.
+- The profile screen now shows and manages the two-factor status of the user being edited.
+- Two-factor screens no longer depend on Alpine.js; scripts and styles are enqueued properly.
+
+### Please note
+- **REST API basic auth:** accounts with two-factor enabled must use an **Application Password** (Users → Profile → Application Passwords) for basic auth. Integrations using such an account's regular password will receive a 401 until switched. Accounts without two-factor are unaffected.
+- **XML-RPC is now disabled** on all sites (affects Jetpack's legacy connection, older mobile app logins and pingbacks). To re-enable, add `add_filter( 'bm_wpexp_disable_xmlrpc', '__return_false' );` in a plugin or mu-plugin.
+- Two-factor code screens time out after 10 minutes, and signing in twice within the same 30 seconds requires waiting for the next code.
+
+### Changed
+- PHP 8.2 modernisation and additional hardening.
+- oEmbed discovery links are now removed correctly on WordPress 7.
+- Fixed the response-headers rules not being removed on deactivation.
+- Fixed a fatal error when creating a new site in a multisite network.
+- Fixed adding users to Matomo when no Matomo site is configured.
+- Fixed mail filter priority and tracking in emails.
+- Updated links to the new domain.
+- Plugin updates use plugin-update-checker 6.
+
+### Development
+- Build moved from Laravel Mix to `@wordpress/scripts` 37 on Node 26.
+- PHPUnit (145 tests) and Vitest suites, running on PHP 8.2–8.5 × WordPress 7.0 and latest via the shared Bernskiold workflows.
 
 ### Added
 
@@ -12,8 +41,6 @@ All notable changes to this project will be documented in this file. This projec
 * Block user enumeration via `?author=N` scans, which otherwise leak login names. Return the `bm_wpexp_block_user_enumeration` filter as `false` to allow it.
 * Disable the periodic admin email verification screen shown on login. Re-enable with the `bm_wpexp_enable_admin_email_verification` filter.
 * Optionally disable Gravatar (remote avatars) to avoid phoning home to gravatar.com, showing a neutral local placeholder instead. Enabled by default; disable with the `BM_WP_DISABLE_GRAVATAR` constant or by returning the `bm_wpexp_enable_gravatar` filter as `false`.
-
-## 4.0.0 - 2026-07-19
 
 ### Changed
 
