@@ -17,6 +17,7 @@ class TwoFactorAuthentication implements Hookable {
 	private const TWO_FACTOR_STATUS_META_KEY = 'bmwp_two_factor_enabled';
 	private const RECOVERY_CODES_META_KEY    = 'bmwp_two_factor_recovery_codes';
 	public const LAST_USED_META_KEY          = 'bm_wpexp_2fa_last_used_ts';
+	public const ASSET_HANDLE                = 'bm-wp-experience-two-factor';
 
 	/**
 	 * Verification sessions bind the second step of the login (and the
@@ -41,6 +42,7 @@ class TwoFactorAuthentication implements Hookable {
             return;
         }
 		// User profile section.
+		add_action( 'admin_enqueue_scripts', [ self::class, 'enqueue_profile_assets' ] );
 		add_action( 'show_user_profile', [ self::class, 'user_profile_section_content' ] );
 		add_action( 'edit_user_profile', [ self::class, 'user_profile_section_content' ] );
 
@@ -67,6 +69,51 @@ class TwoFactorAuthentication implements Hookable {
         </div>
         <?php
     }
+
+	/**
+	 * Register the two-factor setup script and the shared stylesheet.
+	 */
+	public static function register_assets(): void {
+		if ( wp_script_is( self::ASSET_HANDLE, 'registered' ) ) {
+			return;
+		}
+
+		$asset_file = Plugin::get_path( 'assets/scripts/dist/two-factor.asset.php' );
+		$asset      = file_exists( $asset_file ) ? require $asset_file : [];
+
+		wp_register_script(
+			self::ASSET_HANDLE,
+			Plugin::get_assets_url( 'scripts/dist/two-factor.js' ),
+			$asset['dependencies'] ?? [],
+			$asset['version'] ?? Plugin::get_version(),
+			[
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			]
+		);
+
+		wp_register_style(
+			self::ASSET_HANDLE,
+			Plugin::get_assets_url( 'styles/dist/two-factor.css' ),
+			[],
+			Plugin::get_version()
+		);
+	}
+
+	/**
+	 * Enqueue the setup assets on the profile and user edit screens, where
+	 * the two-factor section is rendered.
+	 */
+	public static function enqueue_profile_assets( string $hook_suffix ): void {
+		if ( ! in_array( $hook_suffix, [ 'profile.php', 'user-edit.php' ], true ) ) {
+			return;
+		}
+
+		self::register_assets();
+
+		wp_enqueue_script( self::ASSET_HANDLE );
+		wp_enqueue_style( self::ASSET_HANDLE );
+	}
 
 	public static function user_profile_section_content( \WP_User $user ): void {
 		$user_id = $user->ID;
@@ -725,6 +772,15 @@ class TwoFactorAuthentication implements Hookable {
 		}
 
 		extract( $args );
+
+		// Enqueued before login_header() so the stylesheet prints in the head
+		// and the script in login_footer().
+		self::register_assets();
+		wp_enqueue_style( self::ASSET_HANDLE );
+
+		if ( '2fa-activation' === $template ) {
+			wp_enqueue_script( self::ASSET_HANDLE );
+		}
 
 		login_header();
 

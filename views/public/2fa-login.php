@@ -40,15 +40,3 @@ $backup_codes_action = add_query_arg( 'action', 'load_backup_codes', wp_login_ur
 	<?php wp_nonce_field( TwoFactorAuthentication::LOGIN_NONCE_ACTION ); ?>
 	<button type="submit" class="button-link"><?php esc_html_e( 'Login using backup code', 'bm-wp-experience' ); ?></button>
 </form>
-
-<style>
-	#login form.two-factor-validation-form > p:first-child {
-		margin-bottom: 0.75rem;
-	}
-
-	input[type=number]::-webkit-inner-spin-button,
-	input[type=number]::-webkit-outer-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
-</style>

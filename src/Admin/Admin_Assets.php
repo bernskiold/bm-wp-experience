@@ -44,16 +44,25 @@ class Admin_Assets implements Hookable {
         }
     }
 
-    public static function admin_scripts():void{
-        wp_register_script('bm-wp-experience-customize-support', Plugin::get_assets_url() . '/scripts/admin-customize-support.js', [], Plugin::get_version());
+    public static function admin_scripts(): void {
+        $handle     = 'bm-wp-experience-customize-support';
+        $asset_file = Plugin::get_path('assets/scripts/dist/admin-customize-support.asset.php');
+        $asset      = file_exists($asset_file) ? require $asset_file : [];
 
-        wp_enqueue_script('bm-wp-experience-customize-support');
-        wp_localize_script( 'bm-wp-experience-customize-support', 'bmexp_supports',
-            array(
-                'allow_autocomplete' => defined('BM_WP_ALLOW_USER_AUTOCOMPLETE') ? BM_WP_ALLOW_USER_AUTOCOMPLETE : false,
-            )
+        // Printed in the head, as before, so it runs ahead of the editor scripts.
+        wp_enqueue_script(
+            $handle,
+            Plugin::get_assets_url('scripts/dist/admin-customize-support.js'),
+            $asset['dependencies'] ?? [],
+            $asset['version'] ?? Plugin::get_version()
         );
 
-
+        wp_add_inline_script(
+            $handle,
+            'window.bmexp_supports = ' . wp_json_encode([
+                'allow_autocomplete' => defined('BM_WP_ALLOW_USER_AUTOCOMPLETE') ? BM_WP_ALLOW_USER_AUTOCOMPLETE : false,
+            ]) . ';',
+            'before'
+        );
     }
 }

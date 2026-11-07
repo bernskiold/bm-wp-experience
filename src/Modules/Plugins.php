@@ -6,6 +6,8 @@
 
 namespace Bernskiold\WP\Experience\Modules;
 
+use Bernskiold\WP\Experience\Plugin;
+
 class Plugins extends Module {
     public static function hooks(): void {
         add_filter('install_plugins_tabs', [ self::class, 'add_suggested_plugin_install_link' ]);
@@ -22,7 +24,7 @@ class Plugins extends Module {
 
         add_filter('plugin_row_meta', [ self::class, 'show_plugin_meta' ], 100, 4);
 
-        add_action('admin_head-plugins.php', [ self::class, 'show_deactivation_warning' ]);
+        add_action('admin_enqueue_scripts', [ self::class, 'enqueue_deactivation_warning' ]);
     }
 
     /**
@@ -110,17 +112,29 @@ class Plugins extends Module {
      * Show a small but friendly warning if the user tries to
      * disable this plugin.
      */
-    public static function show_deactivation_warning(): void {
-        $message = esc_html__("Warning: This plugin provides additional enterprise-grade protective measures, alongside WordPress core tweaks for an optimal experience. If you deactive, you should consider adding similar protective measuress.\n\nAre you sure you want to deactivate?", 'bm-wp-experience'); ?>
-		<script type="text/javascript">
-			jQuery( document ).ready( function( $ ) {
-				$( ".wp-list-table.plugins tr[data-slug=\"bm-wp-experience\"] .deactivate" ).on( "click", function( e ) {
-					if ( ! window.confirm( '<?php echo esc_js($message); ?>' ) ) {
-						e.preventDefault();
-					}
-				} );
-			} );
-		</script>
-		<?php
+    public static function enqueue_deactivation_warning(string $hook_suffix): void {
+        if ('plugins.php' !== $hook_suffix) {
+            return;
+        }
+
+        $handle     = 'bm-wp-experience-plugins-deactivation-warning';
+        $asset_file = Plugin::get_path('assets/scripts/dist/plugins-deactivation-warning.asset.php');
+        $asset      = file_exists($asset_file) ? require $asset_file : [];
+
+        wp_enqueue_script(
+            $handle,
+            Plugin::get_assets_url('scripts/dist/plugins-deactivation-warning.js'),
+            $asset['dependencies'] ?? [],
+            $asset['version'] ?? Plugin::get_version(),
+            [ 'in_footer' => true ]
+        );
+
+        $message = __("Warning: This plugin provides additional enterprise-grade protective measures, alongside WordPress core tweaks for an optimal experience. If you deactive, you should consider adding similar protective measuress.\n\nAre you sure you want to deactivate?", 'bm-wp-experience');
+
+        wp_add_inline_script(
+            $handle,
+            'window.bmexpDeactivationWarning = ' . wp_json_encode([ 'message' => $message ]) . ';',
+            'before'
+        );
     }
 }
