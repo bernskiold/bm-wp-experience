@@ -11,6 +11,9 @@
 /package-lock.json       export-ignore
 /package.json            export-ignore
 /webpack.config.js       export-ignore
+/bin                     export-ignore
+/tests                   export-ignore
+/phpunit.xml.dist        export-ignore
 /assets/styles/src       export-ignore
 
 ##

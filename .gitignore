@@ -10,3 +10,4 @@ ehthumbs.db
 Thumbs.db
 assets/styles/dist/**
 /bm-wp-experience
+.phpunit.result.cache

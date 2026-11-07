@@ -3,11 +3,11 @@
   "description": "Provides an opinionated WordPress experience with clean-up and tweaks that we at Bernskiold have found runs WordPress best.",
   "type": "wordpress-plugin",
   "config": {
-	"sort-packages": true,
-	"optimize-autoloader": true,
-	"platform": {
-	  "php": "8.2"
-	},
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "platform": {
+      "php": "8.2"
+    },
     "allow-plugins": {
       "composer/installers": true
     }
@@ -20,39 +20,42 @@
     "composer/installers": "^2.0",
     "postal/postal": "^2.0",
     "pragmarx/google2fa": "^9.0",
-    "pragmarx/recovery": "^0.2.1",
     "yahnis-elsts/plugin-update-checker": "^5.0"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.0",
     "phpstan/phpstan": "^2.0",
+    "phpunit/phpunit": "^9.6",
     "roave/security-advisories": "dev-latest",
-    "szepeviktor/phpstan-wordpress": "^2.0"
+    "szepeviktor/phpstan-wordpress": "^2.0",
+    "yoast/phpunit-polyfills": "^4.0"
   },
   "license": "GPL-3.0-or-later",
   "authors": [
-	{
-	  "name": "Bernskiold",
-	  "email": "info@bernskiold.com"
-	}
+    {
+      "name": "Bernskiold",
+      "email": "info@bernskiold.com"
+    }
   ],
   "autoload": {
-	"psr-4": {
-	  "Bernskiold\\WP\\Experience\\": "src"
-	}
+    "psr-4": {
+      "Bernskiold\\WP\\Experience\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Bernskiold\\WP\\Experience\\Tests\\": "tests/php/"
+    }
   },
   "scripts": {
-	"lint": "php-cs-fixer fix -v src",
-	"test:types": "phpstan analyse --ansi --memory-limit=-1",
-	"test:lint": "php-cs-fixer fix -v --dry-run src",
-	"test": [
-	  "@test:lint",
-	  "@test:types"
-	],
-	"release": [
-	  "npm install",
-	  "npm run release",
-	  "composer install --no-dev -o"
-	]
+    "lint": "php-cs-fixer fix -v src",
+    "test": "phpunit",
+    "test:types": "phpstan analyse --ansi --memory-limit=-1",
+    "test:lint": "php-cs-fixer fix -v --dry-run src",
+    "release": [
+      "npm install",
+      "npm run release",
+      "composer install --no-dev -o"
+    ]
   }
 }
