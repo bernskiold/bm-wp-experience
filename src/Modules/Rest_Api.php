@@ -8,6 +8,7 @@
 
 namespace Bernskiold\WP\Experience\Modules;
 
+use Bernskiold\WP\Experience\Modules\Security\TwoFactorAuthentication;
 use WP_Error;
 use WP_Query;
 
@@ -107,6 +108,18 @@ class Rest_Api extends Module {
 
         $username = wp_strip_all_tags($_SERVER['PHP_AUTH_USER']);
         $password = wp_strip_all_tags($_SERVER['PHP_AUTH_PW']);
+
+        /*
+         * Accounts with two-factor authentication sign in to the REST API with
+         * an Application Password, which WordPress core validates on this same
+         * filter before we run. Their account password alone is not accepted
+         * here, since it would skip the second step.
+         */
+        $account = get_user_by('login', $username) ?: get_user_by('email', $username);
+
+        if ($account && TwoFactorAuthentication::has_user_two_factor($account->ID)) {
+            return $user;
+        }
 
         /*
          * In multi-site, wp_authenticate_spam_check filter is run on authentication. This filter calls

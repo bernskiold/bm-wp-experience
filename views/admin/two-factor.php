@@ -11,7 +11,7 @@ use Bernskiold\WP\Experience\Modules\Security\TwoFactorAuthentication;
 		<tr>
 			<th><?php esc_html_e( 'Activation Status', 'bm-wp-experience' ); ?></th>
 			<td>
-				<?php if ( TwoFactorAuthentication::has_user_two_factor() ) : ?>
+				<?php if ( TwoFactorAuthentication::has_user_two_factor( $user_id ) ) : ?>
 					<p style="margin-bottom: 0.5rem;"><?php _e( 'Two factor authentication is <span style="color: green; font-weight: bold;">enabled</span>.',
 							'bm-wp-experience' ); ?></p>
 					<button class="button" @click.prevent="disable"><?php esc_html_e( 'Disable Two-Factor Authentication', 'bm-wp-experience' ); ?></button>
@@ -86,7 +86,7 @@ use Bernskiold\WP\Experience\Modules\Security\TwoFactorAuthentication;
 			disable() {
 				const body = new FormData();
 				body.append( 'action', 'bmwp_deactivate_two_factor' );
-				body.append( 'nonce', '<?php echo esc_js( wp_create_nonce( 'bmwp-deactivate-two-factor-nonce' ) ); ?>' );
+				body.append( 'nonce', '<?php echo esc_js( wp_create_nonce( TwoFactorAuthentication::nonce_action( 'deactivate', $user_id ) ) ); ?>' );
 				body.append( 'user_id', '<?php echo esc_js( $user_id ); ?>' );
 
 				fetch( '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', {
@@ -102,7 +102,7 @@ use Bernskiold\WP\Experience\Modules\Security\TwoFactorAuthentication;
 			validate() {
 				const body = new FormData();
 				body.append( 'action', 'bmwp_validate_two_factor' );
-				body.append( 'nonce', '<?php echo esc_js( wp_create_nonce( 'bmwp-validate-two-factor-nonce' ) ); ?>' );
+				body.append( 'nonce', '<?php echo esc_js( wp_create_nonce( TwoFactorAuthentication::nonce_action( 'validate', $user_id ) ) ); ?>' );
 				body.append( 'token', this.token );
 				body.append( 'user_id', '<?php echo esc_js( $user_id ); ?>' );
 
@@ -125,7 +125,7 @@ use Bernskiold\WP\Experience\Modules\Security\TwoFactorAuthentication;
 			activate() {
 				const body = new FormData();
 				body.append( 'action', 'bmwp_activate_two_factor' );
-				body.append( 'nonce', '<?php echo esc_js( wp_create_nonce( 'bmwp-activate-two-factor-nonce' ) ); ?>' );
+				body.append( 'nonce', '<?php echo esc_js( wp_create_nonce( TwoFactorAuthentication::nonce_action( 'activate', $user_id ) ) ); ?>' );
 				body.append( 'token', this.token );
 				body.append( 'user_id', '<?php echo esc_js( $user_id ); ?>' );
 

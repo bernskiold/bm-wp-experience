@@ -59,28 +59,12 @@ use Bernskiold\WP\Experience\Modules\Security\TwoFactorAuthentication;
 			token: '',
 			recoveryCodes: '',
 			activationError: false,
-			disable() {
-				const body = new FormData();
-				body.append( 'action', 'bmwp_deactivate_two_factor' );
-				body.append( 'nonce', '<?php echo esc_js( wp_create_nonce( 'bmwp-deactivate-two-factor-nonce' ) ); ?>' );
-				body.append( 'user_id', '<?php echo esc_js( $user->ID ); ?>' );
-
-				fetch( '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', {
-					method: 'POST',
-					credentials: 'same-origin',
-					body,
-				} )
-					.then( ( response ) => response.json() )
-					.then( ( response ) => {
-						location.reload();
-					} );
-			},
 			validate() {
 				const body = new FormData();
 				body.append( 'action', 'bmwp_validate_two_factor' );
 				body.append( 'nonce', '<?php echo esc_js( wp_create_nonce( 'bmwp-validate-two-factor-nonce' ) ); ?>' );
 				body.append( 'token', this.token );
-				body.append( 'user_id', '<?php echo esc_js( $user->ID ); ?>' );
+				body.append( '<?php echo esc_js( TwoFactorAuthentication::SESSION_FIELD ); ?>', '<?php echo esc_js( $session ); ?>' );
 
 				fetch( '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', {
 					method: 'POST',
@@ -103,7 +87,7 @@ use Bernskiold\WP\Experience\Modules\Security\TwoFactorAuthentication;
 				body.append( 'action', 'bmwp_activate_two_factor' );
 				body.append( 'nonce', '<?php echo esc_js( wp_create_nonce( 'bmwp-activate-two-factor-nonce' ) ); ?>' );
 				body.append( 'token', this.token );
-				body.append( 'user_id', '<?php echo esc_js( $user->ID ); ?>' );
+				body.append( '<?php echo esc_js( TwoFactorAuthentication::SESSION_FIELD ); ?>', '<?php echo esc_js( $session ); ?>' );
 
 				fetch( '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>', {
 					method: 'POST',

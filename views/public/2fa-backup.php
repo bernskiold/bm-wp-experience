@@ -1,7 +1,6 @@
 <?php
 
-$redirect_to = isset( $_REQUEST['redirect_to'] ) ? esc_url_raw( wp_unslash( $_REQUEST['redirect_to'] ) ) : admin_url();
-$remember_me = ! empty( $_REQUEST['rememberme'] );
+use Bernskiold\WP\Experience\Modules\Security\TwoFactorAuthentication;
 ?>
 
 <?php if ( isset( $error ) ) : ?>
@@ -18,9 +17,8 @@ $remember_me = ! empty( $_REQUEST['rememberme'] );
 	</p>
 
 	<input type="hidden" name="backup_code_used" value="1" />
-	<input type="hidden" name="user_id" id="user_id" value="<?php echo esc_attr( $user->ID ); ?>" />
-	<input type="hidden" name="redirect_to" value="<?php echo esc_attr( $redirect_to ); ?>" />
-	<input type="hidden" name="rememberme" id="rememberme" value="<?php echo esc_attr( $remember_me ); ?>" />
+	<input type="hidden" name="<?php echo esc_attr( TwoFactorAuthentication::SESSION_FIELD ); ?>" value="<?php echo esc_attr( $session ); ?>" />
+	<?php wp_nonce_field( TwoFactorAuthentication::LOGIN_NONCE_ACTION ); ?>
 
 	<?php submit_button( __( 'Log In', 'bm-wp-experience' ) ); ?>
 </form>
