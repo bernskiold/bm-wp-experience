@@ -41,11 +41,12 @@ CONFIG_FILE="$DIR/wp-tests-config.php"
 # it ships. Without a matching package, take the test library from the release
 # branch of wordpress-develop. Its bootstrap reads the config from the
 # directory above includes/.
-if [ "$WP_VERSION" != "${WP_VERSION%%-*}" ] || { [ ! -d "$TESTS_DIR" ] && ! composer --working-dir="$DIR" require --quiet --no-interaction "wp-phpunit/wp-phpunit:~$WP_MINOR.0" >&2; }; then
+if [ ! -d "$TESTS_DIR" ] && { [ "$WP_VERSION" != "${WP_VERSION%%-*}" ] || ! composer --working-dir="$DIR" require --quiet --no-interaction "wp-phpunit/wp-phpunit:~$WP_MINOR.0" >&2; }; then
 	TESTS_DIR="$DIR/wordpress-develop/tests/phpunit"
 	CONFIG_FILE="$TESTS_DIR/wp-tests-config.php"
 
 	if [ ! -d "$TESTS_DIR/includes" ]; then
+		rm -rf "$DIR/wordpress-develop"
 		git clone --quiet --depth 1 --branch "$WP_MINOR" --filter=blob:none --sparse https://github.com/WordPress/wordpress-develop.git "$DIR/wordpress-develop" >&2
 		git -C "$DIR/wordpress-develop" sparse-checkout set tests/phpunit/includes tests/phpunit/data >&2
 	fi
