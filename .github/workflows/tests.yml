@@ -25,3 +25,12 @@ jobs:
             check-dist: true
             # Imagick renders the 2FA QR code; without it those tests skip.
             php-extensions: 'mysqli, imagick'
+
+    # WordPress 7.0 core calls spl_object_hash(), which errors on PHP 8.6,
+    # so PHP 8.6 runs against the latest WordPress only.
+    tests-php-8-6:
+        uses: bernskiold/.github/.github/workflows/wordpress-plugin-tests.yml@main
+        with:
+            php-versions: '["8.6"]'
+            wp-versions: '["latest"]'
+            php-extensions: 'mysqli, imagick'
