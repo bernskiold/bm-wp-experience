@@ -37,6 +37,30 @@ class Cleanup extends Module {
         if ( true !== apply_filters( 'bm_wpexp_enable_admin_email_verification', false ) ) {
             add_filter( 'admin_email_check_interval', '__return_zero' );
         }
+
+        // Disable the /random/ content redirect (WordPress 7.2+). The filter
+        // does not exist before 7.2, so this is a no-op there.
+        add_filter( 'wp_enable_random_content_redirect', [ self::class, 'enable_random_content_redirect' ] );
+    }
+
+    /**
+     * Disable the random content redirect.
+     *
+     * WordPress 7.2 sends /random/ (and /random/{archive}/) to a random
+     * post, which can surface content that was never meant to be browsed
+     * on its own. We disable it by default.
+     *
+     * Return the bm_wpexp_enable_random_content_redirect filter as true
+     * to keep it, then flush the rewrite rules.
+     *
+     * @param bool $enabled Whether random content redirects are enabled.
+     */
+    public static function enable_random_content_redirect( $enabled ): bool {
+        if ( true !== apply_filters( 'bm_wpexp_enable_random_content_redirect', false ) ) {
+            return false;
+        }
+
+        return (bool) $enabled;
     }
 
     /**

@@ -48,6 +48,7 @@ For almost every feature there is a filter, constant or action allowing you to c
 - Disable emoji styles
 - Remove links to feeds unless specified by `BM_WP_DISABLE_FEED_URLS`.
 - Disable the periodic admin email verification screen. Re-enable with the `bm_wpexp_enable_admin_email_verification` filter.
+- Disable the `/random/` content redirect (WordPress 7.2+), which sends visitors to a random post. Re-enable with the `bm_wpexp_enable_random_content_redirect` filter.
 
 ### Comments
 
@@ -193,6 +194,8 @@ mu-plugin. `add_filter( 'bm_wpexp_enable_block_editor_styling', '__return_false'
 **Allow Feed URLs:** By default we hide feed URLs from the header. If you are using feeds, set `BM_WP_DISABLE_FEED_URLS` to `false` in your configuration.
 
 `bm_wpexp_enable_admin_email_verification` - Return `true` to re-enable the periodic admin email verification screen shown on login.
+
+`bm_wpexp_enable_random_content_redirect` - Return `true` to re-enable the WordPress 7.2+ `/random/` content redirect. Flush the rewrite rules afterwards (for example by saving Settings → Permalinks). To keep only some post types out of it, leave it enabled and set `'randomable' => false` on those post types instead.
 
 ### Comments
 

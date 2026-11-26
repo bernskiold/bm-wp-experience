@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+
+* Disable the `/random/` content redirect added in WordPress 7.2 by default, so visitors can't land on random posts of any public post type. Re-enable with `add_filter( 'bm_wpexp_enable_random_content_redirect', '__return_true' );`, then flush the rewrite rules. Has no effect before WordPress 7.2.
+
 ## 4.0.0 - 2026-11-07
 
 ### Requirements
