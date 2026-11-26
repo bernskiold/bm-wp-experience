@@ -17,7 +17,8 @@ jobs:
         uses: bernskiold/.github/.github/workflows/wordpress-plugin-tests.yml@main
         with:
             php-versions: '["8.2","8.3","8.4","8.5"]'
-            wp-versions: '["7.0","latest"]'
+            # Drop 7.2-RC3 once 7.2 is released and "latest" picks it up.
+            wp-versions: '["7.0","latest","7.2-RC3"]'
             js-unit: true
             # `composer lint` runs PHPStan (formerly the QA workflow).
             php-lint: true

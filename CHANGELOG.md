@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file. This projec
 ### Development
 
 * Tests also run on PHP 8.6 against the latest WordPress.
+* Tests also run on WordPress 7.2-RC3. `bin/install-wp-tests.sh` takes the test library from wordpress-develop for pre-releases, and for releases that wp-phpunit has no package for yet.
 
 ## 4.0.0 - 2026-11-07
 

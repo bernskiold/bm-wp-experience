@@ -5,7 +5,8 @@
 #
 #   bin/install-wp-tests.sh [wp-version] [db-name] [db-user] [db-pass] [db-host]
 #
-# wp-version is "latest" (default) or a release such as "6.8" or "6.8.3".
+# wp-version is "latest" (default), a release such as "7.0" or "7.0.2", or a
+# pre-release such as "7.2-RC3".
 # Prints the environment variables to export for `composer test`.
 set -euo pipefail
 
@@ -22,7 +23,7 @@ fi
 
 # The test library is published per release; use the newest patch of the
 # same minor so a fresh core point release never blocks the run.
-WP_MINOR=$(echo "$WP_VERSION" | cut -d. -f1,2)
+WP_MINOR=$(echo "${WP_VERSION%%-*}" | cut -d. -f1,2)
 DIR="$TARGET/$WP_VERSION"
 
 mkdir -p "$DIR"
@@ -33,11 +34,24 @@ if [ ! -d "$DIR/wordpress" ]; then
 	rm "$DIR/wordpress.zip"
 fi
 
-if [ ! -d "$DIR/vendor/wp-phpunit/wp-phpunit" ]; then
-	composer --working-dir="$DIR" require --quiet --no-interaction "wp-phpunit/wp-phpunit:~$WP_MINOR.0"
+TESTS_DIR="$DIR/vendor/wp-phpunit/wp-phpunit"
+CONFIG_FILE="$DIR/wp-tests-config.php"
+
+# wp-phpunit publishes no pre-releases, and a new release only some time after
+# it ships. Without a matching package, take the test library from the release
+# branch of wordpress-develop. Its bootstrap reads the config from the
+# directory above includes/.
+if [ "$WP_VERSION" != "${WP_VERSION%%-*}" ] || { [ ! -d "$TESTS_DIR" ] && ! composer --working-dir="$DIR" require --quiet --no-interaction "wp-phpunit/wp-phpunit:~$WP_MINOR.0" >&2; }; then
+	TESTS_DIR="$DIR/wordpress-develop/tests/phpunit"
+	CONFIG_FILE="$TESTS_DIR/wp-tests-config.php"
+
+	if [ ! -d "$TESTS_DIR/includes" ]; then
+		git clone --quiet --depth 1 --branch "$WP_MINOR" --filter=blob:none --sparse https://github.com/WordPress/wordpress-develop.git "$DIR/wordpress-develop" >&2
+		git -C "$DIR/wordpress-develop" sparse-checkout set tests/phpunit/includes tests/phpunit/data >&2
+	fi
 fi
 
-cat > "$DIR/wp-tests-config.php" <<CONFIG
+cat > "$CONFIG_FILE" <<CONFIG
 <?php
 define( 'ABSPATH', '$DIR/wordpress/' );
 define( 'WP_DEFAULT_THEME', 'default' );
@@ -55,5 +69,5 @@ define( 'WP_TESTS_TITLE', 'Test Blog' );
 define( 'WP_PHP_BINARY', 'php' );
 CONFIG
 
-echo "WP_PHPUNIT__DIR=$DIR/vendor/wp-phpunit/wp-phpunit"
-echo "WP_PHPUNIT__TESTS_CONFIG=$DIR/wp-tests-config.php"
+echo "WP_PHPUNIT__DIR=$TESTS_DIR"
+echo "WP_PHPUNIT__TESTS_CONFIG=$CONFIG_FILE"
