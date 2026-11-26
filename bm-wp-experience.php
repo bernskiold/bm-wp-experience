@@ -9,7 +9,7 @@
  * Text Domain: bm-wp-experience
  * Domain Path: /languages/
  * Requires at least: 7.0
- * Tested up to: 7.1
+ * Tested up to: 7.2
  * Requires PHP: 8.2
  *
  * **************************************************************************

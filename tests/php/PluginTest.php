@@ -22,7 +22,7 @@ class PluginTest extends TestCase {
 
 		$this->assertSame( $data['version'], Plugin::get_version() );
 		$this->assertSame( '7.0', $data['requires'] );
-		$this->assertSame( '7.1', $data['tested'] );
+		$this->assertSame( '7.2', $data['tested'] );
 		$this->assertSame( '8.2', $data['php'] );
 	}
 
